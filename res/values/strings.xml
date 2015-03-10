@@ -2,7 +2,8 @@
 <resources>
 
     <string name="app_name">AndroBot</string>
-    <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+    <string name="welcome">Welcome to AndroBot</string>
+    <string name="btn1_text">Start</string>
 
 </resources>
