@@ -1,4 +1,4 @@
-package at.uibk.informatik.androbot;
+package at.uibk.informatik.androbot.app;
 
 import android.bluetooth.BluetoothAdapter;
 import android.content.Intent;
