@@ -53,4 +53,24 @@ public class MainActivity extends Activity {
 		}
 		return super.onOptionsItemSelected(item);
 	}
+
+	// move
+	public void move(View v) {
+
+		switch (v.getId()) {
+		case R.id.forward:
+			System.out.println("forward");
+			break;
+		case R.id.backward:
+			System.out.println("backward");
+			break;
+		case R.id.left:
+			System.out.println("left");
+			break;
+		case R.id.right:
+			System.out.println("right");
+			break;
+		}
+
+	}
 }
