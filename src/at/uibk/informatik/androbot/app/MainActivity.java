@@ -8,6 +8,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+import at.uibk.informatik.androbot.contracts.IRobot;
+import at.uibk.informatik.androbot.control.BluetoothConnection;
+import at.uibk.informatik.androbot.control.Robot;
 
 public class MainActivity extends Activity {
 
@@ -21,12 +24,16 @@ public class MainActivity extends Activity {
 
 		tv1 = (TextView) findViewById(R.id.textView1);
 		BA = BluetoothAdapter.getDefaultAdapter();
+		
+		IRobot r = new Robot(new BluetoothConnection());
+		r.move();
 	}
 
 	public void on(View view) {
 		if (!BA.isEnabled()) {
-			Intent turnOn = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-			startActivityForResult(turnOn, 0);
+//			Intent turnOn = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+//			startActivityForResult(turnOn, 0);
+			BA.enable();
 
 			tv1.setText("BLUETOOTH activated");
 		} else {
