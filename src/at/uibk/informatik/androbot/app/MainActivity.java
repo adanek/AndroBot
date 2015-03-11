@@ -8,11 +8,14 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+import at.uibk.informatik.androbot.contracts.Direction;
+import at.uibk.informatik.androbot.contracts.IRobot;
 
 public class MainActivity extends Activity {
 
 	private TextView tv1;
 	private BluetoothAdapter BA;
+	private IRobot robot;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -59,16 +62,16 @@ public class MainActivity extends Activity {
 
 		switch (v.getId()) {
 		case R.id.forward:
-			System.out.println("forward");
+			robot.move();
 			break;
 		case R.id.backward:
-			System.out.println("backward");
+			robot.move();
 			break;
 		case R.id.left:
-			System.out.println("left");
+			robot.turn(Direction.LEFT);
 			break;
 		case R.id.right:
-			System.out.println("right");
+			robot.turn(Direction.RIGHT);
 			break;
 		}
 
