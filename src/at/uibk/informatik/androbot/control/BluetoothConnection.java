@@ -18,20 +18,20 @@ public class BluetoothConnection implements IConnection {
 
 	private static final UUID SERVICE_ID = UUID.randomUUID();
 	private static final String TAG = "BluetoothConnenction";
-	private static String address = "00:26:83:30:F7:E8";
+	private String address;
 
-	public BluetoothConnection() {
+	public BluetoothConnection(String macAddress) {
 		this.btAdapter = BluetoothAdapter.getDefaultAdapter();
 		this.checkBtState();
+		this.setAddress(macAddress);
 	}
 
 	@Override
-	public void write(String msg) {
-		byte[] buffer = msg.getBytes();
-
+	public void write(byte[] msg) {
+		
 		Log.d(TAG, "Sending message: " + msg);
 		try {
-			outStream.write(buffer);
+			outStream.write(msg);
 		} catch (IOException e) {
 			Log.d(TAG, "Exception occured during writing: " + e.getMessage());
 		}
@@ -41,7 +41,7 @@ public class BluetoothConnection implements IConnection {
 	public void connect() {
 
 		// Set pointer to the remote device
-		BluetoothDevice device = btAdapter.getRemoteDevice(address);
+		BluetoothDevice device = btAdapter.getRemoteDevice(getAddress());
 
 		try {
 			btSocket = createSocket(device);
@@ -113,5 +113,13 @@ public class BluetoothConnection implements IConnection {
 			throws IOException {
 
 		return device.createRfcommSocketToServiceRecord(SERVICE_ID);
+	}
+
+	public String getAddress() {
+		return address;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
 	}
 }

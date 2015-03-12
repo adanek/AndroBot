@@ -27,7 +27,7 @@ public class MainActivity extends Activity {
 		tv1 = (TextView) findViewById(R.id.textView1);
 		BA = BluetoothAdapter.getDefaultAdapter();
 		
-		this.robot = new Robot(new BluetoothConnection());
+		this.robot = new Robot(new BluetoothConnection("00:26:83:30:F7:E8"));
 	}
 
 	public void on(View view) {
