@@ -10,6 +10,8 @@ import android.view.View;
 import android.widget.TextView;
 import at.uibk.informatik.androbot.contracts.Direction;
 import at.uibk.informatik.androbot.contracts.IRobot;
+import at.uibk.informatik.androbot.control.BluetoothConnection;
+import at.uibk.informatik.androbot.control.Robot;
 
 public class MainActivity extends Activity {
 
@@ -24,6 +26,8 @@ public class MainActivity extends Activity {
 
 		tv1 = (TextView) findViewById(R.id.textView1);
 		BA = BluetoothAdapter.getDefaultAdapter();
+		
+		this.robot = new Robot(new BluetoothConnection());
 	}
 
 	public void on(View view) {
@@ -62,10 +66,10 @@ public class MainActivity extends Activity {
 
 		switch (v.getId()) {
 		case R.id.forward:
-			robot.move();
+			robot.moveForward();
 			break;
 		case R.id.backward:
-			robot.move();
+			robot.moveBackward();
 			break;
 		case R.id.left:
 			robot.turn(Direction.LEFT);

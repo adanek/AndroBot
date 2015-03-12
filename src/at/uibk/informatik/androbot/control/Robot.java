@@ -11,26 +11,23 @@ public class Robot implements IRobot {
 	public Robot(IConnection connection){
 		this.conn = connection;
 		this.conn.connect();
+		this.conn.disconnect();
+		
 	}
 	
 	@Override
 	public void connect() {
-		// TODO Auto-generated method stub
+		this.conn.connect();
 
 	}
 
 	@Override
 	public void disconnect() {
-		// TODO Auto-generated method stub
+		this.conn.connect();
 
 	}
 
-	@Override
-	public void move() {
-		// TODO Auto-generated method stub
-
-	}
-
+	
 	@Override
 	public void move(byte distance_cm) {
 		// TODO Auto-generated method stub
@@ -39,12 +36,6 @@ public class Robot implements IRobot {
 
 	@Override
 	public void turn(Direction direction) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void turn(Direction direction, byte degree) {
 		// TODO Auto-generated method stub
 
 	}
@@ -59,6 +50,30 @@ public class Robot implements IRobot {
 	public void setBar(byte value) {
 		// TODO Auto-generated method stub
 
+	}
+
+	@Override
+	public void moveForward() {
+		this.conn.write("w\r\n");
+		
+	}
+
+	@Override
+	public void moveBackward() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void turn(byte degree) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public String getOdomentry() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

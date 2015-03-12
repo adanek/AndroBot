@@ -45,6 +45,7 @@ public class BluetoothConnection implements IConnection {
 
 		try {
 			btSocket = createSocket(device);
+			
 		} catch (IOException e) {
 			Log.d(TAG, "Can't create socket to remote device");
 		}

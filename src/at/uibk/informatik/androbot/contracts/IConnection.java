@@ -4,6 +4,5 @@ public interface IConnection {
 
      void write(String message);
      void connect();
-     void disconnect();
-     
+     void disconnect();     
 }
