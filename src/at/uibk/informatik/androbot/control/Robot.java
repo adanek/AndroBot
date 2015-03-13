@@ -1,5 +1,7 @@
 package at.uibk.informatik.androbot.control;
 
+import java.io.IOException;
+
 import at.uibk.informatik.androbot.contracts.Direction;
 import at.uibk.informatik.androbot.contracts.IConnection;
 import at.uibk.informatik.androbot.contracts.IRobot;
@@ -9,22 +11,22 @@ public class Robot implements IRobot {
 	private IConnection conn;
 	
 	public Robot(IConnection connection){
-		this.conn = connection;
-		this.conn.connect();
-		this.conn.disconnect();
-		
+		this.conn = connection;		
 	}
 	
 	@Override
 	public void connect() {
-		this.conn.connect();
-
+		try {
+			this.conn.connect();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	@Override
 	public void disconnect() {
-		this.conn.connect();
-
+		this.conn.disconnect();
 	}
 
 	
