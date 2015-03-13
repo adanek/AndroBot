@@ -7,11 +7,20 @@ public interface IRobot {
 	
 	void moveForward();
 	void moveBackward();
-	void move(byte distance_cm);
 	void turn(Direction direction);
 	void turn(byte degree);
 	void stop();
 	void setBar(byte value);
 	String getOdomentry();
 	//void execute(Queue)
+	void turnLeft();
+	void turnRight();
+	void barLower();
+	void barRise();
+	String getSensors();
+	void moveDistance(byte distance_cm);
+	void setVelocity(byte left, byte right);
+	void setLeds(byte red, byte blue);
+	void setOdomentry(byte xlow, byte xheigh, byte ylow, byte yheigh,
+			byte alphalow, byte alphaheigh);
 }
