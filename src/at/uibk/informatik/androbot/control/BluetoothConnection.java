@@ -19,7 +19,8 @@ public class BluetoothConnection implements IConnection {
 
 	private BluetoothAdapter btAdapter;
 
-	//private static final UUID SERVICE_ID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
+	// private static final UUID SERVICE_ID =
+	// UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
 	private static final String TAG = "BluetoothConnenction";
 	private String address;
 
@@ -81,14 +82,25 @@ public class BluetoothConnection implements IConnection {
 	}
 
 	@Override
-	public void write(byte[] msg) {
-
+	public void sendCommand(byte[] command) {
 		if (this.tConnected == null || !this.tConnected.isAlive())
 			throw new IllegalStateException(
 					"The connection must be connected before writing");
 
-		Log.d(TAG, "Sending message: " + msg);
-		this.tConnected.write(msg);
+		Log.d(TAG, "Sending message: " + new String(command));
+		this.tConnected.sendCommand(command);
+	}
+
+	@Override
+	public String getResponse(byte[] command) {
+		if (this.tConnected == null || !this.tConnected.isAlive())
+			throw new IllegalStateException(
+					"The connection must be connected before writing");
+
+		Log.d(TAG, "Sending message: " + new String(command));
+		String response = this.tConnected.getResponse(command);
+
+		return response;
 	}
 
 	private void checkBtState() {
@@ -190,6 +202,7 @@ public class BluetoothConnection implements IConnection {
 		private final BluetoothSocket btSocket;
 		private final InputStream btInStream;
 		private final OutputStream btOutStream;
+		private boolean running = true;
 
 		public BtDataExchangeThread(BluetoothSocket socket) {
 			this.btSocket = socket;
@@ -215,17 +228,17 @@ public class BluetoothConnection implements IConnection {
 		// Receives messages from remote device
 		public void run() {
 
-			byte[] buffer = new byte[1024];
-			int bytes;
-
 			Log.d(LOG_TAG, "Start to listen on socket for incoming messages");
 
 			while (true) {
-				try {
-					bytes = btInStream.read(buffer);
 
-					// TODO: Send message to caller
-				} catch (IOException e) {
+				if (this.running) {
+					try {
+						sleep(1000);
+					} catch (InterruptedException e) {
+						break;
+					}
+				} else {
 					break;
 				}
 			}
@@ -233,19 +246,26 @@ public class BluetoothConnection implements IConnection {
 			Log.d(LOG_TAG, "Thread finished");
 		}
 
-		// Sends a message to the remote device
-		public void write(byte[] data) {
-			Log.d(LOG_TAG, "Writing message: " + data.toString());
+		// Sends a command to the remote device
+		public void sendCommand(byte[] command) {
+			Log.d(LOG_TAG, "Writing message: " + new String(command));
 
-			try {
-				btOutStream.write(data);
-			} catch (IOException e) {
-				Log.d(LOG_TAG, "Failed to write data: \n" + e.getMessage());
-			}
+			sendData(command);
+		}
+
+		// Receives a response from the remote device to a given command
+		public String getResponse(byte[] command) {
+
+			this.flushInputStream();
+			sendData(command);
+			String response = receiveData();
+			return response;
 		}
 
 		public void cancel() {
 			Log.d(LOG_TAG, "Thread canceled");
+			
+			this.running = false;
 
 			try {
 				btOutStream.flush();
@@ -257,6 +277,37 @@ public class BluetoothConnection implements IConnection {
 				btSocket.close();
 			} catch (IOException e) {
 				Log.d(LOG_TAG, "Failed to close the connection");
+			}
+		}
+
+		private void sendData(byte[] data) {
+			try {
+				btOutStream.write(data);
+			} catch (IOException e) {
+				Log.d(LOG_TAG, "Failed to write data: \n" + e.getMessage());
+			}
+		}
+
+		private String receiveData() {
+			byte[] buffer = new byte[1024];
+			int bytes = 0;
+
+			try {
+				bytes = btInStream.read(buffer);
+			} catch (IOException e) {
+			}
+
+			String msg = new String(buffer, 0, bytes);
+			Log.d(LOG_TAG, "Received message: " + msg);
+			return msg;
+		}
+		
+		private void flushInputStream(){
+			try {
+				if(btInStream.available()> 0){
+					this.receiveData();
+				}
+			} catch (IOException e) {
 			}
 		}
 	}

@@ -8,34 +8,6 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="at.uibk.informatik.androbot.app.MainActivity" >
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="20dp"
-        android:text="@string/welcome" />
-
-    <TextView
-        android:id="@+id/textView1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/button1"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="44dp"
-        android:text=""
-        android:textAppearance="?android:attr/textAppearanceSmall" />
-
-    <Button
-        android:id="@+id/backward"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="112dp"
-        android:onClick="move"
-        android:text="X" />
-
     <Button
         android:id="@+id/right"
         android:layout_width="wrap_content"
@@ -72,10 +44,36 @@
         android:id="@+id/forward"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/button1"
-        android:layout_marginBottom="35dp"
-        android:layout_toLeftOf="@+id/right"
+        android:layout_above="@+id/btnStop"
+        android:layout_marginBottom="20dp"
+        android:layout_toRightOf="@+id/btnOdomentry"
         android:onClick="move"
         android:text="W" />
+
+    <Button
+        android:id="@+id/backward"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_toRightOf="@+id/btnOdomentry"
+        android:onClick="move"
+        android:text="X" />
+
+    <Button
+        android:id="@+id/btnOdomentry"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/left"
+        android:layout_below="@+id/backward"
+        android:layout_marginTop="30dp"
+        android:onClick="getOdomentry"
+        android:text="Position" />
+
+    <TextView
+        android:id="@+id/tvPosition"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/btnOdomentry"
+        android:layout_centerHorizontal="true" />
 
 </RelativeLayout>

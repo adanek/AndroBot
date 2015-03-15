@@ -3,7 +3,7 @@ package at.uibk.informatik.androbot.app;
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
-import at.uibk.informatik.androbot.app.R.id;
+import android.widget.TextView;
 import at.uibk.informatik.androbot.contracts.Direction;
 import at.uibk.informatik.androbot.contracts.IRobot;
 import at.uibk.informatik.androbot.control.BluetoothConnection;
@@ -55,6 +55,11 @@ public class MainActivity extends Activity {
 		default:
 			break;
 		}
-
+	}
+	
+	public void getOdomentry(View v){
+		TextView output = (TextView) findViewById(R.id.tvPosition);
+		
+		output.setText(robot.getOdomentry());
 	}
 }

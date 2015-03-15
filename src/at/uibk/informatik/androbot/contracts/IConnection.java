@@ -4,7 +4,8 @@ import java.io.IOException;
 
 public interface IConnection {
 
-     void write(byte[] message);
+     void sendCommand(byte[] command);
+     String getResponse(byte[] command);
      void connect() throws IOException;
      void disconnect();     
 }
