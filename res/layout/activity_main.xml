@@ -59,21 +59,67 @@
         android:onClick="move"
         android:text="X" />
 
-    <Button
-        android:id="@+id/btnOdomentry"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/left"
-        android:layout_below="@+id/backward"
-        android:layout_marginTop="30dp"
-        android:onClick="getOdomentry"
-        android:text="Position" />
-
     <TextView
         android:id="@+id/tvPosition"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/btnOdomentry"
         android:layout_centerHorizontal="true" />
+
+    <Button
+        android:id="@+id/btnOdomentry"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignRight="@+id/left"
+        android:layout_centerVertical="true"
+        android:onClick="getOdomentry"
+        android:text="Position" />
+
+    <Button
+        android:id="@+id/squaretest"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignRight="@+id/backward"
+        android:layout_marginBottom="20dp"
+        android:onClick="squareTest"
+        android:text="Start Square Test" />
+
+    <EditText
+        android:id="@+id/degrees"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/squaretest"
+        android:layout_marginBottom="16dp"
+        android:layout_toRightOf="@+id/tvPosition"
+        android:ems="10"
+        android:inputType="number"
+        android:text="90" />
+
+    <EditText
+        android:id="@+id/distance"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/degrees"
+        android:layout_alignLeft="@+id/degrees"
+        android:ems="10"
+        android:inputType="number"
+        android:text="10" />
+
+    <TextView
+        android:id="@+id/txtDistance"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/degrees"
+        android:layout_alignLeft="@+id/left"
+        android:text="Distance" />
+
+    <TextView
+        android:id="@+id/txtDegrees"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/degrees"
+        android:layout_alignLeft="@+id/txtDistance"
+        android:text="Degrees" />
 
 </RelativeLayout>
