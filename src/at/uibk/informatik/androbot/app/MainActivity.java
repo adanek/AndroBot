@@ -3,6 +3,7 @@ package at.uibk.informatik.androbot.app;
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
+import at.uibk.informatik.androbot.app.R.id;
 import at.uibk.informatik.androbot.contracts.Direction;
 import at.uibk.informatik.androbot.contracts.IRobot;
 import at.uibk.informatik.androbot.control.BluetoothConnection;
@@ -47,6 +48,11 @@ public class MainActivity extends Activity {
 			break;
 		case R.id.right:
 			robot.turn(Direction.RIGHT);
+			break;
+		case R.id.btnStop:
+			robot.stop();
+			break;
+		default:
 			break;
 		}
 

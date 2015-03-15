@@ -38,7 +38,16 @@ public class Robot implements IRobot {
 
 	@Override
 	public void turn(Direction direction) {
-		// TODO Auto-generated method stub
+		switch (direction){
+		case LEFT:
+			this.turnLeft();
+			break;
+		case RIGHT:
+			this.turnRight();
+			break;
+		default:
+			break;		
+		}
 
 	}
 

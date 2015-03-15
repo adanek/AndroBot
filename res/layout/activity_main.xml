@@ -59,13 +59,13 @@
         android:text="A" />
 
     <Button
-        android:id="@+id/button1"
+        android:id="@+id/btnStop"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBaseline="@+id/right"
         android:layout_alignBottom="@+id/right"
         android:layout_toLeftOf="@+id/right"
-        android:onClick="on"
+        android:onClick="move"
         android:text="@string/btn1_text" />
 
     <Button
