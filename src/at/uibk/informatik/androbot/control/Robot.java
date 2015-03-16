@@ -32,7 +32,17 @@ public class Robot implements IRobot {
 	
 	@Override
 	public void moveDistance(byte distance_cm) {
-		this.conn.sendCommand(new byte[] { 'k', distance_cm, '\r', '\n' });
+		
+		
+		//odomentry stuff
+		byte dis = (byte)(distance_cm * 1.43);
+		this.conn.sendCommand(new byte[] { 'k', dis, '\r', '\n' });
+		try {
+			Thread.sleep(2000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 	}
 
@@ -47,6 +57,12 @@ public class Robot implements IRobot {
 			break;
 		default:
 			break;		
+		}
+		try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 
 	}
@@ -72,7 +88,7 @@ public class Robot implements IRobot {
 	@Override
 	public void turnLeft() {
 		this.conn.sendCommand(new byte[] { 'd', '\r', '\n' });
-
+		
 	}
 	
 	@Override
