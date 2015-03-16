@@ -81,7 +81,7 @@ public class MainActivity extends Activity {
 			if (degr == 0) {
 				robot.turn(Direction.LEFT);
 			} else {
-				robot.turn(degr);
+				robot.turn(intToByte(degr));
 			}
 
 			break;
@@ -90,7 +90,7 @@ public class MainActivity extends Activity {
 			if (degr == 0) {
 				robot.turn(Direction.RIGHT);
 			} else {
-				robot.turn(degr);
+				robot.turn(intToByte(degr));
 			}
 			break;
 		case R.id.btnStop:
@@ -117,7 +117,8 @@ public class MainActivity extends Activity {
 		Log.d("main_activity", "Distance in cm " + Integer.valueOf(distance.getText().toString()));
 
 		// get byte from integer
-		byte dist_byte = intToByte(Integer.valueOf(distance.getText().toString()));
+		byte dist_byte = intToByte(Integer.valueOf(distance.getText()
+				.toString()));
 
 		// start square test
 		robot.moveDistance(dist_byte);
