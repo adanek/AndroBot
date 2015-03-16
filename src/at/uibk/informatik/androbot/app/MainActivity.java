@@ -22,7 +22,8 @@ public class MainActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
-		this.robot = new Robot(new BluetoothConnection("00:26:83:30:F7:E8")); // MAC
+		//Andis Maci 00:26:83:30:F7:E8
+		this.robot = new Robot(new BluetoothConnection("20:13:08:16:10:42"));   // MAC
 																				// from
 																				// Andi's
 																				// PC
@@ -107,14 +108,13 @@ public class MainActivity extends Activity {
 	}
 
 	// square test
-	public void squareTest(View v) {
-
-		System.out.println("Square Test started");
+	public void squareTest(View v){
+		
+		Log.d("main_activity", "Square Test started");
 
 		EditText distance = (EditText) findViewById(R.id.distance);
 
-		System.out.println("Distance in cm "
-				+ Integer.valueOf(distance.getText().toString()));
+		Log.d("main_activity", "Distance in cm " + Integer.valueOf(distance.getText().toString()));
 
 		// get byte from integer
 		byte dist_byte = intToByte(Integer.valueOf(distance.getText()
