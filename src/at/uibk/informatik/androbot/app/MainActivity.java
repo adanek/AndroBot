@@ -129,6 +129,7 @@ public class MainActivity extends Activity {
 		robot.turn(Direction.LEFT);
 		robot.moveDistance(dist_byte);
 		robot.turn(Direction.LEFT);
+		robot.stop();
 
 	}
 
