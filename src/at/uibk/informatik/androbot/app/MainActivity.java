@@ -122,13 +122,13 @@ public class MainActivity extends Activity {
 
 		// start square test
 		robot.moveDistance(dist_byte);
-		robot.turnLeft();
+		robot.turn(Direction.LEFT);
 		robot.moveDistance(dist_byte);
-		robot.turnLeft();
+		robot.turn(Direction.LEFT);
 		robot.moveDistance(dist_byte);
-		robot.turnLeft();
+		robot.turn(Direction.LEFT);
 		robot.moveDistance(dist_byte);
-		robot.turnLeft();
+		robot.turn(Direction.LEFT);
 
 	}
 

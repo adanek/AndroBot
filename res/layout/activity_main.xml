@@ -94,7 +94,7 @@
         android:layout_toRightOf="@+id/tvPosition"
         android:ems="10"
         android:inputType="number"
-        android:text="90" />
+        android:text="0" />
 
     <EditText
         android:id="@+id/distance"
