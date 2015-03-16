@@ -87,13 +87,13 @@ public class Robot implements IRobot {
 	
 	@Override
 	public void turnLeft() {
-		this.conn.sendCommand(new byte[] { 'd', '\r', '\n' });
+		this.conn.sendCommand(new byte[] { 'a', '\r', '\n' });
 		
 	}
 	
 	@Override
 	public void turnRight() {
-		this.conn.sendCommand(new byte[] { 'a', '\r', '\n' });
+		this.conn.sendCommand(new byte[] { 'd', '\r', '\n' });
 
 	}
 	
