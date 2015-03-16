@@ -117,7 +117,8 @@ public class Robot implements IRobot {
 	}
 	
 	@Override
-	public void turn(byte degree) {
+	public void turn(int degree) {
+		byte deg = (byte)(degree * 1.17);
 		this.conn.sendCommand(new byte[] { 'l', degree, '\r', '\n' });
 		
 	}

@@ -8,7 +8,7 @@ public interface IRobot {
 	void moveForward();
 	void moveBackward();
 	void turn(Direction direction);
-	void turn(byte degree);
+	void turn(int degree);
 	void stop();
 	void setBar(byte value);
 	String getOdomentry();
