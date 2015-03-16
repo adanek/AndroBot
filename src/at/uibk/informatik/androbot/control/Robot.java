@@ -118,8 +118,20 @@ public class Robot implements IRobot {
 	
 	@Override
 	public void turn(int degree) {
-		byte deg = (byte)(degree * 1.17);
-		this.conn.sendCommand(new byte[] { 'l', degree, '\r', '\n' });
+		int deg = (int)degree;//(degree * 1.17);
+		
+//		if(deg > 180){
+//			this.conn.sendCommand(new byte[] { 'l', (byte)180, '\r', '\n' });
+//			try {
+//				Thread.sleep(1500);
+//			} catch (InterruptedException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
+//			deg -= 180;
+//		}
+		
+		this.conn.sendCommand(new byte[] { 'l', (byte)deg, '\r', '\n' });
 		
 	}
 	

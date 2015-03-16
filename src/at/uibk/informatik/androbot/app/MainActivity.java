@@ -12,16 +12,22 @@ import at.uibk.informatik.androbot.contracts.Direction;
 import at.uibk.informatik.androbot.contracts.IRobot;
 import at.uibk.informatik.androbot.control.BluetoothConnection;
 import at.uibk.informatik.androbot.control.Robot;
+import at.uibk.informatik.androbot.programms.SquareTest;
 
 public class MainActivity extends Activity {
 
 	private IRobot robot;
+	private SquareTest prg;
+	private String test;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
+		
+		prg = new SquareTest();
+		
 		//Andis Maci 00:26:83:30:F7:E8
 		this.robot = new Robot(new BluetoothConnection("20:13:08:16:10:42"));   // MAC
 																				// from
@@ -40,13 +46,13 @@ public class MainActivity extends Activity {
 	@Override
 	protected void onResume() {
 		super.onResume();
-		this.robot.connect();
+				
 	}
 
 	@Override
 	protected void onPause() {
 		super.onPause();
-		this.robot.disconnect();
+	
 	}
 
 	// move
@@ -110,25 +116,6 @@ public class MainActivity extends Activity {
 	// square test
 	public void squareTest(View v){
 		
-		Log.d("main_activity", "Square Test started");
-
-		EditText distance = (EditText) findViewById(R.id.distance);
-
-		Log.d("main_activity", "Distance in cm " + Integer.valueOf(distance.getText().toString()));
-
-		// get byte from integer
-		byte dist_byte = intToByte(Integer.valueOf(distance.getText().toString()));
-
-		// start square test
-		robot.moveDistance(dist_byte);
-		robot.turn(Direction.LEFT);
-		robot.moveDistance(dist_byte);
-		robot.turn(Direction.LEFT);
-		robot.moveDistance(dist_byte);
-		robot.turn(Direction.LEFT);
-		robot.moveDistance(dist_byte);
-		robot.turn(Direction.LEFT);
-		robot.stop();
 
 	}
 
