@@ -13,7 +13,7 @@ public class SquareTest extends Programm {
 	@Override
 	public void ExecutionPlan() {
 		
-		Log.d(LOG_TAG, "Square Test started");
+	/*	Log.d(LOG_TAG, "Square Test started");
 
 		EditText distance = (EditText) findViewById(R.id.distance);
 
@@ -47,6 +47,8 @@ public class SquareTest extends Programm {
 		// Show difference
 		
 		// Display startPosition, endPosition and difference on screen
+		 
+		 */
 
 		
 	}
