@@ -108,7 +108,7 @@ public class MainActivity extends Activity {
 	}
 
 	public void getOdomentry(View v) {
-		TextView output = (TextView) findViewById(R.id.tvPosition);
+		TextView output = (TextView) findViewById(R.id.txtName);
 
 		output.setText(robot.getOdomentry());
 	}

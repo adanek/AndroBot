@@ -60,7 +60,7 @@
         android:text="X" />
 
     <TextView
-        android:id="@+id/tvPosition"
+        android:id="@+id/txtName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/btnOdomentry"
@@ -91,7 +91,7 @@
         android:layout_height="wrap_content"
         android:layout_above="@+id/squaretest"
         android:layout_marginBottom="16dp"
-        android:layout_toRightOf="@+id/tvPosition"
+        android:layout_toRightOf="@+id/txtName"
         android:ems="10"
         android:inputType="number"
         android:text="0" />
