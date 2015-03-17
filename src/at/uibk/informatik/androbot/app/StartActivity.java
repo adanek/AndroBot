@@ -3,6 +3,7 @@ package at.uibk.informatik.androbot.app;
 import java.text.DecimalFormat;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -37,15 +38,22 @@ public class StartActivity extends Activity {
 	//Settings
 	public void onSettings(View v){
 		
+		Intent settings = new Intent(this, SettingsActivity.class);
+		startActivity(settings);
+		
 	}
 	
 	//Basic Control
 	public void onBasic(View v){
 		
+		
 	}
 	
 	//Square Test
 	public void onSquare(View v){
+		
+		Intent square = new Intent(this, SquareTestActivity.class);
+		startActivity(square);
 		
 	}
 	

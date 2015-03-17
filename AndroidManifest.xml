@@ -33,7 +33,7 @@
             android:label="@string/app_name" >
         </activity>
         <activity
-            android:name=".SquareActivity"
+            android:name=".SquareTestActivity"
             android:label="@string/app_name" >
         </activity>
     </application>
