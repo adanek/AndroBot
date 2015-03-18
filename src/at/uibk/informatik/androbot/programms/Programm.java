@@ -6,7 +6,7 @@ import at.uibk.informatik.androbot.control.Robot;
 public abstract class Programm {
 	
 	
-	protected IRobot robot;
+	private IRobot robot;
 	public Programm(){
 		this.robot = new Robot(null);
 		

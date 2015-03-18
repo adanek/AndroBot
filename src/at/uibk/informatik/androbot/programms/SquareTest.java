@@ -1,10 +1,8 @@
 package at.uibk.informatik.androbot.programms;
 
 import android.util.Log;
-import android.widget.EditText;
-import at.uibk.informatik.androbot.app.R;
 import at.uibk.informatik.androbot.contracts.Direction;
-import at.uibk.informatik.androbot.control.Robot;
+import at.uibk.informatik.androbot.contracts.IRobot;
 
 public class SquareTest extends Programm {
 
@@ -25,6 +23,8 @@ public class SquareTest extends Programm {
 		// Get start position (Odomentry)
 		
 		// Start Sensors
+		
+		IRobot robot = super.getRobot();
 		
 		// start square test
 		robot.moveDistance((byte) distance);

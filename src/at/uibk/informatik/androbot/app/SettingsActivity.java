@@ -37,6 +37,8 @@ public class SettingsActivity extends Activity {
 	//Save settings
 	public void onSave(View v){
 		
+		//back to start activity
+		finish();
 	}
 	
 }
