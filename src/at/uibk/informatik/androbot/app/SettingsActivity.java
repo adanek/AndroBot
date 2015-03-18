@@ -16,6 +16,8 @@ import at.uibk.informatik.androbot.programms.SquareTest;
 
 public class SettingsActivity extends Activity {
 
+	private static final String LOG_TAG = "Settings";
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -37,6 +39,19 @@ public class SettingsActivity extends Activity {
 	//Save settings
 	public void onSave(View v){
 		
+		EditText mac     = (EditText) findViewById(R.id.inputMAC);
+		EditText linear  = (EditText) findViewById(R.id.inputLinear);
+		EditText angular = (EditText) findViewById(R.id.inputAngular);
+	
+		String macAddress = mac.getText().toString();
+		Double linearCo   = Double.valueOf(linear.getText().toString());
+		Double angularCo  = Double.valueOf(angular.getText().toString());
+		
+		//log
+		Log.d(LOG_TAG, "Mac Address " + macAddress + " set");
+		Log.d(LOG_TAG, "Linear coefficient " + linearCo + " set");
+		Log.d(LOG_TAG, "Angular coefficient " + angularCo + " set"); 
+
 		//back to start activity
 		finish();
 	}

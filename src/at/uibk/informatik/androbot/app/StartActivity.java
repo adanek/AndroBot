@@ -48,7 +48,7 @@ public class StartActivity extends Activity {
 	public void onBasic(View v){
 		
 		//call basic control view
-		Intent basic = new Intent(this, SquareTestActivity.class);
+		Intent basic = new Intent(this, BasicControlActivity.class);
 		startActivity(basic);
 		
 	}
