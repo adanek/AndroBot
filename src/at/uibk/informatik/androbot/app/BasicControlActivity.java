@@ -15,12 +15,12 @@ import at.uibk.informatik.androbot.control.BluetoothConnection;
 import at.uibk.informatik.androbot.control.Robot;
 import at.uibk.informatik.androbot.programms.SquareTest;
 
-public class StartActivity extends Activity {
+public class BasicControlActivity extends Activity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_start);
+		setContentView(R.layout.activity_basic);
 	}
 
 	@Override
@@ -35,31 +35,12 @@ public class StartActivity extends Activity {
 	
 	}
 
-	//Settings
-	public void onSettings(View v){
+	//Move
+	public void onMove(View v){
 		
-		//call settings view
-		Intent settings = new Intent(this, SettingsActivity.class);
-		startActivity(settings);
+
 		
 	}
 	
-	//Basic Control
-	public void onBasic(View v){
-		
-		//call basic control view
-		Intent basic = new Intent(this, SquareTestActivity.class);
-		startActivity(basic);
-		
-	}
-	
-	//Square Test
-	public void onSquare(View v){
-		
-		//call square test view
-		Intent square = new Intent(this, SquareTestActivity.class);
-		startActivity(square);
-		
-	}
 	
 }

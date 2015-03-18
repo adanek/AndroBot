@@ -10,17 +10,14 @@ public class SquareTest extends Programm {
 
 	private static final String LOG_TAG = "SquareTest";
 
+	private int distance;
+	
 	@Override
 	public void ExecutionPlan() {
 		
-	/*	Log.d(LOG_TAG, "Square Test started");
-
-		EditText distance = (EditText) findViewById(R.id.distance);
-
-		Log.d(LOG_TAG, "Distance in cm " + Integer.valueOf(distance.getText().toString()));
-
-		// get byte from integer
-		byte dist_byte = intToByte(Integer.valueOf(distance.getText().toString()));
+		//Log
+		Log.d(LOG_TAG, "Square Test started");
+		Log.d(LOG_TAG, "Distance in cm " + Integer.valueOf(distance));
 
 		// Think about encapsulating the obstacale logic.
 		
@@ -30,15 +27,14 @@ public class SquareTest extends Programm {
 		// Start Sensors
 		
 		// start square test
-		robot.moveDistance(dist_byte);
+		robot.moveDistance((byte) distance);
 		robot.turn(Direction.LEFT);
-		robot.moveDistance(dist_byte);
+		robot.moveDistance((byte) distance);
 		robot.turn(Direction.LEFT);
-		robot.moveDistance(dist_byte);
+		robot.moveDistance((byte) distance);
 		robot.turn(Direction.LEFT);
-		robot.moveDistance(dist_byte);
+		robot.moveDistance((byte) distance);
 		robot.turn(Direction.LEFT);
-		
 		
 		// STtop sensors
 		
@@ -47,10 +43,7 @@ public class SquareTest extends Programm {
 		// Show difference
 		
 		// Display startPosition, endPosition and difference on screen
-		 
-		 */
 
-		
 	}
 	
 	public int getDistance() {
@@ -60,7 +53,5 @@ public class SquareTest extends Programm {
 	public void setDistance(int distance) {
 		this.distance = distance;
 	}
-
-	private int distance;
 
 }

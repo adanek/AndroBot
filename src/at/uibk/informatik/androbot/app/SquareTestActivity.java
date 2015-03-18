@@ -1,25 +1,22 @@
 package at.uibk.informatik.androbot.app;
 
-import java.text.DecimalFormat;
-
 import android.app.Activity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
-import android.widget.EditText;
-import android.widget.TextView;
-import at.uibk.informatik.androbot.contracts.Direction;
-import at.uibk.informatik.androbot.contracts.IRobot;
-import at.uibk.informatik.androbot.control.BluetoothConnection;
-import at.uibk.informatik.androbot.control.Robot;
+import android.widget.SeekBar;
 import at.uibk.informatik.androbot.programms.SquareTest;
 
 public class SquareTestActivity extends Activity {
 
+	private SquareTest squareTest;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_square);
+		
+		//create square test instance
+		squareTest = new SquareTest();
 	}
 
 	@Override
@@ -36,6 +33,14 @@ public class SquareTestActivity extends Activity {
 
 	//Start
 	public void onStart(View v){
+		
+		SeekBar distSeek = (SeekBar) findViewById(R.id.distance);
+		
+		//get distance value from seekbar
+		squareTest.setDistance(distSeek.getProgress());
+		
+		//start square test
+		squareTest.start();
 		
 	}
 	

@@ -1,13 +1,14 @@
 package at.uibk.informatik.androbot.programms;
 
 import at.uibk.informatik.androbot.contracts.IRobot;
+import at.uibk.informatik.androbot.control.Robot;
 
 public abstract class Programm {
 	
 	
-	private IRobot robot;
+	protected IRobot robot;
 	public Programm(){
-		//this.robot = new Robot();
+		this.robot = new Robot(null);
 		
 	}
 	

@@ -6,55 +6,99 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="at.uibk.informatik.androbot.app.SquareActivity" >
+    tools:context="at.uibk.informatik.androbot.app.BasicControlActivity" >
 
     <TextView
         android:id="@+id/txtName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Square Test" />
+        android:text="Basic Control" />
 
-        <Button
-        android:id="@+id/btnStart"
+    <Button
+        android:id="@+id/minus"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
-        android:layout_marginLeft="30dp"
-        android:onClick="onStart"
-        android:text="Start" />
-        
-        
-        <Button
-        android:id="@+id/btnStop"
+        android:layout_marginTop="50dp"
+        android:layout_marginLeft="20dp"
+        android:text="-" />
+    
+    <Button
+        android:id="@+id/forward"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
-        android:layout_marginLeft="180dp"
-        android:onClick="onStop"
-        android:text="Stop" />
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="50dp"
+        android:onClick="onMove"
+        android:text="W" />
 
-        <SeekBar
-            android:id="@+id/distance"
-            android:layout_width="200dp"
-            android:layout_height="30dp"
-            android:layout_marginTop="140dp"
-            android:layout_marginLeft="20dp"
-            android:max="200"/>
 
-        <TextView
-            android:id="@+id/txtLblDist"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="115dp"
-            android:layout_marginLeft="20dp"
-            android:text="Distance"
-            android:textAppearance="?android:attr/textAppearanceSmall" />
+        <Button
+        android:id="@+id/plus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:layout_marginLeft="205dp"
+        android:text="-" />
+    
+        <Button
+        android:id="@+id/left"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="120dp"
+        android:layout_marginLeft="20dp"
+        android:onClick="onMove"
+        android:text="A" />
+    
+    <Button
+        android:id="@+id/stop"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="120dp"
+        android:onClick="onMove"
+        android:text="S" />
+
+
+        <Button
+        android:id="@+id/right"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="120dp"
+        android:layout_marginLeft="205dp"
+        android:onClick="onMove"
+        android:text="D" /> 
         
-            <TextView
+     <Button
+        android:id="@+id/down"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="190dp"
+        android:layout_marginLeft="20dp"
+        android:text="Down" />
+    
+    <Button
+        android:id="@+id/backward"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="190dp"
+        android:onClick="onMove"
+        android:text="X" />
+
+
+        <Button
+        android:id="@+id/up"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="190dp"
+        android:layout_marginLeft="205dp"
+        android:text="Up" /> 
+        
+                    <TextView
             android:id="@+id/txtLblRL"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="185dp"
+            android:layout_marginTop="270dp"
             android:layout_marginLeft="20dp"
             android:text="RL"
             android:textAppearance="?android:attr/textAppearanceSmall" />
@@ -63,7 +107,7 @@
             android:id="@+id/txtLblFL"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="185dp"
+            android:layout_marginTop="270dp"
             android:layout_marginLeft="70dp"
             android:text="FL"
             android:textAppearance="?android:attr/textAppearanceSmall" />
@@ -72,7 +116,7 @@
             android:id="@+id/txtLblFM"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="185dp"
+            android:layout_marginTop="270dp"
             android:layout_marginLeft="120dp"
             android:text="FM"
             android:textAppearance="?android:attr/textAppearanceSmall" />            
@@ -81,7 +125,7 @@
             android:id="@+id/txtLblFR"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="185dp"
+            android:layout_marginTop="270dp"
             android:layout_marginLeft="170dp"
             android:text="FR"
             android:textAppearance="?android:attr/textAppearanceSmall" /> 
@@ -90,7 +134,7 @@
             android:id="@+id/txtLblRR"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="185dp"
+            android:layout_marginTop="270dp"
             android:layout_marginLeft="220dp"
             android:text="RR"
             android:textAppearance="?android:attr/textAppearanceSmall" />
@@ -99,7 +143,7 @@
                 android:id="@+id/txtRL"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-           		android:layout_marginTop="210dp"
+           		android:layout_marginTop="295dp"
            	    android:layout_marginLeft="20dp"
                 android:text="0"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
@@ -108,7 +152,7 @@
                 android:id="@+id/txtFL"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-           		android:layout_marginTop="210dp"
+           		android:layout_marginTop="295dp"
            	    android:layout_marginLeft="70dp"
                 android:text="0"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
@@ -117,7 +161,7 @@
                 android:id="@+id/txtFM"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-           		android:layout_marginTop="210dp"
+           		android:layout_marginTop="295dp"
            	    android:layout_marginLeft="120dp"
                 android:text="0"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
@@ -126,7 +170,7 @@
                 android:id="@+id/txtFR"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-           		android:layout_marginTop="210dp"
+           		android:layout_marginTop="295dp"
            	    android:layout_marginLeft="170dp"
                 android:text="0"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
@@ -135,26 +179,27 @@
                 android:id="@+id/txtRR"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-           		android:layout_marginTop="210dp"
+           		android:layout_marginTop="295dp"
            	    android:layout_marginLeft="220dp"
                 android:text="0"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
-                
-            <TextView
-            android:id="@+id/txtLblLog"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="240dp"
-            android:layout_marginLeft="20dp"
-            android:text="Log"
-            android:textAppearance="?android:attr/textAppearanceSmall" />
 
-            <TextView
-                android:id="@+id/txtLog"
+                <TextView
+                    android:id="@+id/txtLblOdometry"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="330dp"
+                    android:layout_marginLeft="20dp"
+                    android:text="Odometry"
+                    android:textAppearance="?android:attr/textAppearanceSmall" />
+                
+               <TextView
+                android:id="@+id/txtOdometry"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="260dp"
-                 android:layout_marginLeft="20dp"
-                android:text=" " />
-                
+           		android:layout_marginTop="350dp"
+           	    android:layout_marginLeft="20dp"
+                android:text=" "
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+        
 </RelativeLayout>
