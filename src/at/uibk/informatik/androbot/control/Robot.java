@@ -2,177 +2,312 @@ package at.uibk.informatik.androbot.control;
 
 import java.io.IOException;
 
+import android.util.Log;
 import at.uibk.informatik.androbot.contracts.Direction;
 import at.uibk.informatik.androbot.contracts.IConnection;
+import at.uibk.informatik.androbot.contracts.IDistanceSensor;
 import at.uibk.informatik.androbot.contracts.IRobot;
 
 public class Robot implements IRobot {
 
+	private static final String LOG_TAG = "Robot";
 	private IConnection conn;
-	
-	public Robot(IConnection connection){
-		this.conn = connection;		
+	private double angularCorrection;
+	private double linearCorrection;
+	private int barCurrentAngel;
+	private final int barMaxAngle = 90;
+	private final int barStepSize = 10;
+
+	/* ********************************************************************************** *
+	 * Constructor
+	 * **************************************************************
+	 * ******************** *
+	 */
+
+	public Robot(IConnection connection) {
+		this.conn = connection;
+
+		this.angularCorrection = 1.0;
+		this.linearCorrection = 1.0;
 	}
-	
+
+	/* ********************************************************************************** *
+	 * Properties
+	 * ***************************************************************
+	 * ******************* *
+	 */
+
+	public double getAngularCorrection() {
+		return angularCorrection;
+	}
+
+	public void setAngularCorrection(double angularCorrection) {
+		this.angularCorrection = angularCorrection;
+	}
+
+	/* ********************************************************************************** *
+	 * Methods
+	 * ******************************************************************
+	 * **************** *
+	 */
+
+	/*
+	 * Connection
+	 */
+
+
 	@Override
 	public void connect() {
 		try {
 			this.conn.connect();
+			this.initialize();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
 
+
 	@Override
 	public void disconnect() {
 		this.conn.disconnect();
 	}
 
-	
-	@Override
-	public void moveDistance(byte distance_cm) {
-		
-		
-		//odomentry stuff
-		byte dis = (byte)(distance_cm * 1.43);
-		this.conn.sendCommand(new byte[] { 'k', dis, '\r', '\n' });
-		try {
-			Thread.sleep(2000);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-	}
 
 	@Override
-	public void turn(Direction direction) {
-		switch (direction){
-		case LEFT:
-			this.turnLeft();
-			break;
-		case RIGHT:
-			this.turnRight();
-			break;
-		default:
-			break;		
-		}
-		try {
-			Thread.sleep(1000);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+	public void initialize() {
 
+		this.setBar(90);
 	}
+
+	/*
+	 * Movement
+	 */
+
 
 	@Override
 	public void moveForward() {
 		this.conn.sendCommand(new byte[] { 'w', '\r', '\n' });
-		
+
 	}
+
+
+	@Override
+	public void moveDistance(byte distance_cm) {
+
+		int distance = (int) (distance_cm * linearCorrection);
+
+		try {
+			while (distance > 0) {
+				byte stepWidth = (byte) (distance > Byte.MAX_VALUE ? Byte.MAX_VALUE
+						: distance);
+				distance -= stepWidth;
+
+				// Calculate runtime in milliseconds
+				int runtime = 2000;
+
+				// Send partial command
+				this.conn
+						.sendCommand(new byte[] { 'k', stepWidth, '\r', '\n' });
+				Thread.sleep(runtime);
+			}
+
+		} catch (InterruptedException e) {
+			Log.d(LOG_TAG, "Move distance has been interupt");
+			e.printStackTrace();
+		}
+	}
+
 
 	@Override
 	public void moveBackward() {
 		this.conn.sendCommand(new byte[] { 'x', '\r', '\n' });
-		
 	}
 
 	@Override
 	public void stop() {
 		this.conn.sendCommand(new byte[] { 's', '\r', '\n' });
-
 	}
-	
+
+
+	@Override
+	public void turn(Direction direction, int degrees) {
+
+		int deg = (int) (degrees * angularCorrection);
+		int maxDegreePerStep = 127;
+
+		try {
+			while (deg > 0) {
+
+				int stepWidth = deg > maxDegreePerStep ? maxDegreePerStep : deg;
+				byte stepData = getStepDataForTurn(direction, stepWidth);
+				deg -= stepWidth;
+
+				// Calculate runtime for turning
+				int runtime = 1000;
+
+				this.conn.sendCommand(new byte[] { 'l', stepData, '\r', '\n' });
+				Thread.sleep(runtime);
+			}
+		} catch (InterruptedException e) {
+			Log.d(LOG_TAG, "Turn command has been interupt");
+			e.printStackTrace();
+		}
+	}
+
+
 	@Override
 	public void turnLeft() {
-		this.conn.sendCommand(new byte[] { 'a', '\r', '\n' });
-		
+		this.turn(Direction.LEFT, 90);
 	}
-	
+
+
 	@Override
 	public void turnRight() {
-		this.conn.sendCommand(new byte[] { 'd', '\r', '\n' });
-
+		this.turn(Direction.RIGHT, 90);
 	}
+
+	// Calculate the accurate parameter for turning the desired degrees in the
+	// desired direction
+	private byte getStepDataForTurn(Direction direction, int stepWidth) {
+		int data = 0;
+
+		switch (direction) {
+		case LEFT:
+			data = stepWidth;
+			break;
+
+		case RIGHT:
+			data = Byte.MAX_VALUE - stepWidth + 1; // plus 1 because 255 is
+													// already a turn by 1
+													// degree
+			break;
+
+		default:
+			break;
+		}
+		return (byte) data;
+	}
+
 	
+	
+	
+	@Override
+	public void setBar(int degrees) {
+
+		if (degrees < 0 || degrees > barMaxAngle)
+			throw new IllegalArgumentException(
+					"Argument degrees is out of range");
+
+		this.barCurrentAngel = degrees; // Remember the new position of the bar
+		byte data = (byte) (degrees * Byte.MAX_VALUE / barMaxAngle);
+
+		this.conn.sendCommand(new byte[] { 'o', data, '\r', '\n' });
+	}
+
 	@Override
 	public void barLower() {
-		this.conn.sendCommand(new byte[] { '-', '\r', '\n' });
+		if (this.barCurrentAngel > 0) {
 
+			int newValue = barCurrentAngel > barStepSize ? barCurrentAngel
+					- barStepSize : 0;
+			this.setBar(newValue);
+		}
 	}
-	
+
 	@Override
 	public void barRise() {
-		this.conn.sendCommand(new byte[] { '+', '\r', '\n' });
+		if (this.barCurrentAngel < barMaxAngle) {
 
+			int newValue = (barCurrentAngel + barStepSize) < barMaxAngle ? (barCurrentAngel + barStepSize)
+					: barMaxAngle;
+			this.setBar(newValue);
+		}
 	}
-	
-	
-	@Override
-	public void setBar(byte value) {
-		this.conn.sendCommand(new byte[] { 'o', value, '\r', '\n' });
 
-	}
 	
+	
+	/*
+	 * Sensors
+	 */
+		
+	/*
+	 * (non-Javadoc)
+	 * @see at.uibk.informatik.androbot.contracts.IRobot#getSensors()
+	 */
 	@Override
-	public void turn(int degree) {
-		int deg = (int)degree;//(degree * 1.17);
-		
-//		if(deg > 180){
-//			this.conn.sendCommand(new byte[] { 'l', (byte)180, '\r', '\n' });
-//			try {
-//				Thread.sleep(1500);
-//			} catch (InterruptedException e) {
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//			}
-//			deg -= 180;
-//		}
-		
-		this.conn.sendCommand(new byte[] { 'l', (byte)deg, '\r', '\n' });
-		
+	public IDistanceSensor[] getSensors() {
+
+		IDistanceSensor[] sensors = new DistanceSensor[5];
+		String[] sensorNames = new String[5];
+
+		sensorNames[0] = "Rear-Left";
+		sensorNames[1] = "Front-Left";
+		sensorNames[2] = "Front-Middel";
+		sensorNames[3] = "Front-Right";
+		sensorNames[4] = "Rear-Right";
+
+		String response = this.conn.getResponse(new byte[] { 'q', '\r', '\n' });
+		Log.d(LOG_TAG, "Received sensordata: " + response);
+		String[] fields = response.split(" ");
+
+		if (fields.length != 9)
+			return null;
+
+		for (int i = 1; i < 6; i++) {
+			sensors[i] = new DistanceSensor(sensorNames[i - 1],
+					Integer.decode(fields[i]));
+		}
+
+		return sensors;
 	}
+
 	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	/*
+	 * (non-Javadoc)
+	 * @see at.uibk.informatik.androbot.contracts.IRobot#setVelocity(byte, byte)
+	 */
 	@Override
 	public void setVelocity(byte left, byte right) {
 		this.conn.sendCommand(new byte[] { 'i', left, right, '\r', '\n' });
-		
+
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see at.uibk.informatik.androbot.contracts.IRobot#setLeds(byte, byte)
+	 */
 	@Override
 	public void setLeds(byte red, byte blue) {
 		this.conn.sendCommand(new byte[] { 'u', red, blue, '\r', '\n' });
-		
+
 	}
-	
+
 	@Override
 	public String getOdomentry() {
 		// Send command
 		String response = this.conn.getResponse(new byte[] { 'h', '\r', '\n' });
 		return response;
 	}
-	
+
 	@Override
-	public void setOdomentry(byte xlow, byte xheigh, byte ylow, byte
-			yheigh, byte alphalow, byte alphaheigh) {
-		
+	public void setOdomentry(byte xlow, byte xheigh, byte ylow, byte yheigh,
+			byte alphalow, byte alphaheigh) {
+
 		// Test if byte is big enough for the input data
-		
+
 		// Send command
-		this.conn.sendCommand(new byte[] { 'j', xlow, xheigh, ylow, yheigh, alphalow, alphaheigh, '\r', '\n' });
-		
+		this.conn.sendCommand(new byte[] { 'j', xlow, xheigh, ylow, yheigh,
+				alphalow, alphaheigh, '\r', '\n' });
 	}
-	
-	@Override
-	public String getSensors() {
-		// Send command
-		this.conn.sendCommand(new byte[] { 'q', '\r', '\n' });
-		// TODO read results from robot
-		return null;
-	}
-	
-	
 
 }
