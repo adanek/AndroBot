@@ -67,7 +67,7 @@ public class MainActivity extends Activity {
 		Log.d("main_activity", "Distance in cm " + dist);
 		Log.d("main_activity", "Degrees in °" + dist);
 
-		switch (v.getId()) {
+	/*	switch (v.getId()) {
 		// forward
 		case R.id.forward:
 			// no distance entered
@@ -104,8 +104,8 @@ public class MainActivity extends Activity {
 			break;
 		default:
 			break;
-		}
-	}
+		}*/
+	} 
 
 	public void getOdomentry(View v) {
 		TextView output = (TextView) findViewById(R.id.txtName);

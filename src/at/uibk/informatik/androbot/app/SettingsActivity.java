@@ -12,6 +12,7 @@ import at.uibk.informatik.androbot.contracts.Direction;
 import at.uibk.informatik.androbot.contracts.IRobot;
 import at.uibk.informatik.androbot.control.BluetoothConnection;
 import at.uibk.informatik.androbot.control.Robot;
+import at.uibk.informatik.androbot.programms.Programm;
 import at.uibk.informatik.androbot.programms.SquareTest;
 
 public class SettingsActivity extends Activity {
@@ -46,6 +47,13 @@ public class SettingsActivity extends Activity {
 		String macAddress = mac.getText().toString();
 		Double linearCo   = Double.valueOf(linear.getText().toString());
 		Double angularCo  = Double.valueOf(angular.getText().toString());
+		
+		//set correction values
+		Programm.setAngularCorr(angularCo);
+		Programm.setLinearCorr(linearCo);
+		
+		//set MAC address
+		Programm.setMacAddress(macAddress);
 		
 		//log
 		Log.d(LOG_TAG, "Mac Address " + macAddress + " set");

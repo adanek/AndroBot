@@ -28,13 +28,13 @@ public class SquareTest extends Programm {
 		
 		// start square test
 		robot.moveDistance((byte) distance);
-		robot.turn(Direction.LEFT);
+		robot.turnLeft();
 		robot.moveDistance((byte) distance);
-		robot.turn(Direction.LEFT);
+		robot.turnLeft();
 		robot.moveDistance((byte) distance);
-		robot.turn(Direction.LEFT);
+		robot.turnLeft();
 		robot.moveDistance((byte) distance);
-		robot.turn(Direction.LEFT);
+		robot.turnLeft();
 		
 		// STtop sensors
 		
