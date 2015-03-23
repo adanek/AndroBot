@@ -8,10 +8,10 @@ import at.uibk.informatik.androbot.contracts.IRobot;
 public class BasicControl extends ProgrammBase {
 
 	public BasicControl() {
-		super(SettingsActivity.MacAddress);
+		//super(SettingsActivity.MacAddress);
 		
-		super.getRobot().setAngularCorrection(SettingsActivity.AngularCorrecion);
-		super.getRobot().setLinearCorrection(SettingsActivity.LinearCorrection);
+		//super.getRobot().setAngularCorrection(SettingsActivity.AngularCorrecion);
+		//super.getRobot().setLinearCorrection(SettingsActivity.LinearCorrection);
 	}
 
 	private static final String LOG_TAG = "Basic Control";
@@ -29,6 +29,7 @@ public class BasicControl extends ProgrammBase {
 		Log.d(LOG_TAG, "Move " + dir);
 		
 		IRobot robot = super.getRobot();
+		
 		
 		switch(dir){
 		//turn left

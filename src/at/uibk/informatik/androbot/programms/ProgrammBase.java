@@ -1,5 +1,6 @@
 package at.uibk.informatik.androbot.programms;
 
+import at.uibk.informatik.androbot.app.SettingsActivity;
 import at.uibk.informatik.androbot.contracts.IRobot;
 import at.uibk.informatik.androbot.control.BluetoothConnection;
 import at.uibk.informatik.androbot.control.Robot;
@@ -10,17 +11,12 @@ public abstract class ProgrammBase {
 	private static double linearCorr;
 	private IRobot robot;
 
-	public ProgrammBase(String macAddress) {
-		this.robot = new Robot(new BluetoothConnection(macAddress));
-
-		// System.out.println("linear correction " + linearCorr);
-		// System.out.println("angular correction " + angularCorr);
-		// System.out.println("Mac Address " + macAddress);
+	public ProgrammBase() {
+		this.robot = new Robot(new BluetoothConnection(SettingsActivity.MacAddress));
 
 		// set correction data
-		robot.setAngularCorrection(1.0);
-		robot.setLinearCorrection(1.0);
-		//
+		robot.setAngularCorrection(SettingsActivity.AngularCorrecion);
+		robot.setLinearCorrection(SettingsActivity.LinearCorrection);
 
 	}
 
