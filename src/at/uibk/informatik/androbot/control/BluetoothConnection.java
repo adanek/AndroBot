@@ -262,6 +262,12 @@ public class BluetoothConnection implements IConnection {
 
 			this.flushInputStream();
 			sendData(command);
+			try {
+				Thread.sleep(500);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			String response = receiveData();
 			return response;
 		}

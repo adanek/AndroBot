@@ -1,6 +1,9 @@
 package at.uibk.informatik.androbot.control;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 
 import android.util.Log;
 import at.uibk.informatik.androbot.contracts.Direction;
@@ -252,9 +255,9 @@ public class Robot implements IRobot {
 	 * @see at.uibk.informatik.androbot.contracts.IRobot#getSensors()
 	 */
 	@Override
-	public IDistanceSensor[] getSensors() {
+	public List<IDistanceSensor> getSensors() {
 
-		IDistanceSensor[] sensors = new DistanceSensor[5];
+		List<IDistanceSensor> sensors = new ArrayList<IDistanceSensor>();
 		String[] sensorNames = new String[5];
 
 		sensorNames[0] = "Rear-Left";
@@ -267,12 +270,13 @@ public class Robot implements IRobot {
 		Log.d(LOG_TAG, "Received sensordata: " + response);
 		String[] fields = response.split(" ");
 
-		if (fields.length != 9)
+		if (fields.length != 11)
 			return null;
 
-		for (int i = 1; i < 6; i++) {
-			sensors[i] = new DistanceSensor(sensorNames[i - 1],
-					Integer.decode(fields[i]));
+		int ndx = 0;
+		for (int i = 3; i < 8; i++) {
+			sensors.add(new DistanceSensor(sensorNames[ndx],
+					Integer.decode(fields[i])));
 		}
 
 		return sensors;

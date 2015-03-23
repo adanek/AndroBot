@@ -18,10 +18,10 @@ import at.uibk.informatik.androbot.programms.SquareTest;
 public class SettingsActivity extends Activity {
 
 	private static final String LOG_TAG = "Settings";
-	public static String MacAddress = "00:26:83:30:F7:E8";
-	//public static String MacAddress = "20:13:08:16:10:42";
-	public static double LinearCorrection = 1.0;
-	public static double AngularCorrecion = 1.0;
+	//public static String MacAddress = "00:26:83:30:F7:E8";
+	public static String MacAddress = "20:13:08:16:10:42"; //
+	public static double LinearCorrection = 1.34;
+	public static double AngularCorrecion = 1.55;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -32,7 +32,14 @@ public class SettingsActivity extends Activity {
 	@Override
 	protected void onResume() {
 		super.onResume();
-				
+		EditText mac     = (EditText) findViewById(R.id.inputMAC);
+		EditText linear  = (EditText) findViewById(R.id.inputLinear);
+		EditText angular = (EditText) findViewById(R.id.inputAngular);
+		
+		
+		mac.setText(SettingsActivity.MacAddress);
+		linear.setText(String.valueOf(LinearCorrection));
+		angular.setText(String.valueOf(AngularCorrecion));
 	}
 
 	@Override

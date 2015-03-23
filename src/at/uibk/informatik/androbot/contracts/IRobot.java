@@ -1,5 +1,7 @@
 package at.uibk.informatik.androbot.contracts;
 
+import java.util.List;
+
 public interface IRobot {
 	
 	/**
@@ -117,7 +119,7 @@ public interface IRobot {
 	 * 
 	 * @return Array of distance sensors
 	 */
-	IDistanceSensor[] getSensors();
+	List<IDistanceSensor> getSensors();
 	
 	
 	
