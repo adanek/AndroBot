@@ -103,8 +103,8 @@ public class BasicControlActivity extends Activity {
 		for (int i = 0; i < sensorData.size(); i++) {
 
 			TextView text = null;
-			
-			//get sensor view element
+
+			// get sensor view element
 			switch (i) {
 			case 0:
 				text = (TextView) findViewById(R.id.txtRL);
@@ -122,10 +122,14 @@ public class BasicControlActivity extends Activity {
 				text = (TextView) findViewById(R.id.txtRR);
 				break;
 			}
-			
-			//set text on screen
-			text.setText(Integer.toString(sensorData.get(i).getCurrentDistance()));
-			
+
+			// set text on screen
+			if (text != null) {
+				// set text on screen
+				text.setText(Integer.toString(sensorData.get(i)
+						.getCurrentDistance()));
+			}
+
 		}
 
 	}

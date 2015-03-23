@@ -89,6 +89,9 @@ public class BasicControl extends ProgrammBase {
 	//return distance sensors
 	public List<IDistanceSensor> getSensorValues(){
 		
+		// log
+		Log.d(LOG_TAG, "sensor data requested");
+		
 		IRobot robot = super.getRobot();
 		
 		//get sensor data from robot
