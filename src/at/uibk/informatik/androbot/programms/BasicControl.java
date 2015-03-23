@@ -7,6 +7,7 @@ import at.uibk.informatik.androbot.app.SettingsActivity;
 import at.uibk.informatik.androbot.contracts.BarMove;
 import at.uibk.informatik.androbot.contracts.Direction;
 import at.uibk.informatik.androbot.contracts.IDistanceSensor;
+import at.uibk.informatik.androbot.contracts.IPositionData;
 import at.uibk.informatik.androbot.contracts.IRobot;
 
 public class BasicControl extends ProgrammBase {
@@ -96,6 +97,18 @@ public class BasicControl extends ProgrammBase {
 		
 		//get sensor data from robot
 		return robot.getSensors();
+		
+	}
+	
+	//get position data from AndroBot
+	public String getPositionData(){
+		
+		// log
+		Log.d(LOG_TAG, "position data requested");
+		
+		IRobot robot = super.getRobot();
+		
+		return robot.getOdomentry();
 		
 	}
 	
