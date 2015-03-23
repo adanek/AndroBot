@@ -1,17 +1,26 @@
 package at.uibk.informatik.androbot.programms;
 
 import android.util.Log;
+import at.uibk.informatik.androbot.app.SettingsActivity;
 import at.uibk.informatik.androbot.contracts.Direction;
 import at.uibk.informatik.androbot.contracts.IRobot;
 
-public class SquareTest extends Programm {
+public class SquareTest extends ProgrammBase {
 
 	private static final String LOG_TAG = "SquareTest";
 
 	private int distance;
 	
+	
+	public SquareTest() {
+		super(SettingsActivity.MacAddress);
+		
+		super.getRobot().setAngularCorrection(SettingsActivity.AngularCorrecion);
+		super.getRobot().setLinearCorrection(SettingsActivity.LinearCorrection);
+	}
+
 	@Override
-	public void ExecutionPlan() {
+	public void execute() {
 		
 		//Log
 		Log.d(LOG_TAG, "Square Test started");

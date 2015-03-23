@@ -37,12 +37,24 @@ public class Robot implements IRobot {
 	 * ******************* *
 	 */
 
+	@Override
 	public double getAngularCorrection() {
 		return angularCorrection;
 	}
 
+	@Override
 	public void setAngularCorrection(double angularCorrection) {
 		this.angularCorrection = angularCorrection;
+	}
+	
+	@Override
+	public double getLinearCorrection(){
+		return this.linearCorrection;		
+	}
+	
+	@Override
+	public void setLinearCorrection(double newValue){
+		this.linearCorrection = newValue;
 	}
 
 	/* ********************************************************************************** *
@@ -60,7 +72,7 @@ public class Robot implements IRobot {
 	public void connect() {
 		try {
 			this.conn.connect();
-			this.initialize();
+			//this.initialize();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -71,6 +83,10 @@ public class Robot implements IRobot {
 	@Override
 	public void disconnect() {
 		this.conn.disconnect();
+	}
+	
+	public synchronized boolean isConnected(){
+		return this.conn.isConnected();
 	}
 
 

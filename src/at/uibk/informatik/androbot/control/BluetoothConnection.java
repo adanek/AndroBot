@@ -81,6 +81,10 @@ public class BluetoothConnection implements IConnection {
 			this.tConnected.cancel();
 	}
 
+	public synchronized boolean isConnected(){
+		return this.tConnected.isAlive();
+	}
+	
 	@Override
 	public void sendCommand(byte[] command) {
 		if (this.tConnected == null || !this.tConnected.isAlive())

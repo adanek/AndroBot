@@ -12,11 +12,18 @@ public interface IRobot {
 	 */
 	void disconnect();
 	
+	boolean isConnected();
+	
 	/**
 	 * Sets the default values of the robot
 	 */
 	void initialize();
 	
+	void setLinearCorrection(double newValue);
+	double getLinearCorrection();
+	
+	void setAngularCorrection(double newValue);
+	double getAngularCorrection();
 	
 	
 	

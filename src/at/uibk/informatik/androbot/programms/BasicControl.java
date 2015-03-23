@@ -1,15 +1,24 @@
 package at.uibk.informatik.androbot.programms;
 
 import android.util.Log;
+import at.uibk.informatik.androbot.app.SettingsActivity;
 import at.uibk.informatik.androbot.contracts.Direction;
 import at.uibk.informatik.androbot.contracts.IRobot;
 
-public class BasicControl extends Programm {
+public class BasicControl extends ProgrammBase {
+
+	public BasicControl() {
+		super(SettingsActivity.MacAddress);
+		
+		super.getRobot().setAngularCorrection(SettingsActivity.AngularCorrecion);
+		super.getRobot().setLinearCorrection(SettingsActivity.LinearCorrection);
+	}
 
 	private static final String LOG_TAG = "Basic Control";
 
 	@Override
-	public void ExecutionPlan() {
+	public void execute() {
+		
 		
 	}
 	

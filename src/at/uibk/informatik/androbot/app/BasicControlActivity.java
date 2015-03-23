@@ -32,13 +32,13 @@ public class BasicControlActivity extends Activity {
 	@Override
 	protected void onResume() {
 		super.onResume();
-				
+				basic.connect();
 	}
 
 	@Override
 	protected void onPause() {
 		super.onPause();
-	
+		basic.disconnect();
 	}
 
 	//Move

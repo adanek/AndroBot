@@ -8,4 +8,5 @@ public interface IConnection {
      String getResponse(byte[] command);
      void connect() throws IOException;
      void disconnect();     
+     boolean isConnected();
 }

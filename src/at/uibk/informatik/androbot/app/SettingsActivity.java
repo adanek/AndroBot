@@ -12,12 +12,16 @@ import at.uibk.informatik.androbot.contracts.Direction;
 import at.uibk.informatik.androbot.contracts.IRobot;
 import at.uibk.informatik.androbot.control.BluetoothConnection;
 import at.uibk.informatik.androbot.control.Robot;
-import at.uibk.informatik.androbot.programms.Programm;
+import at.uibk.informatik.androbot.programms.ProgrammBase;
 import at.uibk.informatik.androbot.programms.SquareTest;
 
 public class SettingsActivity extends Activity {
 
 	private static final String LOG_TAG = "Settings";
+	public static String MacAddress = "00:26:83:30:F7:E8";
+	//public static String MacAddress = "20:13:08:16:10:42";
+	public static double LinearCorrection = 1.0;
+	public static double AngularCorrecion = 1.0;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -49,12 +53,14 @@ public class SettingsActivity extends Activity {
 		Double angularCo  = Double.valueOf(angular.getText().toString());
 		
 		//set correction values
-		Programm.setAngularCorr(angularCo);
-		Programm.setLinearCorr(linearCo);
-		
-		//set MAC address
-		Programm.setMacAddress(macAddress);
-		
+//		ProgrammBase.setAngularCorr(angularCo);
+//		ProgrammBase.setLinearCorr(linearCo);
+		SettingsActivity.AngularCorrecion = angularCo;
+		SettingsActivity.LinearCorrection = linearCo;
+//		//set MAC address
+//		ProgrammBase.setMacAddress(macAddress);
+		SettingsActivity.MacAddress = macAddress;
+//		
 		//log
 		Log.d(LOG_TAG, "Mac Address " + macAddress + " set");
 		Log.d(LOG_TAG, "Linear coefficient " + linearCo + " set");
