@@ -2,6 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:onClick="onSensors"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
@@ -204,5 +205,14 @@
            	    android:layout_marginLeft="20dp"
                 android:text=" "
                 android:textAppearance="?android:attr/textAppearanceMedium" />
+
+               <Button
+                   android:id="@+id/getSensors"
+                   style="?android:attr/buttonStyleSmall"
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:layout_below="@+id/txtOdometry"
+                   android:layout_toRightOf="@+id/txtLblFR"
+                   android:text="Get Sensors" />
         
 </RelativeLayout>

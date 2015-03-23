@@ -4,15 +4,15 @@ import android.util.Log;
 import at.uibk.informatik.androbot.app.SettingsActivity;
 import at.uibk.informatik.androbot.contracts.BarMove;
 import at.uibk.informatik.androbot.contracts.Direction;
+import at.uibk.informatik.androbot.contracts.IDistanceSensor;
 import at.uibk.informatik.androbot.contracts.IRobot;
 
 public class BasicControl extends ProgrammBase {
 
+	private IRobot robot;
+	
 	public BasicControl() {
-		// super(SettingsActivity.MacAddress);
-
-		// super.getRobot().setAngularCorrection(SettingsActivity.AngularCorrecion);
-		// super.getRobot().setLinearCorrection(SettingsActivity.LinearCorrection);
+		IRobot robot = super.getRobot();
 	}
 
 	private static final String LOG_TAG = "Basic Control";
@@ -27,8 +27,6 @@ public class BasicControl extends ProgrammBase {
 
 		// log
 		Log.d(LOG_TAG, "Move " + dir);
-
-		IRobot robot = super.getRobot();
 
 		switch (dir) {
 		// turn left
@@ -56,15 +54,11 @@ public class BasicControl extends ProgrammBase {
 		// log
 		Log.d(LOG_TAG, "Robot stopped");
 
-		IRobot robot = super.getRobot();
-
 		// stop robot
 		robot.stop();
 	}
 
 	public void handleBar(BarMove bar) {
-
-		IRobot robot = super.getRobot();
 
 		// log
 		Log.d(LOG_TAG, "Bar action: " + bar);
@@ -77,6 +71,7 @@ public class BasicControl extends ProgrammBase {
 			robot.setBar(0);
 			break;
 		case PLUS:
+			robot.barRise();
 			break;
 		case MINUS:
 			robot.barLower();
@@ -84,4 +79,13 @@ public class BasicControl extends ProgrammBase {
 		}
 
 	}
+	
+	//return distance sensors
+	public IDistanceSensor[] getSensorValues(){
+		
+		//get sensor data from robot
+		return robot.getSensors();
+		
+	}
+	
 }

@@ -11,6 +11,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import at.uibk.informatik.androbot.contracts.BarMove;
 import at.uibk.informatik.androbot.contracts.Direction;
+import at.uibk.informatik.androbot.contracts.IDistanceSensor;
 import at.uibk.informatik.androbot.contracts.IRobot;
 import at.uibk.informatik.androbot.control.BluetoothConnection;
 import at.uibk.informatik.androbot.control.Robot;
@@ -20,20 +21,20 @@ import at.uibk.informatik.androbot.programms.SquareTest;
 public class BasicControlActivity extends Activity {
 
 	private BasicControl basic;
-	
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_basic);
-		
-		//create basic control instance
+
+		// create basic control instance
 		basic = new BasicControl();
 	}
 
 	@Override
 	protected void onResume() {
 		super.onResume();
-				basic.connect();
+		basic.connect();
 	}
 
 	@Override
@@ -42,9 +43,9 @@ public class BasicControlActivity extends Activity {
 		basic.disconnect();
 	}
 
-	//Move
-	public void onMove(View v){
-		
+	// Move
+	public void onMove(View v) {
+
 		switch (v.getId()) {
 		// forward
 		case R.id.forward:
@@ -55,7 +56,7 @@ public class BasicControlActivity extends Activity {
 			basic.move(Direction.BACKWARD);
 			break;
 		// turn left
-		case R.id.left: 
+		case R.id.left:
 			basic.move(Direction.LEFT);
 			break;
 		// turn right
@@ -65,18 +66,18 @@ public class BasicControlActivity extends Activity {
 		default:
 			break;
 		}
-		
+
 	}
-	
-	//stop
-	public void onStop(View v){
+
+	// stop
+	public void onStop(View v) {
 		basic.stop();
 	}
-	
-	//handle bar
-	public void onBar(View v){
-		
-		switch(v.getId()){
+
+	// handle bar
+	public void onBar(View v) {
+
+		switch (v.getId()) {
 		case R.id.down:
 			basic.handleBar(BarMove.DOWN);
 			break;
@@ -90,7 +91,41 @@ public class BasicControlActivity extends Activity {
 			basic.handleBar(BarMove.MINUS);
 			break;
 		}
-		
+
 	}
-	
+
+	// on Sensors
+	public void onSensors(View v) {
+
+		IDistanceSensor[] sensorData = basic.getSensorValues();
+
+		for (int i = 0; i < sensorData.length; i++) {
+
+			TextView text = null;
+			
+			//get sensor view element
+			switch (i) {
+			case 0:
+				text = (TextView) findViewById(R.id.txtRL);
+				break;
+			case 1:
+				text = (TextView) findViewById(R.id.txtFL);
+				break;
+			case 2:
+				text = (TextView) findViewById(R.id.txtFM);
+				break;
+			case 3:
+				text = (TextView) findViewById(R.id.txtFR);
+				break;
+			case 4:
+				text = (TextView) findViewById(R.id.txtRR);
+				break;
+			}
+			
+			//set text on screen
+			text.setText(Integer.toString(sensorData[i].getCurrentDistance()));
+		}
+
+	}
+
 }
