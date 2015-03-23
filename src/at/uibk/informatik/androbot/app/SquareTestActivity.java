@@ -47,6 +47,9 @@ public class SquareTestActivity extends Activity {
 	//Stop
 	public void onStop(View v){
 		
+		//stop square test
+		squareTest.end();
+		
 	}
 	
 }
