@@ -1,19 +1,17 @@
-<ScroolView xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:tools="http://schemas.android.com/tools"
             android:id="@+id/scrollView1"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent">
 
-<RelativeLayout 
-
+<RelativeLayout
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="542dp"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="at.uibk.informatik.androbot.app.BasicControlActivity" >
-
 
     <TextView
         android:id="@+id/txtName"
@@ -217,11 +215,21 @@
                    style="?android:attr/buttonStyleSmall"
                    android:layout_width="wrap_content"
                    android:layout_height="wrap_content"
+                   android:layout_alignLeft="@+id/txtOdometry"
                    android:layout_below="@+id/txtOdometry"
-                   android:layout_toRightOf="@+id/txtLblFR"
+                   android:layout_marginTop="52dp"
                    android:onClick="onSensors"
                    android:text="Get Sensors" />
+
+               <Button
+                   android:id="@+id/getPosData"
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:layout_alignBottom="@+id/getSensors"
+                   android:layout_alignRight="@+id/up"
+                   android:onClick="onPosData"
+                   android:text="Get pos. data" />
         
 </RelativeLayout>
 
-</ScroolView>
+</ScrollView>
