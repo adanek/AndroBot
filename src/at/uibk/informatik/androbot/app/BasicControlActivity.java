@@ -1,6 +1,7 @@
 package at.uibk.informatik.androbot.app;
 
 import java.text.DecimalFormat;
+import java.util.List;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -97,9 +98,9 @@ public class BasicControlActivity extends Activity {
 	// on Sensors
 	public void onSensors(View v) {
 
-		IDistanceSensor[] sensorData = basic.getSensorValues();
+		List<IDistanceSensor> sensorData = basic.getSensorValues();
 
-		for (int i = 0; i < sensorData.length; i++) {
+		for (int i = 0; i < sensorData.size(); i++) {
 
 			TextView text = null;
 			
@@ -123,7 +124,8 @@ public class BasicControlActivity extends Activity {
 			}
 			
 			//set text on screen
-			text.setText(Integer.toString(sensorData[i].getCurrentDistance()));
+			text.setText(Integer.toString(sensorData.get(i).getCurrentDistance()));
+			
 		}
 
 	}

@@ -1,5 +1,7 @@
 package at.uibk.informatik.androbot.programms;
 
+import java.util.List;
+
 import android.util.Log;
 import at.uibk.informatik.androbot.app.SettingsActivity;
 import at.uibk.informatik.androbot.contracts.BarMove;
@@ -85,7 +87,7 @@ public class BasicControl extends ProgrammBase {
 	}
 	
 	//return distance sensors
-	public IDistanceSensor[] getSensorValues(){
+	public List<IDistanceSensor> getSensorValues(){
 		
 		IRobot robot = super.getRobot();
 		
