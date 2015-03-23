@@ -133,16 +133,19 @@ public class BasicControlActivity extends Activity {
 		}
 
 	}
-	
-	//on odometry
-	public void onPosData(View v){
-		
+
+	// on odometry
+	public void onPosData(View v) {
+
 		String posData = basic.getPositionData();
-		
+
 		TextView pos = (TextView) findViewById(R.id.txtOdometry);
-		
-		pos.setText(posData);
-		
+
+		//refresh position data
+		if (posData != null & pos != null) {
+			pos.setText(posData);
+		}
+
 	}
 
 }
