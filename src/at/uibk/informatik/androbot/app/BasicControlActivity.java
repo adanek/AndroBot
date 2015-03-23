@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
+import at.uibk.informatik.androbot.contracts.BarMove;
 import at.uibk.informatik.androbot.contracts.Direction;
 import at.uibk.informatik.androbot.contracts.IRobot;
 import at.uibk.informatik.androbot.control.BluetoothConnection;
@@ -70,6 +71,26 @@ public class BasicControlActivity extends Activity {
 	//stop
 	public void onStop(View v){
 		basic.stop();
+	}
+	
+	//handle bar
+	public void onBar(View v){
+		
+		switch(v.getId()){
+		case R.id.down:
+			basic.handleBar(BarMove.DOWN);
+			break;
+		case R.id.up:
+			basic.handleBar(BarMove.UP);
+			break;
+		case R.id.plus:
+			basic.handleBar(BarMove.PLUS);
+			break;
+		case R.id.minus:
+			basic.handleBar(BarMove.MINUS);
+			break;
+		}
+		
 	}
 	
 }

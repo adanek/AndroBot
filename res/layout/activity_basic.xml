@@ -20,6 +20,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="50dp"
         android:layout_marginLeft="20dp"
+        android:onClick="onBar"
         android:text="-" />
     
     <Button
@@ -31,13 +32,13 @@
         android:onClick="onMove"
         android:text="W" />
 
-
         <Button
         android:id="@+id/plus"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="50dp"
         android:layout_marginLeft="205dp"
+        android:onClick="onBar"
         android:text="-" />
     
         <Button
@@ -55,7 +56,7 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="120dp"
-        android:onClick="onMove"
+        android:onClick="onStop"
         android:text="S" />
 
 
@@ -74,6 +75,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="190dp"
         android:layout_marginLeft="20dp"
+        android:onClick="onBar"
         android:text="Down" />
     
     <Button
@@ -92,6 +94,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="190dp"
         android:layout_marginLeft="205dp"
+        android:onClick="onBar"
         android:text="Up" /> 
         
                     <TextView
