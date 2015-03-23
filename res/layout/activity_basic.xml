@@ -213,6 +213,7 @@
                    android:layout_height="wrap_content"
                    android:layout_below="@+id/txtOdometry"
                    android:layout_toRightOf="@+id/txtLblFR"
+                   android:onClick="onSensors"
                    android:text="Get Sensors" />
         
 </RelativeLayout>
