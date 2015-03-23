@@ -36,7 +36,6 @@ public class SettingsActivity extends Activity {
 		EditText linear  = (EditText) findViewById(R.id.inputLinear);
 		EditText angular = (EditText) findViewById(R.id.inputAngular);
 		
-		
 		mac.setText(SettingsActivity.MacAddress);
 		linear.setText(String.valueOf(LinearCorrection));
 		angular.setText(String.valueOf(AngularCorrecion));
