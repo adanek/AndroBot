@@ -46,52 +46,70 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="80dp"
         android:ems="10" />
-
-    <TextView
-        android:id="@+id/txtCoefficients"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="130dp"
-        android:text="Coefficients"
-        android:textAppearance="?android:attr/textAppearanceMedium"/>
-
-    <TextView
-        android:id="@+id/txtLinear"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="150dp"
-        android:layout_marginLeft="45dp"
-        android:text="Linear"
-        android:textAppearance="?android:attr/textAppearanceSmall" />
-    
-        <TextView
-        android:id="@+id/txtAngular"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="150dp"
-        android:layout_marginLeft="200dp"
-        android:text="Angular"
-        android:textAppearance="?android:attr/textAppearanceSmall" />
-
-        <EditText
-            android:id="@+id/inputLinear"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:ems="5"
-            android:layout_marginTop="180dp"
-            android:layout_marginLeft="30dp"
-            android:inputType="numberDecimal"/>
         
         <EditText
-            android:id="@+id/inputAngular"
+            android:id="@+id/inputForty"
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="110dp"
+            android:layout_marginTop="250dp"
+            android:ems="5"
+            android:inputType="numberDecimal" />
+
+        <Button
+            android:id="@+id/btnTwentyTest"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:ems="5"
-            android:layout_marginTop="180dp"
-            android:layout_marginLeft="150dp"
-            android:inputType="numberDecimal"/>
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="150dp"
+            android:onClick="onTwenty"
+            android:text="20 cm" />
 
+        <Button
+            android:id="@+id/btnFortyTest"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="110dp"
+            android:layout_marginTop="150dp"
+            android:onClick="onForty"
+            android:text="40 cm" />
+
+        <Button
+            android:id="@+id/btnAngularTest"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="210dp"
+            android:layout_marginTop="150dp"
+            android:onClick="onThreeSixty"
+            android:text="360 °" />
+
+        <TextView
+            android:id="@+id/txtCoefficients"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/btnTwentyTest"
+            android:layout_marginTop="220dp"
+            android:text="Distances"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <EditText
+            android:id="@+id/inputTwenty"
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="250dp"
+            android:ems="5"
+            android:inputType="numberDecimal" />
+
+        <EditText
+            android:id="@+id/inputThreeSixty"
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="210dp"
+            android:layout_marginTop="250dp"
+            android:ems="5"
+            android:inputType="numberDecimal" />  
+            
 </RelativeLayout>
 
 </ScrollView>
