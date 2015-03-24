@@ -24,9 +24,9 @@ public class SettingsActivity extends Activity {
 	public static double LinearCorrection = 1.34;
 	public static double AngularCorrecion = 1.55;
 	
-	private double DistanceTwenty = 20;
-	private double DistanceForty = 40;
-	private int    Degrees = 360;
+	private static double DistanceTwenty = 20;
+	private static double DistanceForty = 40;
+	private static int    Degrees = 360;
 	
 	private Settings configuration;
 	
@@ -80,8 +80,8 @@ public class SettingsActivity extends Activity {
 		Degrees          = Integer.valueOf(degrees.getText().toString());
 		
 		//set correction values
-		LinearCorrection = (Math.abs(20 - DistanceTwenty) + Math.abs(40 - DistanceForty)) / 2;
-		AngularCorrecion = 360 / Degrees;
+		LinearCorrection = 1 + ((20 - DistanceTwenty) / 20 + (40 - DistanceForty) / 40) / 2;
+		AngularCorrecion = 360.0 / Degrees;
 		
 		//set MAC address
 		SettingsActivity.MacAddress = macAddress;
