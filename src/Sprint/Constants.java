@@ -23,6 +23,5 @@ public interface Constants {
 	
     
     public static final int REQUEST_EVENT = 100;
-    public static final int REQUEST_SENT = 101;
-    
+    public static final int REQUEST_SENT = 101;    
 }

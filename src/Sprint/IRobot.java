@@ -7,6 +7,16 @@ import android.os.Handler;
 public interface IRobot {
 	
 	/**
+	 * Message type for callback message sensor data received
+	 */
+	public static final int SENSOR_DATA_RECEIVED = 202;
+	
+	/**
+	 * Message type for callback message position received
+	 */
+    public static final int POSITION_RECEIVED = 203;
+    
+	/**
 	 * Connect the application with the robot
 	 */
 	void connect();
@@ -23,10 +33,28 @@ public interface IRobot {
 	 */
 	void initialize();
 	
+	/**
+	 * Sets the correction coefficient for the linear movement
+	 * @param newValue The new coefficient
+	 */
 	void setLinearCorrection(double newValue);
+	
+	/**
+	 * Returns the current correction coefficient for linear movements
+	 * @return the current coefficient
+	 */
 	double getLinearCorrection();
 	
+	/**
+	 * Sets the correction coefficient for turn movements
+	 * @param newValue the new coefficient
+	 */
 	void setAngularCorrection(double newValue);
+	
+	/**
+	 * Returns the current coefficient for turn movements
+	 * @return the current coefficient
+	 */
 	double getAngularCorrection();
 	
 	
@@ -57,10 +85,6 @@ public interface IRobot {
 	 */
 	void setVelocity(int left, int right);
 	
-	/**
-	 * Stops the current movement of the robot
-	 */
-	void stop();
 
 	/**
 	 * Turns the robot in the given direction by the given degrees
@@ -83,6 +107,10 @@ public interface IRobot {
 	void turnRight();
 
 	
+	/**
+	 * Stops the current movement of the robot
+	 */
+	void stop();
 	
 	
 	/**
@@ -93,10 +121,8 @@ public interface IRobot {
 	 * 
 	 * @param degrees
 	 *            the new angle of the bar
-	 * @throws IllegalArgumentException
-	 *             if the argument is not in the range form 0 - 90
 	 */
-	void setBar(int degrees);
+	void setBar(byte position);
 	
 	/**
 	 * Sets the bar to the lowest possible angle
@@ -108,24 +134,6 @@ public interface IRobot {
 	 */
 	void barRise();
 	
-	
-	
-	
-	/**
-	 * Gets an array of IDistancesSensor representing the distance sensors of the robot.
-	 * Each sensor has a name and a particular value.
-	 * 
-	 * Values between 10 - 80 can be interpreted as distance in cm to the detected obstacle
-	 * Value 0 can be interpreted as too close to the obstacle for measurement
-	 * Value 99 can be interpreted as no obstacle detected
-	 * 
-	 * @return Array of distance sensors
-	 */
-	List<IDistanceSensor> getSensors();
-	
-	
-	
-	
 	/**
 	 * Sets the values of the the corresponding LED
 	 * @param red the brightness of the red led
@@ -133,15 +141,37 @@ public interface IRobot {
 	 */
 	void setLeds(byte red, byte blue);
 	
+	
+	/**
+	 * Requests the remote device to sent its current sensor data.
+	 * The robot sends a message with the received data to the callback handler
+	 * of the caller
+	 * 
+	 * Message.what = CONSTANTS.DATA_EVENT
+	 * Message.arg1 = CONSTANTS.SENSOR_DATA_RECEIVED
+	 * Message.object = List<IDistanceSensor>
+	 * 
+	 * Each sensor has a name and a particular value. 
+	 * Values between 10 - 80 can be interpreted as distance in cm to the detected obstacle
+	 * Value 0 can be interpreted as too close to the obstacle for measurement
+	 * Value 99 can be interpreted as no obstacle detected
+	 */
+	void requestSensorData();	
 		
 	/**
+	 * Requests the current odomentry data from the remote device
+	 * The robot sents a message with the received data to the callback handler
+	 * of the device with the following parameters:
 	 * 
-	 * @return
+	 * Message.what = CONSTANTS_DATA_EVENT
+	 * Message.arg1 = CONSTANTS_POSITION_RECEIVED
+	 * Messgae.object = IPosition
 	 */
-	String getOdomentry();
-	void setOdomentry(byte xlow, byte xheigh, byte ylow, byte yheigh,
-			byte alphalow, byte alphaheigh);
-
-
-	
+	void requestCurrentPosition();
+		
+	/**
+	 * Sets the current position of the remote device to the given values
+	 * @param position the values to set
+	 */
+	void setOdomentry(IPosition position);	
 }

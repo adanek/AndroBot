@@ -121,64 +121,70 @@ public class Robot implements IRobot {
 
 	@Override
 	public void turn(Direction direction, int degrees) {
-		// TODO Auto-generated method stub
-
+		
+		int deg = (int)(degrees * angularCorrection);
+				
+		while(deg > 0){
+			byte step = (byte)(deg > Byte.MAX_VALUE ? Byte.MAX_VALUE: deg);
+			deg -= step;
+			
+			// Use negative values for turn to the right
+			if(direction == Direction.RIGHT){
+				step *= -1;
+			}
+			
+			IRequest req = new TurnByAngleRequest(connection, readHandler, step);
+			addRequest(req);
+		}
 	}
 	
 	@Override
-	public void turnLeft() {
-		// TODO Auto-generated method stub
-
+	public void turnLeft() {		
+		turn(Direction.LEFT, 90);
 	}
 
 	@Override
 	public void turnRight() {
-		// TODO Auto-generated method stub
-
+		turn(Direction.RIGHT, 90);
 	}
 
 	@Override
-	public void setBar(int degrees) {
-		// TODO Auto-generated method stub
-
+	public void setBar(byte position) {
+	
+		IRequest req = new SetBarRequest(connection, readHandler, position);
+		addRequest(req);
 	}
 
 	@Override
 	public void barLower() {
-		// TODO Auto-generated method stub
-
+		setBar((byte) 0);
 	}
 
 	@Override
 	public void barRise() {
-		// TODO Auto-generated method stub
-
+		setBar((byte) Byte.MAX_VALUE);
 	}
 
 	@Override
 	public void setLeds(byte red, byte blue) {
-		// TODO Auto-generated method stub
-
+		IRequest req = new SetLedsRequest(connection, readHandler, red, blue);
+		addRequest(req);
+	}
+	
+	@Override
+	public void requestSensorData() {
+		addSimpleCommandRequest('q');		
 	}
 
 	@Override
-	public String getOdomentry() {
-		// TODO Auto-generated method stub
-		return null;
+	public void requestCurrentPosition() {
+		addSimpleCommandRequest('h');		
 	}
 
 	@Override
-	public void setOdomentry(byte xlow, byte xheigh, byte ylow, byte yheigh, byte alphalow, byte alphaheigh) {
+	public void setOdomentry(IPosition position) {
 		// TODO Auto-generated method stub
-
-	}
-
-
-
-	@Override
-	public List<IDistanceSensor> getSensors() {
-		// TODO Auto-generated method stub
-		return null;
+		
 	}
 
 	private void addSimpleCommandRequest(char command) {
@@ -217,12 +223,39 @@ public class Robot implements IRobot {
 						executeNext();
 					break;
 				}
+			case Constants.MESSAGE_READ:
+				parseData(msg.obj);
 			default:
 				Message m = caller.obtainMessage();
 				m.copyFrom(msg);
 				m.sendToTarget();
 			}
+		}
+
+		private void parseData(Object obj) {
+			String response = new String((byte[]) obj);
+			
+			if(response.contains("sensor:"))
+				sendSensorData(response);
+			
+			else if(response.contains("odometry:"))
+				sendPositionData(response);
+		}
+
+		private void sendPositionData(String response) {
+			Message msg = caller.obtainMessage(POSITION_RECEIVED);			
+			msg.obj = Position.parse(response);
+			msg.sendToTarget();
+			
+		}
+
+		private void sendSensorData(String response) {
+			Message msg = caller.obtainMessage(SENSOR_DATA_RECEIVED);			
+			msg.obj = DistanceSensor.parse(response);
+			msg.sendToTarget();
 		};
 	};
+	
+
 
 }
