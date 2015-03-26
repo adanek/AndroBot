@@ -13,12 +13,16 @@ public class Robot implements IRobot {
 	private Queue<IRequest> requests;
 	private boolean executing;
 	private Handler caller;
+	private double linearCorrection;
+	private double angularCorrection;
 
 	public Robot(IConnection connection) {
 
-		
 		this.connection = connection;
 		this.connection.setReadHandler(readHandler);
+		
+		this.linearCorrection = 1.0;
+		this.angularCorrection = 1.0;
 
 		this.requests = new LinkedList<IRequest>();
 		this.executing = false;
@@ -39,10 +43,10 @@ public class Robot implements IRobot {
 		return this.connection.getState() == IConnection.STATE_CONNECTED;
 	}
 
-	public void setCaller(Handler caller){
+	public void setCaller(Handler caller) {
 		this.caller = caller;
 	}
-	
+
 	@Override
 	public void initialize() {
 		// TODO Auto-generated method stub
@@ -51,44 +55,41 @@ public class Robot implements IRobot {
 
 	@Override
 	public void setLinearCorrection(double newValue) {
-		// TODO Auto-generated method stub
+		this.linearCorrection = newValue;
 
 	}
 
 	@Override
 	public double getLinearCorrection() {
-		// TODO Auto-generated method stub
-		return 0;
+		return this.linearCorrection;
 	}
 
 	@Override
 	public void setAngularCorrection(double newValue) {
-		// TODO Auto-generated method stub
-
+		this.angularCorrection = newValue;
 	}
 
 	@Override
 	public double getAngularCorrection() {
-		// TODO Auto-generated method stub
-		return 0;
+		return this.angularCorrection;
 	}
 
 	@Override
 	public void moveForward() {
-		IRequest req = new MoveForwardRequest(connection, readHandler);
-		this.addRequest(req);
+		this.addSimpleCommandRequest('w');
 	}
 
 	@Override
 	public void moveBackward() {
-		IRequest req = new MoveBackwardsRequest(connection, readHandler);
-		this.addRequest(req);
+		this.addSimpleCommandRequest('x');
 	}
 
 	@Override
 	public void moveDistance(int distance_cm) {
 
-		int distanceLeft = distance_cm;
+		// Calculate total distance
+		int distanceLeft = (int)(distance_cm * this.linearCorrection);
+		
 		// Split large distances into smaller parts
 		while (distanceLeft > 0) {
 
@@ -102,20 +103,28 @@ public class Robot implements IRobot {
 	}
 
 	@Override
-	public void setVelocity(byte left, byte right) {
-		// TODO Auto-generated method stub
-
+	public void setVelocity(int left, int right) {
+		SetVelocityRequest req = new SetVelocityRequest(connection, readHandler);
+		req.setLeftWheelVelocity((byte)left);
+		req.setRightWheelVelocity((byte)right);
+		
+		this.addRequest(req);		
 	}
 
 	@Override
 	public synchronized void stop() {
 		this.requests.clear();
 		this.executing = false;
-		
-		IRequest req = new StopRequest(connection, readHandler);
-		this.addRequest(req);
+
+		this.addSimpleCommandRequest('s');
 	}
 
+	@Override
+	public void turn(Direction direction, int degrees) {
+		// TODO Auto-generated method stub
+
+	}
+	
 	@Override
 	public void turnLeft() {
 		// TODO Auto-generated method stub
@@ -164,16 +173,17 @@ public class Robot implements IRobot {
 
 	}
 
-	@Override
-	public void turn(Direction direction, int degrees) {
-		// TODO Auto-generated method stub
 
-	}
 
 	@Override
 	public List<IDistanceSensor> getSensors() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	private void addSimpleCommandRequest(char command) {
+		IRequest req = new SimpleCommandRequest(connection, readHandler, command);
+		this.addRequest(req);
 	}
 
 	private synchronized void addRequest(IRequest request) {
@@ -203,7 +213,7 @@ public class Robot implements IRobot {
 			case IRequest.REQUEST_EVENT:
 				switch (msg.arg1) {
 				case IRequest.REQUEST_SENT:
-					if(executing)
+					if (executing)
 						executeNext();
 					break;
 				}

@@ -58,7 +58,11 @@ public class MainActivity extends Activity {
 
 	public void onClick(View view) {
 		
-		robot.moveDistance(1000);
+		robot.moveForward();
+		robot.moveBackward();
+		robot.setVelocity(32, 32);
+		robot.moveDistance(500);
+	
 	}
 	
 	public void btnStop_Click(View view){

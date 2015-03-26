@@ -55,7 +55,7 @@ public interface IRobot {
 	 * @param left the velocity of the left wheel
 	 * @param right the velocity of the right wheel
 	 */
-	void setVelocity(byte left, byte right);
+	void setVelocity(int left, int right);
 	
 	/**
 	 * Stops the current movement of the robot
