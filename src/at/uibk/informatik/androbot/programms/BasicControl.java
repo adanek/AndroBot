@@ -13,7 +13,8 @@ import at.uibk.informatik.androbot.contracts.IRobot;
 public class BasicControl extends ProgrammBase {
 	
 	public BasicControl() {
-
+		//call super constructor
+		super();
 	}
 
 	private static final String LOG_TAG = "Basic Control";

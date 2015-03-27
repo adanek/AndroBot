@@ -13,10 +13,10 @@ public class SquareTest extends ProgrammBase {
 	
 	
 	public SquareTest() {
-		//super(SettingsActivity.MacAddress);
 		
-		//super.getRobot().setAngularCorrection(SettingsActivity.AngularCorrecion);
-		//super.getRobot().setLinearCorrection(SettingsActivity.LinearCorrection);
+		//call super constructor
+		super();
+		
 	}
 
 	@Override
