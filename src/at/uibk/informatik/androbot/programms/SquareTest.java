@@ -1,27 +1,22 @@
 package at.uibk.informatik.androbot.programms;
 
+import android.content.Context;
 import android.util.Log;
-import at.uibk.informatik.androbot.app.SettingsActivity;
-import at.uibk.informatik.androbot.contracts.Direction;
 import at.uibk.informatik.androbot.contracts.IRobot;
+import at.uibk.informatik.androbot.contracts.IRobotResponseCallback;
 
 public class SquareTest extends ProgrammBase {
 
 	private static final String LOG_TAG = "SquareTest";
-
 	private int distance;
 	
-	
-	public SquareTest() {
-		
-		//call super constructor
-		super();
-		
-	}
+	public SquareTest(Context context, IRobotResponseCallback listener) {
+		super(context, listener);
+	}	
 
 	@Override
-	public void execute() {
-		
+	protected void onExecute() {
+
 		//Log
 		Log.d(LOG_TAG, "Square Test started");
 		Log.d(LOG_TAG, "Distance in cm " + Integer.valueOf(distance));
@@ -62,5 +57,4 @@ public class SquareTest extends ProgrammBase {
 	public void setDistance(int distance) {
 		this.distance = distance;
 	}
-
 }

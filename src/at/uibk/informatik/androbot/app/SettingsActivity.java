@@ -1,26 +1,23 @@
 package at.uibk.informatik.androbot.app;
 
-import java.text.DecimalFormat;
+import java.util.List;
 
 import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.TextView;
-import at.uibk.informatik.androbot.contracts.Direction;
-import at.uibk.informatik.androbot.contracts.IRobot;
-import at.uibk.informatik.androbot.control.BluetoothConnection;
-import at.uibk.informatik.androbot.control.Robot;
-import at.uibk.informatik.androbot.programms.ProgrammBase;
+import at.uibk.informatik.androbot.contracts.IDistanceSensor;
+import at.uibk.informatik.androbot.contracts.IPosition;
+import at.uibk.informatik.androbot.contracts.IRobotResponseCallback;
 import at.uibk.informatik.androbot.programms.Settings;
-import at.uibk.informatik.androbot.programms.SquareTest;
 
-public class SettingsActivity extends Activity {
+public class SettingsActivity extends Activity implements IRobotResponseCallback{ 
 
 	private static final String LOG_TAG = "Settings";
 	//public static String MacAddress = "00:26:83:30:F7:E8";
-	public static String MacAddress = "20:13:08:16:10:42"; //
+	//public static String MacAddress = "20:13:08:16:10:42"; //0C:8B:FD:CC:54:51
+	public static String MacAddress = "0C:8B:FD:CC:54:51"; //Laptop Andi
 	public static double LinearCorrection = 1.34;
 	public static double AngularCorrecion = 1.55;
 	
@@ -36,7 +33,7 @@ public class SettingsActivity extends Activity {
 		setContentView(R.layout.activity_settings);
 		
 		//create settings distance
-		configuration = new Settings();
+		configuration = new Settings(getApplicationContext(), this);
 	}
 
 	@Override
@@ -132,6 +129,14 @@ public class SettingsActivity extends Activity {
 		configuration.test = 1;
 		configuration.start();
 		
+	}
+
+	@Override
+	public void onSensorDataReceived(List<IDistanceSensor> sensors) {			
+	}
+
+	@Override
+	public void onPositionReceived(IPosition position) {		
 	}
 	
 }

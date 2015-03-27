@@ -1,11 +1,16 @@
 package at.uibk.informatik.androbot.programms;
 
+import android.content.Context;
 import android.util.Log;
-import at.uibk.informatik.androbot.app.SettingsActivity;
 import at.uibk.informatik.androbot.contracts.Direction;
 import at.uibk.informatik.androbot.contracts.IRobot;
+import at.uibk.informatik.androbot.contracts.IRobotResponseCallback;
 
 public class Settings extends ProgrammBase {
+
+	public Settings(Context context, IRobotResponseCallback listener) {
+		super(context, listener);
+	}
 
 	private static final String LOG_TAG = "Settings";
 
@@ -13,17 +18,10 @@ public class Settings extends ProgrammBase {
 	private int degrees;
 	
 	public int test;
-	
-	public Settings() {
-		//super(SettingsActivity.MacAddress);
-		
-		//super.getRobot().setAngularCorrection(SettingsActivity.AngularCorrecion);
-		//super.getRobot().setLinearCorrection(SettingsActivity.LinearCorrection);
-	}
 
 	@Override
-	public void execute() {
-		
+	protected void onExecute() {
+				
 		IRobot robot = super.getRobot();
 		
 		switch(test){
@@ -38,8 +36,6 @@ public class Settings extends ProgrammBase {
 			robot.turn(Direction.LEFT, degrees);
 			break;	
 		}
-
-
 	}
 	
 	//get distance
@@ -60,6 +56,5 @@ public class Settings extends ProgrammBase {
 	//set degrees
 	public void setDegrees(int degrees) {
 		this.degrees = degrees;
-	}
-	
+	}	
 }

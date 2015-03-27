@@ -1,12 +1,17 @@
 package at.uibk.informatik.androbot.app;
 
+import java.util.List;
+
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.SeekBar;
+import at.uibk.informatik.androbot.contracts.IDistanceSensor;
+import at.uibk.informatik.androbot.contracts.IPosition;
+import at.uibk.informatik.androbot.contracts.IRobotResponseCallback;
 import at.uibk.informatik.androbot.programms.SquareTest;
 
-public class SquareTestActivity extends Activity {
+public class SquareTestActivity extends Activity implements IRobotResponseCallback{
 
 	private SquareTest squareTest;
 	
@@ -16,7 +21,7 @@ public class SquareTestActivity extends Activity {
 		setContentView(R.layout.activity_square);
 		
 		//create square test instance
-		squareTest = new SquareTest();
+		squareTest = new SquareTest(getApplicationContext(), this);
 	}
 
 	@Override
@@ -50,6 +55,14 @@ public class SquareTestActivity extends Activity {
 		//stop square test
 		squareTest.end();
 		
+	}
+
+	@Override
+	public void onSensorDataReceived(List<IDistanceSensor> sensors) {		
+	}
+
+	@Override
+	public void onPositionReceived(IPosition position) {
 	}
 	
 }

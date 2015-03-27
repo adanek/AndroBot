@@ -1,29 +1,26 @@
 package at.uibk.informatik.androbot.programms;
 
-import java.util.List;
-
+import android.content.Context;
 import android.util.Log;
-import at.uibk.informatik.androbot.app.SettingsActivity;
 import at.uibk.informatik.androbot.contracts.BarMove;
 import at.uibk.informatik.androbot.contracts.Direction;
-import at.uibk.informatik.androbot.contracts.IDistanceSensor;
-import at.uibk.informatik.androbot.contracts.IPositionData;
 import at.uibk.informatik.androbot.contracts.IRobot;
+import at.uibk.informatik.androbot.contracts.IRobotResponseCallback;
 
 public class BasicControl extends ProgrammBase {
 	
-	public BasicControl() {
-		//call super constructor
-		super();
-	}
-
 	private static final String LOG_TAG = "Basic Control";
 
+	public BasicControl(Context context, IRobotResponseCallback listener) {
+		super(context, listener);		
+	}	
+
 	@Override
-	public void execute() {
-
+	protected void onExecute() {
+		// TODO Auto-generated method stub
+		
 	}
-
+	
 	// move
 	public void move(Direction dir) {
 
@@ -89,7 +86,7 @@ public class BasicControl extends ProgrammBase {
 	}
 	
 	//return distance sensors
-	public List<IDistanceSensor> getSensorValues(){
+	public void requestSensorValues(){
 		
 		// log
 		Log.d(LOG_TAG, "sensor data requested");
@@ -97,20 +94,17 @@ public class BasicControl extends ProgrammBase {
 		IRobot robot = super.getRobot();
 		
 		//get sensor data from robot
-		return robot.getSensors();
-		
+		robot.requestSensorData();		
 	}
 	
 	//get position data from AndroBot
-	public String getPositionData(){
+	public void requestPositionData(){
 		
 		// log
 		Log.d(LOG_TAG, "position data requested");
 		
 		IRobot robot = super.getRobot();
 		
-		return robot.getOdomentry();
-		
-	}
-	
+		robot.requestCurrentPosition();		
+	}	
 }

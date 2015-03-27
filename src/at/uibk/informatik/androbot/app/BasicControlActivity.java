@@ -1,25 +1,19 @@
 package at.uibk.informatik.androbot.app;
 
-import java.text.DecimalFormat;
 import java.util.List;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.TextView;
 import at.uibk.informatik.androbot.contracts.BarMove;
 import at.uibk.informatik.androbot.contracts.Direction;
 import at.uibk.informatik.androbot.contracts.IDistanceSensor;
-import at.uibk.informatik.androbot.contracts.IRobot;
-import at.uibk.informatik.androbot.control.BluetoothConnection;
-import at.uibk.informatik.androbot.control.Robot;
+import at.uibk.informatik.androbot.contracts.IPosition;
+import at.uibk.informatik.androbot.contracts.IRobotResponseCallback;
 import at.uibk.informatik.androbot.programms.BasicControl;
-import at.uibk.informatik.androbot.programms.SquareTest;
 
-public class BasicControlActivity extends Activity {
+public class BasicControlActivity extends Activity implements IRobotResponseCallback{
 
 	private BasicControl basic;
 
@@ -29,7 +23,7 @@ public class BasicControlActivity extends Activity {
 		setContentView(R.layout.activity_basic);
 
 		// create basic control instance
-		basic = new BasicControl();
+		basic = new BasicControl(getApplicationContext(), this);
 	}
 
 	@Override
@@ -98,9 +92,20 @@ public class BasicControlActivity extends Activity {
 	// on Sensors
 	public void onSensors(View v) {
 
-		List<IDistanceSensor> sensorData = basic.getSensorValues();
+		basic.requestSensorValues();
+	}
 
-		for (int i = 0; i < sensorData.size(); i++) {
+	// on odometry
+	public void onPosData(View v) {
+
+
+
+	}
+
+	@Override
+	public void onSensorDataReceived(List<IDistanceSensor> sensors) {
+		
+		for (int i = 0; i < sensors.size(); i++) {
 
 			TextView text = null;
 
@@ -126,26 +131,21 @@ public class BasicControlActivity extends Activity {
 			// set text on screen
 			if (text != null) {
 				// set text on screen
-				text.setText(Integer.toString(sensorData.get(i)
+				text.setText(Integer.toString(sensors.get(i)
 						.getCurrentDistance()));
 			}
-
-		}
-
+		}		
 	}
 
-	// on odometry
-	public void onPosData(View v) {
-
-		String posData = basic.getPositionData();
-
+	@Override
+	public void onPositionReceived(IPosition position) {
+		
 		TextView pos = (TextView) findViewById(R.id.txtOdometry);
 
 		//refresh position data
-		if (posData != null & pos != null) {
-			pos.setText(posData);
+		if (position != null & pos != null) {
+			pos.setText(position.toString());
 		}
-
 	}
 
 }

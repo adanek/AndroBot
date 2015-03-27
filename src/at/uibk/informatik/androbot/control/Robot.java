@@ -1,333 +1,279 @@
 package at.uibk.informatik.androbot.control;
 
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
 
-import android.util.Log;
+import android.os.Handler;
+import android.os.Message;
+import at.uibk.informatik.androbot.contracts.Constants;
 import at.uibk.informatik.androbot.contracts.Direction;
 import at.uibk.informatik.androbot.contracts.IConnection;
 import at.uibk.informatik.androbot.contracts.IDistanceSensor;
+import at.uibk.informatik.androbot.contracts.IPosition;
+import at.uibk.informatik.androbot.contracts.IRequest;
 import at.uibk.informatik.androbot.contracts.IRobot;
+import at.uibk.informatik.androbot.contracts.IRobotResponseCallback;
+import at.uibk.informatik.androbot.control.requests.MoveDistanceRequest;
+import at.uibk.informatik.androbot.control.requests.SetBarRequest;
+import at.uibk.informatik.androbot.control.requests.SetLedsRequest;
+import at.uibk.informatik.androbot.control.requests.SetVelocityRequest;
+import at.uibk.informatik.androbot.control.requests.SimpleCommandRequest;
+import at.uibk.informatik.androbot.control.requests.TurnByAngleRequest;
 
 public class Robot implements IRobot {
 
-	private static final String LOG_TAG = "Robot";
-	private IConnection conn;
-	private double angularCorrection;
+	private IConnection connection;
+	private Queue<IRequest> requests;
+	private boolean executing;
+	private Handler caller;
 	private double linearCorrection;
-	private int barCurrentAngel;
-	private final int barMaxAngle = 90;
-	private final int barStepSize = 10;
+	private double angularCorrection;
+	private IRobotResponseCallback listener;
 
-	/* ********************************************************************************** *
-	 * Constructor
-	 * **************************************************************
-	 * ******************** *
-	 */
+	public Robot(IConnection connection, Handler caller, IRobotResponseCallback listener) {
 
-	public Robot(IConnection connection) {
-		this.conn = connection;
+		this.caller = caller;
+		this.listener = listener;
+		
+		this.connection = connection;
+		this.connection.setReadHandler(readHandler);
 
-		this.angularCorrection = 1.0;
 		this.linearCorrection = 1.0;
+		this.angularCorrection = 1.0;
+
+		this.requests = new LinkedList<IRequest>();
+		this.executing = false;
 	}
-
-	/* ********************************************************************************** *
-	 * Properties
-	 * ***************************************************************
-	 * ******************* *
-	 */
-
-	@Override
-	public double getAngularCorrection() {
-		return angularCorrection;
-	}
-
-	@Override
-	public void setAngularCorrection(double angularCorrection) {
-		this.angularCorrection = angularCorrection;
-	}
-	
-	@Override
-	public double getLinearCorrection(){
-		return this.linearCorrection;		
-	}
-	
-	@Override
-	public void setLinearCorrection(double newValue){
-		this.linearCorrection = newValue;
-	}
-
-	/* ********************************************************************************** *
-	 * Methods
-	 * ******************************************************************
-	 * **************** *
-	 */
-
-	/*
-	 * Connection
-	 */
-
 
 	@Override
 	public void connect() {
-		try {
-			this.conn.connect();
-			//this.initialize();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		this.connection.connect();
 	}
-
 
 	@Override
 	public void disconnect() {
-		this.conn.disconnect();
-	}
-	
-	public synchronized boolean isConnected(){
-		return this.conn.isConnected();
+		this.connection.stop();
 	}
 
+	@Override
+	public boolean isConnected() {
+		return this.connection.getState() == IConnection.STATE_CONNECTED;
+	}
+
+	public void setCaller(Handler caller) {
+		this.caller = caller;
+	}
 
 	@Override
 	public void initialize() {
+		// TODO Auto-generated method stub
 
-		this.setBar(90);
 	}
 
-	/*
-	 * Movement
-	 */
+	@Override
+	public void setLinearCorrection(double newValue) {
+		this.linearCorrection = newValue;
 
+	}
+
+	@Override
+	public double getLinearCorrection() {
+		return this.linearCorrection;
+	}
+
+	@Override
+	public void setAngularCorrection(double newValue) {
+		this.angularCorrection = newValue;
+	}
+
+	@Override
+	public double getAngularCorrection() {
+		return this.angularCorrection;
+	}
 
 	@Override
 	public void moveForward() {
-		this.conn.sendCommand(new byte[] { 'w', '\r', '\n' });
-
+		this.addSimpleCommandRequest('w');
 	}
-
-
-	@Override
-	public void moveDistance(byte distance_cm) {
-
-		int distance = (int) (distance_cm * linearCorrection);
-
-		try {
-			while (distance > 0) {
-				byte stepWidth = (byte) (distance > Byte.MAX_VALUE ? Byte.MAX_VALUE
-						: distance);
-				distance -= stepWidth;
-
-				// Calculate runtime in milliseconds
-				int runtime = 2000;
-
-				// Send partial command
-				this.conn
-						.sendCommand(new byte[] { 'k', stepWidth, '\r', '\n' });
-				Thread.sleep(runtime);
-			}
-
-		} catch (InterruptedException e) {
-			Log.d(LOG_TAG, "Move distance has been interupt");
-			e.printStackTrace();
-		}
-	}
-
 
 	@Override
 	public void moveBackward() {
-		this.conn.sendCommand(new byte[] { 'x', '\r', '\n' });
+		this.addSimpleCommandRequest('x');
 	}
 
 	@Override
-	public void stop() {
-		this.conn.sendCommand(new byte[] { 's', '\r', '\n' });
+	public void moveDistance(int distance_cm) {
+
+		// Calculate total distance
+		int distanceLeft = (int) (distance_cm * this.linearCorrection);
+
+		// Split large distances into smaller parts
+		while (distanceLeft > 0) {
+
+			int maxStepSize = Byte.MAX_VALUE;
+			byte step = (byte) (distanceLeft > maxStepSize ? maxStepSize
+					: distanceLeft);
+			distanceLeft -= step;
+
+			IRequest req = new MoveDistanceRequest(connection, readHandler,
+					step);
+			this.addRequest(req);
+		}
 	}
 
+	@Override
+	public void setVelocity(int left, int right) {
+		SetVelocityRequest req = new SetVelocityRequest(connection, readHandler);
+		req.setLeftWheelVelocity((byte) left);
+		req.setRightWheelVelocity((byte) right);
+
+		this.addRequest(req);
+	}
+
+	@Override
+	public synchronized void stop() {
+		this.requests.clear();
+		this.executing = false;
+
+		this.addSimpleCommandRequest('s');
+	}
 
 	@Override
 	public void turn(Direction direction, int degrees) {
 
 		int deg = (int) (degrees * angularCorrection);
-		int maxDegreePerStep = 127;
 
-		try {
-			while (deg > 0) {
+		while (deg > 0) {
+			byte step = (byte) (deg > Byte.MAX_VALUE ? Byte.MAX_VALUE : deg);
+			deg -= step;
 
-				int stepWidth = deg > maxDegreePerStep ? maxDegreePerStep : deg;
-				byte stepData = getStepDataForTurn(direction, stepWidth);
-				deg -= stepWidth;
-
-				// Calculate runtime for turning
-				int runtime = 1000;
-
-				this.conn.sendCommand(new byte[] { 'l', stepData, '\r', '\n' });
-				Thread.sleep(runtime);
+			// Use negative values for turn to the right
+			if (direction == Direction.RIGHT) {
+				step *= -1;
 			}
-		} catch (InterruptedException e) {
-			Log.d(LOG_TAG, "Turn command has been interupt");
-			e.printStackTrace();
+
+			IRequest req = new TurnByAngleRequest(connection, readHandler, step);
+			addRequest(req);
 		}
 	}
-
 
 	@Override
 	public void turnLeft() {
-		this.turn(Direction.LEFT, 90);
+		turn(Direction.LEFT, 90);
 	}
-
 
 	@Override
 	public void turnRight() {
-		this.turn(Direction.RIGHT, 90);
+		turn(Direction.RIGHT, 90);
 	}
 
-	// Calculate the accurate parameter for turning the desired degrees in the
-	// desired direction
-	private byte getStepDataForTurn(Direction direction, int stepWidth) {
-		int data = 0;
-
-		switch (direction) {
-		case LEFT:
-			data = stepWidth;
-			break;
-
-		case RIGHT:
-			data = Byte.MAX_VALUE - stepWidth + 1; // plus 1 because 255 is
-													// already a turn by 1
-													// degree
-			break;
-
-		default:
-			break;
-		}
-		return (byte) data;
-	}
-
-	
-	
-	
 	@Override
-	public void setBar(int degrees) {
+	public void setBar(int position) {
 
-		if (degrees < 0 || degrees > barMaxAngle)
-			throw new IllegalArgumentException(
-					"Argument degrees is out of range");
-
-		this.barCurrentAngel = degrees; // Remember the new position of the bar
-		byte data = (byte) (degrees * Byte.MAX_VALUE / barMaxAngle);
-
-		this.conn.sendCommand(new byte[] { 'o', data, '\r', '\n' });
+		IRequest req = new SetBarRequest(connection, readHandler, (byte) position);
+		addRequest(req);
 	}
 
 	@Override
 	public void barLower() {
-		if (this.barCurrentAngel > 0) {
-
-			int newValue = barCurrentAngel > barStepSize ? barCurrentAngel
-					- barStepSize : 0;
-			this.setBar(newValue);
-		}
+		setBar((byte) 0);
 	}
 
 	@Override
 	public void barRise() {
-		if (this.barCurrentAngel < barMaxAngle) {
-
-			int newValue = (barCurrentAngel + barStepSize) < barMaxAngle ? (barCurrentAngel + barStepSize)
-					: barMaxAngle;
-			this.setBar(newValue);
-		}
+		setBar((byte) Byte.MAX_VALUE);
 	}
 
-	
-	
-	/*
-	 * Sensors
-	 */
-		
-	/*
-	 * (non-Javadoc)
-	 * @see at.uibk.informatik.androbot.contracts.IRobot#getSensors()
-	 */
-	@Override
-	public List<IDistanceSensor> getSensors() {
-
-		List<IDistanceSensor> sensors = new ArrayList<IDistanceSensor>();
-		String[] sensorNames = new String[5];
-
-		sensorNames[0] = "Rear-Left";
-		sensorNames[1] = "Front-Left";
-		sensorNames[2] = "Front-Middel";
-		sensorNames[3] = "Front-Right";
-		sensorNames[4] = "Rear-Right";
-
-		String response = this.conn.getResponse(new byte[] { 'q', '\r', '\n' });
-		Log.d(LOG_TAG, "Received sensordata: " + response);
-		String[] fields = response.split(" ");
-
-		if (fields.length != 11)
-			return null;
-
-		int ndx = 0;
-		for (int i = 3; i < 8; i++) {
-			sensors.add(new DistanceSensor(sensorNames[ndx],
-					Integer.decode(fields[i])));
-		}
-
-		return sensors;
-	}
-
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	/*
-	 * (non-Javadoc)
-	 * @see at.uibk.informatik.androbot.contracts.IRobot#setVelocity(byte, byte)
-	 */
-	@Override
-	public void setVelocity(byte left, byte right) {
-		this.conn.sendCommand(new byte[] { 'i', left, right, '\r', '\n' });
-
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * @see at.uibk.informatik.androbot.contracts.IRobot#setLeds(byte, byte)
-	 */
 	@Override
 	public void setLeds(byte red, byte blue) {
-		this.conn.sendCommand(new byte[] { 'u', red, blue, '\r', '\n' });
-
+		IRequest req = new SetLedsRequest(connection, readHandler, red, blue);
+		addRequest(req);
 	}
 
 	@Override
-	public String getOdomentry() {
-		// Send command
-		String response = this.conn.getResponse(new byte[] { 'h', '\r', '\n' });
-		return response;
+	public void requestSensorData() {
+		addSimpleCommandRequest('q');
 	}
 
 	@Override
-	public void setOdomentry(byte xlow, byte xheigh, byte ylow, byte yheigh,
-			byte alphalow, byte alphaheigh) {
-
-		// Test if byte is big enough for the input data
-
-		// Send command
-		this.conn.sendCommand(new byte[] { 'j', xlow, xheigh, ylow, yheigh,
-				alphalow, alphaheigh, '\r', '\n' });
+	public void requestCurrentPosition() {
+		addSimpleCommandRequest('h');
 	}
+
+	@Override
+	public void setOdomentry(IPosition position) {
+		// TODO Auto-generated method stub
+
+	}
+
+	private void addSimpleCommandRequest(char command) {
+		IRequest req = new SimpleCommandRequest(connection, readHandler,
+				command);
+		this.addRequest(req);
+	}
+
+	private synchronized void addRequest(IRequest request) {
+
+		this.requests.add(request);
+
+		if (executing)
+			return;
+
+		executeNext();
+	}
+
+	private synchronized void executeNext() {
+
+		if (requests.isEmpty()) {
+			this.executing = false;
+			return;
+		}
+
+		this.executing = true;
+		readHandler.post(requests.remove());
+	}
+
+	private Handler readHandler = new Handler() {
+		public void handleMessage(android.os.Message msg) {
+			switch (msg.what) {
+			case IRequest.REQUEST_EVENT:
+				switch (msg.arg1) {
+				case IRequest.REQUEST_SENT:
+					if (executing)
+						executeNext();
+					break;
+				}
+			case Constants.MESSAGE_READ:
+				parseData(msg.obj);
+			default:
+				Message m = caller.obtainMessage();
+				m.copyFrom(msg);
+				m.sendToTarget();
+			}
+		}
+
+		private void parseData(Object obj) {
+			String response = new String((byte[]) obj);
+
+			if (response.contains("sensor:"))
+				sendSensorData(response);
+
+			else if (response.contains("odometry:"))
+				sendPositionData(response);
+		}
+
+		private void sendPositionData(String response) {
+
+			IPosition pos = Position.parse(response);
+			listener.onPositionReceived(pos);
+		}
+
+		private void sendSensorData(String response) {
+	
+			List<IDistanceSensor> sensors = DistanceSensor.parse(response);
+			listener.onSensorDataReceived(sensors);
+		};
+	};
 
 }
