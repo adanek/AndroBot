@@ -40,6 +40,8 @@ public class SquareTest extends ProgrammBase {
 		robot.moveDistance((byte) distance);
 		robot.turnLeft();
 		
+
+		
 		// STtop sensors
 		
 		// Get final position (Odomentry)

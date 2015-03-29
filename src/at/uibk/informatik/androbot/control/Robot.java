@@ -6,6 +6,7 @@ import java.util.Queue;
 
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 import at.uibk.informatik.androbot.contracts.Constants;
 import at.uibk.informatik.androbot.contracts.Direction;
 import at.uibk.informatik.androbot.contracts.IConnection;
@@ -23,6 +24,7 @@ import at.uibk.informatik.androbot.control.requests.TurnByAngleRequest;
 
 public class Robot implements IRobot {
 
+	private static final String LOG_TAG = "Robot";
 	private IConnection connection;
 	private Queue<IRequest> requests;
 	private boolean executing;
@@ -244,8 +246,9 @@ public class Robot implements IRobot {
 						executeNext();
 					break;
 				}
+				break;
 			case Constants.MESSAGE_READ:
-				parseData(msg.obj);
+				parseData(msg);
 			default:
 				Message m = caller.obtainMessage();
 				m.copyFrom(msg);
@@ -253,8 +256,12 @@ public class Robot implements IRobot {
 			}
 		}
 
-		private void parseData(Object obj) {
-			String response = new String((byte[]) obj);
+		private void parseData(Message msg) {
+			
+			if(msg.obj == null){
+				Log.d(LOG_TAG, "Unable to parse message: "+ msg.toString());
+			}
+			String response = new String((byte[]) msg.obj);
 
 			if (response.contains("sensor:"))
 				sendSensorData(response);

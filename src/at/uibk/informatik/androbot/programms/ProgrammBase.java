@@ -22,12 +22,12 @@ public abstract class ProgrammBase {
 	private static double linearCorr;
 	private IRobot robot;
 	private Context context;
-	//private IRobotResponseCallback listener;
+	private IRobotResponseCallback listener;
 
 	public ProgrammBase(Context context, IRobotResponseCallback listener) {
 		
 		this.context = context;
-		//this.listener = listener;
+		this.listener = listener;
 		
 		BluetoothConnection conn = new BluetoothConnection(context);
 		conn.setDeviceAddress(SettingsActivity.MacAddress);
@@ -52,14 +52,14 @@ public abstract class ProgrammBase {
 
 	private void execute(){
 		onExecute();
-		end();
+		
 	}
 	
 	protected abstract void onExecute();
 
 	public void end() {
 		this.robot.stop();
-		this.getRobot().disconnect();
+		//this.getRobot().disconnect();
 	}
 
 	public IRobot getRobot() {

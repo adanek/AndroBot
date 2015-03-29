@@ -29,13 +29,13 @@ public class BasicControlActivity extends Activity implements IRobotResponseCall
 	@Override
 	protected void onResume() {
 		super.onResume();
-		basic.connect();
+		basic.start();
 	}
 
 	@Override
 	protected void onPause() {
 		super.onPause();
-		basic.disconnect();
+		basic.stop();
 	}
 
 	// Move
