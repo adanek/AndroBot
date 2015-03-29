@@ -40,11 +40,17 @@ public abstract class ProgrammBase {
 		this.uiHandler = new Handler(new Callback());
 		this.executing = false;
 
-		BluetoothConnection conn = new BluetoothConnection(context);
-		conn.setDeviceAddress(SettingsActivity.MacAddress);
-		
-//		FakeConnection conn = new FakeConnection();		
+		// Create the connection
+		IConnection conn;
+		if (SettingsActivity.useFakeConnection) {
+			conn = new FakeConnection();
+		} else {
+			BluetoothConnection btc = new BluetoothConnection(context);
+			btc.setDeviceAddress(SettingsActivity.MacAddress);
+			conn = btc;
+		}
 
+		// Create the robot
 		this.robot = new Robot(conn, uiHandler);
 		this.robot.setAngularCorrection(SettingsActivity.AngularCorrecion);
 		this.robot.setLinearCorrection(SettingsActivity.LinearCorrection);
@@ -94,9 +100,9 @@ public abstract class ProgrammBase {
 	}
 
 	// ********************************************** Classes *********************************************************
-	
+
 	/**
-	 *  Handles incoming messages from the robot
+	 * Handles incoming messages from the robot
 	 */
 	private class Callback implements Handler.Callback {
 
