@@ -20,6 +20,7 @@ import at.uibk.informatik.androbot.contracts.IPosition;
 import at.uibk.informatik.androbot.contracts.IRobot;
 import at.uibk.informatik.androbot.contracts.IRobotResponseCallback;
 import at.uibk.informatik.androbot.control.BluetoothConnection;
+import at.uibk.informatik.androbot.control.FakeConnection;
 import at.uibk.informatik.androbot.control.Robot;
 
 public abstract class ProgrammBase {
@@ -41,6 +42,8 @@ public abstract class ProgrammBase {
 
 		BluetoothConnection conn = new BluetoothConnection(context);
 		conn.setDeviceAddress(SettingsActivity.MacAddress);
+		
+//		FakeConnection conn = new FakeConnection();		
 
 		this.robot = new Robot(conn, uiHandler);
 		this.robot.setAngularCorrection(SettingsActivity.AngularCorrecion);

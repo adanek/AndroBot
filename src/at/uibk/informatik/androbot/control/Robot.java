@@ -255,7 +255,7 @@ public class Robot implements IRobot {
 		if (msg.obj == null) {
 			Log.d(LOG_TAG, "Unable to parse message: " + msg.toString());
 		}
-		String response = new String((byte[]) msg.obj);
+		String response = new String((byte[]) msg.obj, 0, msg.arg1);
 
 		if (response.contains("sensor:"))
 			sendSensorData(response);
