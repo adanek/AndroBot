@@ -327,6 +327,7 @@ public class Robot implements IRobot {
 				break;
 			case Constants.MESSAGE_READ:
 				parseData(msg);
+				break;
 			default:
 				Message m = caller.obtainMessage();
 				m.copyFrom(msg);

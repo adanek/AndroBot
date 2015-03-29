@@ -151,6 +151,7 @@ public abstract class ProgrammBase {
 					Log.d(LOG_TAG, "Unexpected message received: " + msg.toString());
 					break;
 				}
+				break;
 
 			default:
 				Log.w(LOG_TAG, "Unexpected message received: " + msg.toString());
