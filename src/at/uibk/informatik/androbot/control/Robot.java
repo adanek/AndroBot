@@ -15,6 +15,7 @@ import at.uibk.informatik.androbot.contracts.IPosition;
 import at.uibk.informatik.androbot.contracts.IRequest;
 import at.uibk.informatik.androbot.contracts.IRobot;
 import at.uibk.informatik.androbot.control.requests.MoveDistanceRequest;
+import at.uibk.informatik.androbot.control.requests.Request;
 import at.uibk.informatik.androbot.control.requests.SetBarRequest;
 import at.uibk.informatik.androbot.control.requests.SetLedsRequest;
 import at.uibk.informatik.androbot.control.requests.SetVelocityRequest;
@@ -23,6 +24,7 @@ import at.uibk.informatik.androbot.control.requests.TurnByAngleRequest;
 
 public class Robot implements IRobot {
 
+	// *********************************************** Locals *********************************************************
 	private static final String LOG_TAG = "Robot";
 	private IConnection connection;
 	private Queue<IRequest> requests;
@@ -30,22 +32,57 @@ public class Robot implements IRobot {
 	private Handler caller;
 	private Handler connectionHandler;
 	private double linearCorrection;
-	private double angularCorrection;	
+	private double linearRuntimePerCentimeter;
+	private double angularCorrection;
+	private double angularRuntimePerDegree;
+
+	// ******************************************** Constructors ******************************************************
 
 	public Robot(IConnection connection, Handler caller) {
 
 		this.caller = caller;
-	
+
 		this.connectionHandler = new Handler(new ConnectionCallback());
 		this.connection = connection;
 		this.connection.setReadHandler(connectionHandler);
 
 		this.linearCorrection = 1.0;
+		this.setLinearRuntimePerCentimeter(0.03);
 		this.angularCorrection = 1.0;
+		this.setAngularRuntimePerDegree(0.127);
 
 		this.requests = new LinkedList<IRequest>();
 		this.executing = false;
 	}
+
+	// ********************************************* Properties *******************************************************
+
+	public void setCaller(Handler caller) {
+		this.caller = caller;
+	}
+
+	@Override
+	public void setLinearCorrection(double newValue) {
+		this.linearCorrection = newValue;
+
+	}
+
+	@Override
+	public void setLinearRuntimePerCentimeter(double linearRuntimePerCentimeter) {
+		this.linearRuntimePerCentimeter = linearRuntimePerCentimeter;
+	}
+
+	@Override
+	public void setAngularCorrection(double newValue) {
+		this.angularCorrection = newValue;
+	}
+
+	@Override
+	public void setAngularRuntimePerDegree(double angularRuntimePerDegree) {
+		this.angularRuntimePerDegree = angularRuntimePerDegree;
+	}
+
+	// ********************************************** Methods *********************************************************
 
 	@Override
 	public void connect() {
@@ -62,35 +99,9 @@ public class Robot implements IRobot {
 		return this.connection.getState() == IConnection.STATE_CONNECTED;
 	}
 
-	public void setCaller(Handler caller) {
-		this.caller = caller;
-	}
-
 	@Override
 	public void initialize() {
-		// TODO Auto-generated method stub
 
-	}
-
-	@Override
-	public void setLinearCorrection(double newValue) {
-		this.linearCorrection = newValue;
-
-	}
-
-	@Override
-	public double getLinearCorrection() {
-		return this.linearCorrection;
-	}
-
-	@Override
-	public void setAngularCorrection(double newValue) {
-		this.angularCorrection = newValue;
-	}
-
-	@Override
-	public double getAngularCorrection() {
-		return this.angularCorrection;
 	}
 
 	@Override
@@ -113,30 +124,30 @@ public class Robot implements IRobot {
 		while (distanceLeft > 0) {
 
 			int maxStepSize = Byte.MAX_VALUE;
-			byte step = (byte) (distanceLeft > maxStepSize ? maxStepSize
-					: distanceLeft);
+			byte step = (byte) (distanceLeft > maxStepSize ? maxStepSize : distanceLeft);
 			distanceLeft -= step;
 
-			IRequest req = new MoveDistanceRequest(connection,
-					connectionHandler, step);
+			// Calculate the runtime
+			long runtime = (long) (linearRuntimePerCentimeter * step);
+
+			IRequest req = new MoveDistanceRequest(connection, connectionHandler, step, runtime);
 			this.addRequest(req);
 		}
 	}
 
 	@Override
 	public void setVelocity(int left, int right) {
-		SetVelocityRequest req = new SetVelocityRequest(connection,
-				connectionHandler);
-		req.setLeftWheelVelocity((byte) left);
-		req.setRightWheelVelocity((byte) right);
-
+		SetVelocityRequest req = new SetVelocityRequest(connection, connectionHandler, (byte) left, (byte) right);
 		this.addRequest(req);
 	}
 
 	@Override
-	public synchronized void stop() {
-		this.requests.clear();
-		this.executing = false;
+	public synchronized void stop(boolean immediately) {
+
+		if (immediately) {
+			this.requests.clear();
+			this.executing = false;
+		}
 
 		this.addSimpleCommandRequest('s');
 	}
@@ -147,16 +158,20 @@ public class Robot implements IRobot {
 		int deg = (int) (degrees * angularCorrection);
 
 		while (deg > 0) {
+
+			// Calculate the step width
 			byte step = (byte) (deg > Byte.MAX_VALUE ? Byte.MAX_VALUE : deg);
 			deg -= step;
+
+			// Calculate the runtime
+			int runtime = (int) (angularRuntimePerDegree * step);
 
 			// Use negative values for turn to the right
 			if (direction == Direction.RIGHT) {
 				step *= -1;
 			}
 
-			IRequest req = new TurnByAngleRequest(connection,
-					connectionHandler, step);
+			Request req = new TurnByAngleRequest(connection, connectionHandler, step, runtime);
 			addRequest(req);
 		}
 	}
@@ -174,8 +189,7 @@ public class Robot implements IRobot {
 	@Override
 	public void setBar(int position) {
 
-		IRequest req = new SetBarRequest(connection, connectionHandler,
-				(byte) position);
+		IRequest req = new SetBarRequest(connection, connectionHandler, (byte) position);
 		addRequest(req);
 	}
 
@@ -191,8 +205,7 @@ public class Robot implements IRobot {
 
 	@Override
 	public void setLeds(byte red, byte blue) {
-		IRequest req = new SetLedsRequest(connection, connectionHandler, red,
-				blue);
+		IRequest req = new SetLedsRequest(connection, connectionHandler, red, blue);
 		addRequest(req);
 	}
 
@@ -213,14 +226,15 @@ public class Robot implements IRobot {
 	}
 
 	private void addSimpleCommandRequest(char command) {
-		IRequest req = new SimpleCommandRequest(connection, connectionHandler,
-				command);
+		IRequest req = new SimpleCommandRequest(connection, connectionHandler, command);
 		this.addRequest(req);
 	}
 
 	/**
 	 * Adds an request to the queue and starts the execution if it is not running.
-	 * @param request The request to add.
+	 * 
+	 * @param request
+	 *            The request to add.
 	 */
 	private synchronized void addRequest(IRequest request) {
 
@@ -248,7 +262,9 @@ public class Robot implements IRobot {
 
 	/**
 	 * Handles messages of type REQUEST_EVENT -> MESSAGE_READ and decides which type of response it is
-	 * @param msg The incoming message of type MESSAGE_READ
+	 * 
+	 * @param msg
+	 *            The incoming message of type MESSAGE_READ
 	 */
 	private void parseData(Message msg) {
 
@@ -267,7 +283,8 @@ public class Robot implements IRobot {
 	/**
 	 * Sends a message to the caller thread containing the current position of the robot
 	 * 
-	 * @param response The raw response string with the unparsed position.
+	 * @param response
+	 *            The raw response string with the unparsed position.
 	 */
 	private void sendPositionData(String response) {
 
@@ -278,7 +295,8 @@ public class Robot implements IRobot {
 	/**
 	 * Sends a message to the caller thread containing the current sensor values of the robot
 	 * 
-	 * @param response The raw response string with the unparsed sensor data.
+	 * @param response
+	 *            The raw response string with the unparsed sensor data.
 	 */
 	private void sendSensorData(String response) {
 
@@ -286,8 +304,11 @@ public class Robot implements IRobot {
 		caller.obtainMessage(ROBOT_RESPONSE_RECEIVED, SENSOR_DATA_RECEIVED, -1, sensors).sendToTarget();
 	};
 
+	// ******************************************* Helper Classes *****************************************************
+
 	/**
 	 * Handles the incomeing messages from the connection
+	 * 
 	 * @author adanek
 	 *
 	 */

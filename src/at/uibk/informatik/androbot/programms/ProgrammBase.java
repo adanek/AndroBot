@@ -53,7 +53,9 @@ public abstract class ProgrammBase {
 		// Create the robot
 		this.robot = new Robot(conn, uiHandler);
 		this.robot.setAngularCorrection(SettingsActivity.AngularCorrecion);
+		this.robot.setAngularRuntimePerDegree(SettingsActivity.AngularRuntimePerDegree);
 		this.robot.setLinearCorrection(SettingsActivity.LinearCorrection);
+		this.robot.setLinearRuntimePerCentimeter(SettingsActivity.LinearRuntimePerCentimeter);
 	}
 
 	// ********************************************** Methods *********************************************************
@@ -79,7 +81,7 @@ public abstract class ProgrammBase {
 
 	public void stop() {
 		this.executing = false;
-		this.robot.stop();
+		this.robot.stop(true);
 	}
 
 	private void execute() {

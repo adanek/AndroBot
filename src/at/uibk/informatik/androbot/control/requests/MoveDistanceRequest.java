@@ -1,23 +1,17 @@
 package at.uibk.informatik.androbot.control.requests;
 
 import android.os.Handler;
+import at.uibk.informatik.androbot.app.SettingsActivity;
 import at.uibk.informatik.androbot.contracts.IConnection;
 
 
-public class MoveDistanceRequest extends RequestBase {
+public class MoveDistanceRequest extends Request {
 
-	private byte distance;
-
-	public MoveDistanceRequest(IConnection conn, Handler handler, byte distance) {
-		super(conn, handler);		
+	public MoveDistanceRequest(IConnection conn, Handler handler, byte distance, long runtime) {
+		super(conn, handler);
 		
-		this.distance = distance;
-		this.setDelay(5000);
-	}
-
-	@Override
-	protected void sendRequest() {
-		
-		this.sendCommand('k', distance);	
+		setCommand('k');
+		addParameter(distance);
+		setRuntime(runtime);
 	}	
 }

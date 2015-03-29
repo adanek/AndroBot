@@ -52,4 +52,12 @@ public class StartActivity extends Activity {
 		
 	}
 	
+	public void onTest(View v){
+		
+		//call square test view
+		Intent test = new Intent(this, MainActivity.class);
+		startActivity(test);		
+	}
+	
+	
 }

@@ -31,13 +31,13 @@ public class SquareTest extends ProgrammBase {
 		IRobot robot = super.getRobot();
 		
 		// start square test
-		robot.moveDistance((byte) distance);
+		robot.moveDistance(distance);
 		robot.turnLeft();
-		robot.moveDistance((byte) distance);
+		robot.moveDistance(distance);
 		robot.turnLeft();
-		robot.moveDistance((byte) distance);
+		robot.moveDistance(distance);
 		robot.turnLeft();
-		robot.moveDistance((byte) distance);
+		robot.moveDistance(distance);
 		robot.turnLeft();
 		
 

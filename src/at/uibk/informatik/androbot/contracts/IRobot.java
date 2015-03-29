@@ -42,24 +42,22 @@ public interface IRobot {
 	void setLinearCorrection(double newValue);
 	
 	/**
-	 * Returns the current correction coefficient for linear movements
-	 * @return the current coefficient
-	 */
-	double getLinearCorrection();
-	
-	/**
 	 * Sets the correction coefficient for turn movements
 	 * @param newValue the new coefficient
 	 */
 	void setAngularCorrection(double newValue);
 	
 	/**
-	 * Returns the current coefficient for turn movements
-	 * @return the current coefficient
+	 * Sets the runtime for driving 1cm distance
+	 * @param linearRuntimePerCentimeter
 	 */
-	double getAngularCorrection();
-	
-	
+	void setLinearRuntimePerCentimeter(double linearRuntimePerCentimeter);
+
+	/**
+	 * Sets the runtime for turning 1 degree
+	 * @param angularRuntimePerDegree
+	 */
+	void setAngularRuntimePerDegree(double angularRuntimePerDegree);
 	
 	/**
 	 * Moves the robot forward until it receives the next command
@@ -111,8 +109,9 @@ public interface IRobot {
 	
 	/**
 	 * Stops the current movement of the robot
+	 * @param immediately True if all other requests should be discard
 	 */
-	void stop();
+	void stop(boolean immediately);	
 	
 	
 	/**
@@ -175,5 +174,5 @@ public interface IRobot {
 	 * Sets the current position of the remote device to the given values
 	 * @param position the values to set
 	 */
-	void setOdomentry(IPosition position);	
+	void setOdomentry(IPosition position);
 }

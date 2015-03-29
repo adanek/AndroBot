@@ -9,117 +9,21 @@
     tools:context="at.uibk.informatik.androbot.app.MainActivity" >
 
     <Button
-        android:id="@+id/right"
+        android:id="@+id/start"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/backward"
+        android:layout_height="wrap_content"       
         android:layout_marginBottom="47dp"
-        android:layout_marginLeft="21dp"
-        android:layout_toRightOf="@+id/backward"
-        android:onClick="move"
-        android:text="D" />
-
-    <Button
-        android:id="@+id/left"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/right"
-        android:layout_alignBottom="@+id/right"
-        android:layout_alignParentLeft="true"
-        android:layout_marginLeft="27dp"
-        android:onClick="move"
-        android:text="A" />
-
-    <Button
-        android:id="@+id/btnStop"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/right"
-        android:layout_alignBottom="@+id/right"
-        android:layout_toLeftOf="@+id/right"
-        android:onClick="move"
-        android:text="@string/btn1_text" />
-
-    <Button
-        android:id="@+id/forward"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/btnStop"
-        android:layout_marginBottom="20dp"
-        android:layout_toRightOf="@+id/btnOdomentry"
-        android:onClick="move"
-        android:text="W" />
-
-    <Button
-        android:id="@+id/backward"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:layout_toRightOf="@+id/btnOdomentry"
-        android:onClick="move"
-        android:text="X" />
+        android:layout_marginLeft="21dp"       
+        android:onClick="onStart"
+        android:text="Start" />
 
     <TextView
-        android:id="@+id/txtName"
+        android:id="@+id/txtOutput"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/btnOdomentry"
-        android:layout_centerHorizontal="true" />
-
-    <Button
-        android:id="@+id/btnOdomentry"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignRight="@+id/left"
-        android:layout_centerVertical="true"
-        android:onClick="getOdomentry"
-        android:text="Position" />
-
-    <Button
-        android:id="@+id/squaretest"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignRight="@+id/backward"
-        android:layout_marginBottom="20dp"
-        android:onClick="squareTest"
-        android:text="Start Square Test" />
-
-    <EditText
-        android:id="@+id/degrees"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/squaretest"
-        android:layout_marginBottom="16dp"
-        android:layout_toRightOf="@+id/txtName"
-        android:ems="10"
-        android:inputType="number"
-        android:text="0" />
-
-    <EditText
-        android:id="@+id/distance"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/degrees"
-        android:layout_alignLeft="@+id/degrees"
-        android:ems="10"
-        android:inputType="number"
-        android:text="10" />
-
-    <TextView
-        android:id="@+id/txtLblDist"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/degrees"
-        android:layout_alignLeft="@+id/left"
-        android:text="Distance" />
-
-    <TextView
-        android:id="@+id/txtDegrees"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/degrees"
-        android:layout_alignLeft="@+id/txtLblDist"
-        android:text="Degrees" />
+        android:layout_alignLeft="@+id/start"
+        android:layout_alignTop="@+id/start"
+        android:layout_marginTop="61dp" 
+        android:text="Hello TextView"/>
 
 </RelativeLayout>

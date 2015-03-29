@@ -57,7 +57,7 @@ public class BasicControl extends ProgrammBase {
 		IRobot robot = super.getRobot();
 		
 		// stop robot
-		robot.stop();
+		robot.stop(true);
 	}
 
 	public void handleBar(BarMove bar) {
