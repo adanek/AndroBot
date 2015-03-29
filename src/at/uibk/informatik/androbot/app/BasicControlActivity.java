@@ -13,7 +13,7 @@ import at.uibk.informatik.androbot.contracts.IPosition;
 import at.uibk.informatik.androbot.contracts.IRobotResponseCallback;
 import at.uibk.informatik.androbot.programms.BasicControl;
 
-public class BasicControlActivity extends Activity implements IRobotResponseCallback{
+public class BasicControlActivity extends ProgramActivityBase implements IRobotResponseCallback {
 
 	private BasicControl basic;
 
@@ -21,21 +21,9 @@ public class BasicControlActivity extends Activity implements IRobotResponseCall
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_basic);
-
-		// create basic control instance
-		basic = new BasicControl(getApplicationContext(), this);
-	}
-
-	@Override
-	protected void onResume() {
-		super.onResume();
-		basic.start();
-	}
-
-	@Override
-	protected void onPause() {
-		super.onPause();
-		basic.stop();
+		
+		this.basic = new BasicControl(getApplicationContext(), this);
+		this.setProgramm(basic);
 	}
 
 	// Move
@@ -98,13 +86,11 @@ public class BasicControlActivity extends Activity implements IRobotResponseCall
 	// on odometry
 	public void onPosData(View v) {
 
-
-
 	}
 
 	@Override
 	public void onSensorDataReceived(List<IDistanceSensor> sensors) {
-		
+
 		for (int i = 0; i < sensors.size(); i++) {
 
 			TextView text = null;
@@ -131,18 +117,17 @@ public class BasicControlActivity extends Activity implements IRobotResponseCall
 			// set text on screen
 			if (text != null) {
 				// set text on screen
-				text.setText(Integer.toString(sensors.get(i)
-						.getCurrentDistance()));
+				text.setText(Integer.toString(sensors.get(i).getCurrentDistance()));
 			}
-		}		
+		}
 	}
 
 	@Override
 	public void onPositionReceived(IPosition position) {
-		
+
 		TextView pos = (TextView) findViewById(R.id.txtOdometry);
 
-		//refresh position data
+		// refresh position data
 		if (position != null & pos != null) {
 			pos.setText(position.toString());
 		}

@@ -4,6 +4,11 @@ package at.uibk.informatik.androbot.contracts;
 public interface IRobot {
 	
 	/**
+	 * Message type for callback message Robot response received
+	 */
+	public static final int ROBOT_RESPONSE_RECEIVED= 200;
+	
+	/**
 	 * Message type for callback message sensor data received
 	 */
 	public static final int SENSOR_DATA_RECEIVED = 202;

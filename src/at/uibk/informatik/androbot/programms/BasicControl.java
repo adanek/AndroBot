@@ -17,8 +17,7 @@ public class BasicControl extends ProgrammBase {
 
 	@Override
 	protected void onExecute() {
-		// TODO Auto-generated method stub
-		
+				
 	}
 	
 	// move

@@ -14,7 +14,6 @@ import at.uibk.informatik.androbot.contracts.IDistanceSensor;
 import at.uibk.informatik.androbot.contracts.IPosition;
 import at.uibk.informatik.androbot.contracts.IRequest;
 import at.uibk.informatik.androbot.contracts.IRobot;
-import at.uibk.informatik.androbot.contracts.IRobotResponseCallback;
 import at.uibk.informatik.androbot.control.requests.MoveDistanceRequest;
 import at.uibk.informatik.androbot.control.requests.SetBarRequest;
 import at.uibk.informatik.androbot.control.requests.SetLedsRequest;
@@ -29,17 +28,17 @@ public class Robot implements IRobot {
 	private Queue<IRequest> requests;
 	private boolean executing;
 	private Handler caller;
+	private Handler connectionHandler;
 	private double linearCorrection;
-	private double angularCorrection;
-	private IRobotResponseCallback listener;
+	private double angularCorrection;	
 
-	public Robot(IConnection connection, Handler caller, IRobotResponseCallback listener) {
+	public Robot(IConnection connection, Handler caller) {
 
 		this.caller = caller;
-		this.listener = listener;
-		
+	
+		this.connectionHandler = new Handler(new ConnectionCallback());
 		this.connection = connection;
-		this.connection.setReadHandler(readHandler);
+		this.connection.setReadHandler(connectionHandler);
 
 		this.linearCorrection = 1.0;
 		this.angularCorrection = 1.0;
@@ -118,15 +117,16 @@ public class Robot implements IRobot {
 					: distanceLeft);
 			distanceLeft -= step;
 
-			IRequest req = new MoveDistanceRequest(connection, readHandler,
-					step);
+			IRequest req = new MoveDistanceRequest(connection,
+					connectionHandler, step);
 			this.addRequest(req);
 		}
 	}
 
 	@Override
 	public void setVelocity(int left, int right) {
-		SetVelocityRequest req = new SetVelocityRequest(connection, readHandler);
+		SetVelocityRequest req = new SetVelocityRequest(connection,
+				connectionHandler);
 		req.setLeftWheelVelocity((byte) left);
 		req.setRightWheelVelocity((byte) right);
 
@@ -155,7 +155,8 @@ public class Robot implements IRobot {
 				step *= -1;
 			}
 
-			IRequest req = new TurnByAngleRequest(connection, readHandler, step);
+			IRequest req = new TurnByAngleRequest(connection,
+					connectionHandler, step);
 			addRequest(req);
 		}
 	}
@@ -173,7 +174,8 @@ public class Robot implements IRobot {
 	@Override
 	public void setBar(int position) {
 
-		IRequest req = new SetBarRequest(connection, readHandler, (byte) position);
+		IRequest req = new SetBarRequest(connection, connectionHandler,
+				(byte) position);
 		addRequest(req);
 	}
 
@@ -189,7 +191,8 @@ public class Robot implements IRobot {
 
 	@Override
 	public void setLeds(byte red, byte blue) {
-		IRequest req = new SetLedsRequest(connection, readHandler, red, blue);
+		IRequest req = new SetLedsRequest(connection, connectionHandler, red,
+				blue);
 		addRequest(req);
 	}
 
@@ -210,11 +213,15 @@ public class Robot implements IRobot {
 	}
 
 	private void addSimpleCommandRequest(char command) {
-		IRequest req = new SimpleCommandRequest(connection, readHandler,
+		IRequest req = new SimpleCommandRequest(connection, connectionHandler,
 				command);
 		this.addRequest(req);
 	}
 
+	/**
+	 * Adds an request to the queue and starts the execution if it is not running.
+	 * @param request The request to add.
+	 */
 	private synchronized void addRequest(IRequest request) {
 
 		this.requests.add(request);
@@ -225,6 +232,9 @@ public class Robot implements IRobot {
 		executeNext();
 	}
 
+	/**
+	 * Executes the next Request from the queue and stops the execution if the queue is empty
+	 */
 	private synchronized void executeNext() {
 
 		if (requests.isEmpty()) {
@@ -233,11 +243,58 @@ public class Robot implements IRobot {
 		}
 
 		this.executing = true;
-		readHandler.post(requests.remove());
+		connectionHandler.post(requests.remove());
 	}
 
-	private Handler readHandler = new Handler() {
-		public void handleMessage(android.os.Message msg) {
+	/**
+	 * Handles messages of type REQUEST_EVENT -> MESSAGE_READ and decides which type of response it is
+	 * @param msg The incoming message of type MESSAGE_READ
+	 */
+	private void parseData(Message msg) {
+
+		if (msg.obj == null) {
+			Log.d(LOG_TAG, "Unable to parse message: " + msg.toString());
+		}
+		String response = new String((byte[]) msg.obj);
+
+		if (response.contains("sensor:"))
+			sendSensorData(response);
+
+		else if (response.contains("odometry:"))
+			sendPositionData(response);
+	}
+
+	/**
+	 * Sends a message to the caller thread containing the current position of the robot
+	 * 
+	 * @param response The raw response string with the unparsed position.
+	 */
+	private void sendPositionData(String response) {
+
+		IPosition pos = Position.parse(response);
+		caller.obtainMessage(ROBOT_RESPONSE_RECEIVED, POSITION_RECEIVED, -1, pos).sendToTarget();
+	}
+
+	/**
+	 * Sends a message to the caller thread containing the current sensor values of the robot
+	 * 
+	 * @param response The raw response string with the unparsed sensor data.
+	 */
+	private void sendSensorData(String response) {
+
+		List<IDistanceSensor> sensors = DistanceSensor.parse(response);
+		caller.obtainMessage(ROBOT_RESPONSE_RECEIVED, SENSOR_DATA_RECEIVED, -1, sensors).sendToTarget();
+	};
+
+	/**
+	 * Handles the incomeing messages from the connection
+	 * @author adanek
+	 *
+	 */
+	private class ConnectionCallback implements Handler.Callback {
+
+		@Override
+		public boolean handleMessage(Message msg) {
 			switch (msg.what) {
 			case IRequest.REQUEST_EVENT:
 				switch (msg.arg1) {
@@ -253,34 +310,10 @@ public class Robot implements IRobot {
 				Message m = caller.obtainMessage();
 				m.copyFrom(msg);
 				m.sendToTarget();
+				return false;
 			}
+
+			return true;
 		}
-
-		private void parseData(Message msg) {
-			
-			if(msg.obj == null){
-				Log.d(LOG_TAG, "Unable to parse message: "+ msg.toString());
-			}
-			String response = new String((byte[]) msg.obj);
-
-			if (response.contains("sensor:"))
-				sendSensorData(response);
-
-			else if (response.contains("odometry:"))
-				sendPositionData(response);
-		}
-
-		private void sendPositionData(String response) {
-
-			IPosition pos = Position.parse(response);
-			listener.onPositionReceived(pos);
-		}
-
-		private void sendSensorData(String response) {
-	
-			List<IDistanceSensor> sensors = DistanceSensor.parse(response);
-			listener.onSensorDataReceived(sensors);
-		};
-	};
-
+	}
 }

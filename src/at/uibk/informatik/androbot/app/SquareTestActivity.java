@@ -11,7 +11,7 @@ import at.uibk.informatik.androbot.contracts.IPosition;
 import at.uibk.informatik.androbot.contracts.IRobotResponseCallback;
 import at.uibk.informatik.androbot.programms.SquareTest;
 
-public class SquareTestActivity extends Activity implements IRobotResponseCallback{
+public class SquareTestActivity extends ProgramActivityBase implements IRobotResponseCallback{
 
 	private SquareTest squareTest;
 	
@@ -22,6 +22,7 @@ public class SquareTestActivity extends Activity implements IRobotResponseCallba
 		
 		//create square test instance
 		squareTest = new SquareTest(getApplicationContext(), this);
+		this.setProgramm(squareTest);
 	}
 
 	@Override
@@ -53,7 +54,7 @@ public class SquareTestActivity extends Activity implements IRobotResponseCallba
 	public void onStop(View v){
 		
 		//stop square test
-		squareTest.end();
+		squareTest.stop();
 		
 	}
 
