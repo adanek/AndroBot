@@ -103,7 +103,7 @@ public class BasicControl extends ProgrammBase {
 		Log.d(LOG_TAG, "position data requested");
 		
 		IRobot robot = super.getRobot();
-		
+	
 		robot.requestCurrentPosition();		
 	}	
 }

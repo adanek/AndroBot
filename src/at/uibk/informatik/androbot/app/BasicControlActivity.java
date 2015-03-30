@@ -4,6 +4,7 @@ import java.util.List;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import at.uibk.informatik.androbot.contracts.BarMove;
@@ -15,6 +16,8 @@ import at.uibk.informatik.androbot.programms.BasicControl;
 
 public class BasicControlActivity extends ProgramActivityBase implements IRobotResponseCallback {
 
+	private static final String LOG_TAG = "BasicControl";
+	
 	private BasicControl basic;
 
 	@Override
@@ -86,11 +89,16 @@ public class BasicControlActivity extends ProgramActivityBase implements IRobotR
 	// on odometry
 	public void onPosData(View v) {
 
+		basic.requestPositionData();
+		
 	}
 
 	@Override
 	public void onSensorDataReceived(List<IDistanceSensor> sensors) {
-
+		
+		// log
+		Log.d(LOG_TAG, "sensor data received");
+		
 		for (int i = 0; i < sensors.size(); i++) {
 
 			TextView text = null;
@@ -125,6 +133,9 @@ public class BasicControlActivity extends ProgramActivityBase implements IRobotR
 	@Override
 	public void onPositionReceived(IPosition position) {
 
+		// log
+		Log.d(LOG_TAG, "position data received");
+		
 		TextView pos = (TextView) findViewById(R.id.txtOdometry);
 
 		// refresh position data
