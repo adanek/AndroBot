@@ -44,7 +44,7 @@
         android:layout_marginTop="50dp"
         android:layout_marginLeft="205dp"
         android:onClick="onBar"
-        android:text="-" />
+        android:text="+" />
     
         <Button
         android:id="@+id/left"

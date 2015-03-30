@@ -6,6 +6,7 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import at.uibk.informatik.androbot.contracts.IDistanceSensor;
 import at.uibk.informatik.androbot.contracts.IPosition;
@@ -48,16 +49,23 @@ public class SettingsActivity extends Activity implements IRobotResponseCallback
 		super.onResume();
 		
 		//get screen elements
-		EditText mac     = (EditText) findViewById(R.id.inputMAC);
-		EditText twenty  = (EditText) findViewById(R.id.inputTwenty);
-		EditText forty = (EditText) findViewById(R.id.inputForty);
+		EditText mac        = (EditText) findViewById(R.id.inputMAC);
+		EditText twenty     = (EditText) findViewById(R.id.inputTwenty);
+		EditText forty      = (EditText) findViewById(R.id.inputForty);
 		EditText threeSixty = (EditText) findViewById(R.id.inputThreeSixty);
+		EditText linear     = (EditText) findViewById(R.id.inputLinearRuntime);
+		EditText angular    = (EditText) findViewById(R.id.inputAngularRuntime);
+		CheckBox fakeConn   = (CheckBox) findViewById(R.id.chkFake);
 		
 		//set texts on screen
 		mac.setText(SettingsActivity.MacAddress);
 		twenty.setText(String.valueOf(DistanceTwenty));
 		forty.setText(String.valueOf(DistanceForty));
 		threeSixty.setText(String.valueOf(Degrees));
+		linear.setText(String.valueOf(LinearRuntimePerCentimeter));
+		angular.setText(String.valueOf(AngularRuntimePerDegree));
+		fakeConn.setChecked(useFakeConnection);
+		
 	}
 
 	@Override
@@ -70,10 +78,13 @@ public class SettingsActivity extends Activity implements IRobotResponseCallback
 	public void onSave(View v){
 		
 		//get screen elements
-		EditText mac     = (EditText) findViewById(R.id.inputMAC);
-		EditText twenty  = (EditText) findViewById(R.id.inputTwenty);
-		EditText forty   = (EditText) findViewById(R.id.inputForty);
-		EditText degrees = (EditText) findViewById(R.id.inputThreeSixty);
+		EditText mac      = (EditText) findViewById(R.id.inputMAC);
+		EditText twenty   = (EditText) findViewById(R.id.inputTwenty);
+		EditText forty    = (EditText) findViewById(R.id.inputForty);
+		EditText degrees  = (EditText) findViewById(R.id.inputThreeSixty);
+		EditText linear   = (EditText) findViewById(R.id.inputLinearRuntime);
+		EditText angular  = (EditText) findViewById(R.id.inputAngularRuntime);
+		CheckBox fakeConn = (CheckBox) findViewById(R.id.chkFake);
 		
 		//update values
 		String macAddress = mac.getText().toString();
@@ -85,14 +96,23 @@ public class SettingsActivity extends Activity implements IRobotResponseCallback
 		LinearCorrection = 1 + ((20 - DistanceTwenty) / 20 + (40 - DistanceForty) / 40) / 2;
 		AngularCorrecion = 360.0 / Degrees;
 		
+		//set runtime values
+		LinearRuntimePerCentimeter = Double.valueOf(linear.getText().toString());
+		AngularRuntimePerDegree    = Double.valueOf(angular.getText().toString());
+		
+		//set fake connection flag
+		useFakeConnection = fakeConn.isChecked();
+		
 		//set MAC address
 		SettingsActivity.MacAddress = macAddress;
 		
 		//log
 		Log.d(LOG_TAG, "Mac Address " + macAddress + " set");
 		Log.d(LOG_TAG, "Linear coefficient " + LinearCorrection + " set");
+		Log.d(LOG_TAG, "Linear runtime " + LinearRuntimePerCentimeter + " set"); 
 		Log.d(LOG_TAG, "Angular coefficient " + AngularCorrecion + " set"); 
-
+		Log.d(LOG_TAG, "Angular runtime " + AngularRuntimePerDegree + " set"); 
+		
 		//back to start activity
 		finish();
 	}
