@@ -99,6 +99,11 @@ public class BasicControlActivity extends ProgramActivityBase implements IRobotR
 		// log
 		Log.d(LOG_TAG, "sensor data received");
 		
+		//no sensor data available
+		if(sensors == null){
+			return;
+		}
+		
 		for (int i = 0; i < sensors.size(); i++) {
 
 			TextView text = null;
