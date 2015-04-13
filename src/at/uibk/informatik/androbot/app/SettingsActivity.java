@@ -22,9 +22,9 @@ public class SettingsActivity extends Activity implements IRobotResponseCallback
 	public static String MacAddress = "20:13:08:16:10:50"; //0C:8B:FD:CC:54:51
 	//public static String MacAddress = "0C:8B:FD:CC:54:51"; //Laptop Andi
 	
-	public static double LinearCorrection = 1.0; // Last Value 1.34
+	public static double LinearCorrection = 1.34; // Last Value 1.34
 	public static double LinearRuntimePerCentimeter = 100;
-	public static double AngularCorrecion = 1.0; // Last Value 1.55
+	public static double AngularCorrecion = 1.2; // Last Value 1.55
 	public static double AngularRuntimePerDegree = 25;
 	
 	private static double DistanceTwenty = 20;
