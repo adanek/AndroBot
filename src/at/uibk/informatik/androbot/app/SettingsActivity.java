@@ -24,7 +24,7 @@ public class SettingsActivity extends Activity implements IRobotResponseCallback
 	
 	public static double LinearCorrection = 1.34; // Last Value 1.34
 	public static double LinearRuntimePerCentimeter = 100;
-	public static double AngularCorrecion = 1.2; // Last Value 1.55
+	public static double AngularCorrecion = 1.1; // Last Value 1.55
 	public static double AngularRuntimePerDegree = 25;
 	
 	private static double DistanceTwenty = 20;

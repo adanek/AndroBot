@@ -348,16 +348,46 @@ public class BluetoothConnection implements IConnection {
 			Log.i(LOG_TAG, "BEGIN ConnectedThread");
 			byte[] buffer = new byte[1024];
 			int bytes;
+			int pos = 0;
+			
+			boolean lineComplete = false;
 
 			// Keep listening to the InputStream while connected
 			while (true) {
 				try {
 					// Read from the InputStream
-					bytes = btInStream.read(buffer);
+					//bytes = btInStream.read(buffer);
+				
+					
+					while(true){
+						int r = btInStream.read();
+						//Log.d(LOG_TAG, String.format("%d", r));
+						
+						if(r == -1){
+							break;
+						} else if(r == 13){
+							break;
+						}
+						else if(r == 10){
+							
+							lineComplete = true;
+							break;
+						}
+						else{
+							buffer[pos] = (byte)r;
+							pos++;
+						}
+					}
 
-					// Send the obtained bytes to the caller
-					Log.d(LOG_TAG, "Message received: " + new String(buffer, 0, bytes));
-					handler.obtainMessage(Constants.MESSAGE_READ, bytes, -1, buffer).sendToTarget();
+					if(lineComplete){
+						// Send the obtained bytes to the caller
+						Log.d(LOG_TAG, "Message received: " + new String(buffer, 0, pos));
+						handler.obtainMessage(Constants.MESSAGE_READ, pos, -1, buffer).sendToTarget();
+						
+						pos=0;
+						lineComplete=false;
+					}
+					
 				} catch (IOException e) {
 					Log.i(LOG_TAG, "disconnected");
 
