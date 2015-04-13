@@ -39,12 +39,21 @@
             android:onClick="onSquare"
             android:text="Square Test" />
 
+         <Button
+            android:id="@+id/btnGoal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="180dp"
+            android:onClick="onGoal"
+            android:text="Find Goal" />
+        
         <Button
             android:id="@+id/btnTest"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="180dp"
+            android:layout_marginTop="240dp"
             android:onClick="onTest"
             android:text="Test" />
 
