@@ -271,13 +271,15 @@ public class Robot implements IRobot {
 		if (msg.obj == null) {
 			Log.d(LOG_TAG, "Unable to parse message: " + msg.toString());
 		}
-		String response = new String((byte[]) msg.obj, 0, msg.arg1);
+		String response = new String((byte[]) msg.obj, 0, msg.arg1);		
 
 		if (response.contains("sensor:"))
 			sendSensorData(response);
 
 		else if (response.contains("odometry:"))
 			sendPositionData(response);
+		else if (response.startsWith("comamnd"))
+			Log.d(LOG_TAG, response);
 	}
 
 	/**
