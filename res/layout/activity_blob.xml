@@ -17,7 +17,7 @@
         android:id="@+id/txtName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Find Goal" />
+        android:text="Blob detection" />
 
         <Button
         android:id="@+id/btnStart"
@@ -37,17 +37,18 @@
         android:layout_marginLeft="180dp"
         android:onClick="onStop"
         android:text="Stop" />
-        
+
+
         <TextView
-            android:id="@+id/txtLblGoal"
+            android:id="@+id/txtLblPos"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="115dp"
             android:layout_marginLeft="20dp"
-            android:text="Goal position"
+            android:text="Position"
             android:textAppearance="?android:attr/textAppearanceSmall" />
         
-           <TextView
+          <TextView
             android:id="@+id/txtLblX"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -74,33 +75,32 @@
             android:text="TH"
             android:textAppearance="?android:attr/textAppearanceSmall" />
         
-        
-            <EditText
-            android:id="@+id/inputX"
-            android:layout_width="30dp"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="110dp"
-            android:layout_marginTop="130dp"
-            android:ems="5"
-            android:inputType="numberDecimal" />
-                    
-            <EditText
-            android:id="@+id/inputY"
-            android:layout_width="30dp"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="160dp"
-            android:layout_marginTop="130dp"
-            android:ems="5"
-            android:inputType="numberDecimal" />
-                            
-            <EditText
-            android:id="@+id/inputTH"
-            android:layout_width="30dp"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="210dp"
-            android:layout_marginTop="130dp"
-            android:ems="5"
-            android:inputType="numberDecimal" />
+                           <TextView
+                android:id="@+id/txtX"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+           		android:layout_marginTop="130dp"
+           	    android:layout_marginLeft="120dp"
+                android:text="0"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+               
+                <TextView
+                android:id="@+id/txtY"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+           		android:layout_marginTop="130dp"
+           	    android:layout_marginLeft="170dp"
+                android:text="0"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+                
+                <TextView
+                android:id="@+id/txtTH"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+           		android:layout_marginTop="130dp"
+           	    android:layout_marginLeft="220dp"
+                android:text="0"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
             
             <TextView
             android:id="@+id/txtLblRL"

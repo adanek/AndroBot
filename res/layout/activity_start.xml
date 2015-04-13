@@ -48,12 +48,21 @@
             android:onClick="onGoal"
             android:text="Find Goal" />
         
+         <Button
+            android:id="@+id/btnBlob"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="240dp"
+            android:onClick="onBlob"
+            android:text="Blob detection" /> 
+         
         <Button
             android:id="@+id/btnTest"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="240dp"
+            android:layout_marginTop="300dp"
             android:onClick="onTest"
             android:text="Test" />
 
