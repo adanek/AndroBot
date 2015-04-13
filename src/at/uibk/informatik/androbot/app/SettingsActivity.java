@@ -40,6 +40,7 @@ public class SettingsActivity extends ProgramActivityBase implements IRobotRespo
 		
 		//create settings distance
 		configuration = new Settings(getApplicationContext(), this);
+		this.setProgramm(configuration);
 	}
 
 	@Override
