@@ -17,7 +17,7 @@ public class SettingsActivity extends Activity implements IRobotResponseCallback
 
 	private static final String LOG_TAG = "Settings";
 	
-	public static boolean useFakeConnection = true;
+	public static boolean useFakeConnection = false;
 	//public static String MacAddress = "00:26:83:30:F7:E8";
 	//public static String MacAddress = "20:13:08:16:10:42"; //0C:8B:FD:CC:54:51
 	public static String MacAddress = "0C:8B:FD:CC:54:51"; //Laptop Andi
