@@ -13,7 +13,7 @@ import at.uibk.informatik.androbot.contracts.IPosition;
 import at.uibk.informatik.androbot.contracts.IRobotResponseCallback;
 import at.uibk.informatik.androbot.programms.Settings;
 
-public class SettingsActivity extends Activity implements IRobotResponseCallback{ 
+public class SettingsActivity extends ProgramActivityBase implements IRobotResponseCallback{ 
 
 	private static final String LOG_TAG = "Settings";
 	
