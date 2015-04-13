@@ -52,6 +52,15 @@ public class StartActivity extends Activity {
 		
 	}
 	
+	//Find Goal
+	public void onGoal(View v){
+		
+		//call square test view
+		Intent goal = new Intent(this, FindGoalActivity.class);
+		startActivity(goal);
+		
+	}
+	
 	public void onTest(View v){
 		
 		//call square test view
