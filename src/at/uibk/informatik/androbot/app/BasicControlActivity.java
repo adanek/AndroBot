@@ -14,17 +14,18 @@ import at.uibk.informatik.androbot.contracts.IPosition;
 import at.uibk.informatik.androbot.contracts.IRobotResponseCallback;
 import at.uibk.informatik.androbot.programms.BasicControl;
 
-public class BasicControlActivity extends ProgramActivityBase implements IRobotResponseCallback {
+public class BasicControlActivity extends ProgramActivityBase implements
+		IRobotResponseCallback {
 
 	private static final String LOG_TAG = "BasicControl";
-	
+
 	private BasicControl basic;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_basic);
-		
+
 		this.basic = new BasicControl(getApplicationContext(), this);
 		this.setProgramm(basic);
 	}
@@ -90,47 +91,47 @@ public class BasicControlActivity extends ProgramActivityBase implements IRobotR
 	public void onPosData(View v) {
 
 		basic.requestPositionData();
-		
+
 	}
 
 	@Override
 	public void onSensorDataReceived(List<IDistanceSensor> sensors) {
-		
+
 		// log
 		Log.d(LOG_TAG, "sensor data received");
-		
-		//no sensor data available
-		if(sensors == null){
+
+		// no sensor data available
+		if (sensors == null) {
 			return;
 		}
-		
+
 		for (int i = 0; i < sensors.size(); i++) {
 
 			TextView text = null;
 
-			// get sensor view element
-			switch (i) {
-			case 0:
-				text = (TextView) findViewById(R.id.txtRL);
-				break;
-			case 1:
-				text = (TextView) findViewById(R.id.txtFL);
-				break;
-			case 2:
-				text = (TextView) findViewById(R.id.txtFM);
-				break;
-			case 3:
-				text = (TextView) findViewById(R.id.txtFR);
-				break;
-			case 4:
-				text = (TextView) findViewById(R.id.txtRR);
-				break;
+			IDistanceSensor sensor = sensors.get(i);
+
+			// no sensor
+			if (sensor == null) {
+				continue;
 			}
+
+			String name = sensor.getName();
+
+			// get sensor view element
+			if (name == "Front-Middle") {
+				text = (TextView) findViewById(R.id.txtFM);
+			} else if (name == "Front-Left") {
+				text = (TextView) findViewById(R.id.txtFL);
+			} else if (name == "Front-Right") {
+				text = (TextView) findViewById(R.id.txtFR);
+			}	
 
 			// set text on screen
 			if (text != null) {
 				// set text on screen
-				text.setText(Integer.toString(sensors.get(i).getCurrentDistance()));
+				text.setText(Integer.toString(sensors.get(i)
+						.getCurrentDistance()));
 			}
 		}
 	}
@@ -140,7 +141,7 @@ public class BasicControlActivity extends ProgramActivityBase implements IRobotR
 
 		// log
 		Log.d(LOG_TAG, "position data received");
-		
+
 		TextView pos = (TextView) findViewById(R.id.txtOdometry);
 
 		// refresh position data
