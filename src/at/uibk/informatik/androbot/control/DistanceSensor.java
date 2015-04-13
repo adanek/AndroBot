@@ -44,7 +44,7 @@ public class DistanceSensor implements IDistanceSensor {
 		if(fields.length != 9)
 			return null;
 
-		result.add(new DistanceSensor("Front-Left", Integer.decode(fields[5])));
+		result.add(new DistanceSensor("Front-Left", Integer.decode(fields[3])));
 		result.add(new DistanceSensor("Front-Middle", Integer.decode(fields[6])));
 		result.add(new DistanceSensor("Front-Right", Integer.decode(fields[4])));
 		result.add(new DistanceSensor("Front-Bumber", Integer.decode(fields[8])));
