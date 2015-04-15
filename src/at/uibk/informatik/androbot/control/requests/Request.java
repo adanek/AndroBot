@@ -20,26 +20,32 @@ public class Request implements IRequest {
 	// ********************************************** Locals **********************************************************
 
 	private static final String LOG_TAG = "Request";
-	
+
 	private IConnection conn;
 	private Handler handler;
 	private long runtime;
 	private List<Byte> params;
 	private char command;
-	
+	private boolean confirm;
+
 	// ******************************************** Constructors ******************************************************
 
-	public Request(IConnection conn, Handler handler) {
+	public Request(IConnection conn, Handler handler, boolean confirm) {
 		super();
 		this.conn = conn;
 		this.handler = handler;
 		this.setRuntime(0);
 		this.params = new LinkedList<Byte>();
 		this.setCommand((char) 0);
+		this.confirm = confirm;
 	}
-	
+
+	public Request(IConnection conn, Handler handler) {
+		this(conn, handler, true);
+	}
+
 	// ********************************************* Properties *******************************************************
-	
+
 	/**
 	 * @return the command
 	 */
@@ -48,7 +54,8 @@ public class Request implements IRequest {
 	}
 
 	/**
-	 * @param command the command to set
+	 * @param command
+	 *            the command to set
 	 */
 	public void setCommand(char command) {
 		this.command = command;
@@ -62,7 +69,8 @@ public class Request implements IRequest {
 	}
 
 	/**
-	 * @param runtime the runtime to set
+	 * @param runtime
+	 *            the runtime to set
 	 */
 	public void setRuntime(long runtime) {
 		this.runtime = runtime;
@@ -72,57 +80,61 @@ public class Request implements IRequest {
 
 	/**
 	 * Adds an parameter to the request
-	 * @param param The parameter to add.
+	 * 
+	 * @param param
+	 *            The parameter to add.
 	 */
-	public void addParameter(Byte param){
+	public void addParameter(Byte param) {
 		this.params.add(param);
-	}	
-	
+	}
+
 	@Override
-	public void run(){
-		
+	public void run() {
+
 		send();
-		
-		Message doneMsg = handler.obtainMessage(REQUEST_EVENT, REQUEST_SENT, -1);
-		handler.sendMessageDelayed(doneMsg, getRuntime());
+
+		if (confirm) {
+			Message doneMsg = handler.obtainMessage(REQUEST_EVENT, REQUEST_SENT, -1);
+			handler.sendMessageDelayed(doneMsg, getRuntime());
+		}
 	};
-	
+
 	// Writes the request to the connection
-	private void send(){
+	private void send() {
 		logRequest();
 		this.conn.write(getData());
 	}
-	
+
 	// Logs the request
 	private void logRequest() {
 		StringBuilder sb = new StringBuilder();
-		
+
 		sb.append("Sending: ");
 		sb.append(command);
-		
-		for(Byte b : params){
+
+		for (Byte b : params) {
 			sb.append(String.format(" 0x%2X", b));
 		}
-		
+
 		sb.append("\r\n");
-		
-		Log.d(LOG_TAG, sb.toString());		
+
+		Log.d(LOG_TAG, sb.toString());
 	}
 
 	// Returns a byte array representing the request
-	private byte[] getData(){
+	private byte[] getData() {
 		int len = COMMAND_LENGTH + this.params.size() + SUFFIX_LENGTH;
 		byte[] data = new byte[len];
-		
+
 		data[0] = (byte) command;
-		
-		for(int i = 1; i<= params.size(); i++){
-			data[i] = params.get(i -1);
+
+		for (int i = 1; i <= params.size(); i++) {
+			data[i] = params.get(i - 1);
 		}
-		
-		data[len -2] = '\r';
-		data[len -1] = '\n';
-		
+
+		data[len - 2] = '\r';
+		data[len - 1] = '\n';
+
 		return data;
 	}
 }

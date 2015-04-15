@@ -23,8 +23,9 @@ import at.uibk.informatik.androbot.control.BluetoothConnection;
 import at.uibk.informatik.androbot.control.FakeConnection;
 import at.uibk.informatik.androbot.control.Robot;
 
-public abstract class ProgrammBase {
+public abstract class ProgrammBase implements IRobotResponseCallback{
 
+	private static final String LOG_TAG = "ProgrammBase";
 	private IRobot robot;
 	private Context context;
 	private IRobotResponseCallback listener;
@@ -90,6 +91,10 @@ public abstract class ProgrammBase {
 	}
 
 	protected abstract void onExecute();
+	
+	protected void onRobotIsIdle(){
+		Log.d(LOG_TAG, "Robot is idle");
+	}
 
 	// ******************************************** Properties ********************************************************
 
@@ -142,10 +147,15 @@ public abstract class ProgrammBase {
 				switch (msg.arg1) {
 
 				case IRobot.POSITION_RECEIVED:
+					onPositionReceived((IPosition) msg.obj);
 					listener.onPositionReceived((IPosition) msg.obj);
 					break;
 				case IRobot.SENSOR_DATA_RECEIVED:
+					onSensorDataReceived((List<IDistanceSensor>) msg.obj);
 					listener.onSensorDataReceived((List<IDistanceSensor>) msg.obj);
+					break;
+				case IRobot.IDLE:
+					onRobotIsIdle();
 					break;
 				default:
 					Log.d(LOG_TAG, "Unexpected message received: " + msg.toString());

@@ -19,6 +19,11 @@ public interface IRobot {
     public static final int POSITION_RECEIVED = 203;
     
 	/**
+	 * Message type for callback message position received
+	 */
+    public static final int IDLE = 204;
+    
+	/**
 	 * Connect the application with the robot
 	 */
 	void connect();

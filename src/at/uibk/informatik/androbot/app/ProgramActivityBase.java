@@ -5,9 +5,8 @@ import at.uibk.informatik.androbot.programms.ProgrammBase;
 
 public abstract class ProgramActivityBase extends Activity {
 
-	private ProgrammBase program;
+	private ProgrammBase program;	
 	
-
 	@Override
 	protected void onResume() {		
 		super.onResume();

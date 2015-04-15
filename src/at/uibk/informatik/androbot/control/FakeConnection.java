@@ -14,6 +14,10 @@ public class FakeConnection implements IConnection {
 	private static final String LOG_TAG = "FakeBot";
 	private Handler caller;
 	private int state; 
+
+	int fr = 85;
+	int fm = 85;
+	int fl = 85;
 	
 	public FakeConnection(){
 		this.state = IConnection.STATE_NONE;
@@ -66,7 +70,9 @@ public class FakeConnection implements IConnection {
 	}
 
 	private void sendPositionResponse() {
-		String response = "odometry: 0x01 0xFF 0xFF 0x01 0x00 0xFF";		
+		String response;
+		response = "odometry: 0x01 0xFF 0xFF 0x01 0x00 0xFF";
+		
 		Log.d(LOG_TAG, "Receiving: " + response);
 		
 		byte[] buffer = response.getBytes();
@@ -76,8 +82,14 @@ public class FakeConnection implements IConnection {
 		caller.sendMessageDelayed(msg, 200);
 	}
 
-	private void sendSensorResponse() {
-		String response = "sensor: 0x00 0xa2 0xef 0x12 0xf3 0x01 0x00 0x17";		
+	private void sendSensorResponse() {		
+		
+		String response = String.format("sensor: 0xFF 0xFF 0x%02x 0x%02x 0xFF 0x%02x 0xFF 0xFF", fl, fr, fm );
+				
+		fl--;
+		fr--;
+		fm--;
+		
 		Log.d(LOG_TAG, "Receiving: " + response);
 		
 		byte[] buffer = response.getBytes();

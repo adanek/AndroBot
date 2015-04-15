@@ -1,9 +1,13 @@
 package at.uibk.informatik.androbot.programms;
 
+import java.util.List;
+
 import android.content.Context;
 import android.util.Log;
 import at.uibk.informatik.androbot.contracts.BarMove;
 import at.uibk.informatik.androbot.contracts.Direction;
+import at.uibk.informatik.androbot.contracts.IDistanceSensor;
+import at.uibk.informatik.androbot.contracts.IPosition;
 import at.uibk.informatik.androbot.contracts.IRobot;
 import at.uibk.informatik.androbot.contracts.IRobotResponseCallback;
 
@@ -105,5 +109,17 @@ public class BasicControl extends ProgrammBase {
 		IRobot robot = super.getRobot();
 	
 		robot.requestCurrentPosition();		
+	}
+
+	@Override
+	public void onSensorDataReceived(List<IDistanceSensor> sensors) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onPositionReceived(IPosition position) {
+		// TODO Auto-generated method stub
+		
 	}	
 }

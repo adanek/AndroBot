@@ -2,16 +2,13 @@ package at.uibk.informatik.androbot.app;
 
 import java.util.List;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.SeekBar;
 import at.uibk.informatik.androbot.contracts.IDistanceSensor;
 import at.uibk.informatik.androbot.contracts.IPosition;
 import at.uibk.informatik.androbot.contracts.IRobotResponseCallback;
 import at.uibk.informatik.androbot.programms.FindGoal;
-import at.uibk.informatik.androbot.programms.SquareTest;
 
 public class FindGoalActivity extends ProgramActivityBase implements IRobotResponseCallback{
 

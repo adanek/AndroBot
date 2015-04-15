@@ -146,7 +146,7 @@ public class Robot implements IRobot {
 
 		if (immediately) {
 			this.requests.clear();
-			this.executing = false;
+			this.stopExecution();
 		}
 
 		this.addSimpleCommandRequest('s');
@@ -211,7 +211,10 @@ public class Robot implements IRobot {
 
 	@Override
 	public void requestSensorData() {
-		addSimpleCommandRequest('q');
+		Request req = new Request(connection, connectionHandler, false);
+		req.setCommand('q');
+		connectionHandler.post(req);
+		//addSimpleCommandRequest('q');
 	}
 
 	@Override
@@ -238,7 +241,7 @@ public class Robot implements IRobot {
 	 */
 	private synchronized void addRequest(IRequest request) {
 
-		this.requests.add(request);
+		this.requests.add(request);		
 
 		if (executing)
 			return;
@@ -252,7 +255,7 @@ public class Robot implements IRobot {
 	private synchronized void executeNext() {
 
 		if (requests.isEmpty()) {
-			this.executing = false;
+			stopExecution();
 			return;
 		}
 
@@ -260,6 +263,10 @@ public class Robot implements IRobot {
 		connectionHandler.post(requests.remove());
 	}
 
+	private void stopExecution(){
+		this.executing = false;
+		caller.obtainMessage(ROBOT_RESPONSE_RECEIVED, IDLE, -1).sendToTarget();
+	}
 	/**
 	 * Handles messages of type REQUEST_EVENT -> MESSAGE_READ and decides which type of response it is
 	 * 
