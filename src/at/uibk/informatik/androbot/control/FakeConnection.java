@@ -66,7 +66,7 @@ public class FakeConnection implements IConnection {
 	}
 
 	private void sendPositionResponse() {
-		String response = "odomentry: 0x00 0xa2 0xef 0x12 0xf3 0x01 0x00 0x17";		
+		String response = "odometry: 0x01 0xFF 0xFF 0x01 0x00 0xFF";		
 		Log.d(LOG_TAG, "Receiving: " + response);
 		
 		byte[] buffer = response.getBytes();

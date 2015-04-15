@@ -4,45 +4,51 @@ import at.uibk.informatik.androbot.contracts.IPosition;
 
 public class Position implements IPosition {
 
-	private byte x;
-	private byte y;
-	private byte alpha;
+	private int x;
+	private int y;
+	private int alpha;
 
-	public Position(byte x, byte y, byte alpha) {
+	public Position(int x, int y, int alpha) {
 		this.x = x;
 		this.y = y;
 		this.alpha = alpha;
 	}
-	
+
 	@Override
-	public byte getX() {
+	public int getX() {
 		return x;
 	}
 
 	@Override
-	public byte getY() {
+	public int getY() {
 		return y;
 	}
 
 	@Override
-	public byte getOrientation() {
+	public int getOrientation() {
 		// TODO Auto-generated method stub
 		return alpha;
 	}
-	
+
 	@Override
 	public String toString() {
-		return String.format("Position: x=%2X y=%2X alpha=%2X", this.x, this.y, this.alpha);
+		return String.format("Position: x=%04X y=%04X alpha=%04X", this.x, this.y, this.alpha);
 	}
-	
-	public static IPosition parse(String data){
-		// xlow,  xheigh,  ylow,  yheigh,  alphalow,  alphaheigh
+
+	public static IPosition parse(String data) {
+				
+		// xlow, xheigh, ylow, yheigh, alphalow, alphaheigh
 		// odometry: 0x%02x 0x%02x 0x%02x 0x%02x 0x%02x 0x%02x
+		String[] fields = data.split(" ");
 		
-		String[] fields = data.split(" ");		
-		return new Position(Byte.decode(fields[1]), Byte.decode(fields[3]), Byte.decode(fields[5]));
+		if(fields.length != 7)
+			return null;
+
+		int x = Integer.decode(fields[1]) + (Integer.decode(fields[2]) << 8);
+		int y = Integer.decode(fields[3]) + (Integer.decode(fields[4]) << 8);
+		int a = Integer.decode(fields[5]) + (Integer.decode(fields[6]) << 8);
+
+		return new Position(x, y, a);
 	}
-	
-	
 
 }

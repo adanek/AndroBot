@@ -2,7 +2,7 @@ package at.uibk.informatik.androbot.contracts;
 
 public interface IPosition {
 	
-	byte getX();
-	byte getY();
-	byte getOrientation();
+	int getX();
+	int getY();
+	int getOrientation();
 }
