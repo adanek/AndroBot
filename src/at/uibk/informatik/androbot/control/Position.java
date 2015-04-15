@@ -32,7 +32,7 @@ public class Position implements IPosition {
 
 	@Override
 	public String toString() {
-		return String.format("Position: x=%04X y=%04X alpha=%04X", this.x, this.y, this.alpha);
+		return String.format("x=%04X\ty=%04X\talpha=%04X", this.x, this.y, this.alpha);
 	}
 
 	public static IPosition parse(String data) {
@@ -49,6 +49,11 @@ public class Position implements IPosition {
 		int a = Integer.decode(fields[5]) + (Integer.decode(fields[6]) << 8);
 
 		return new Position(x, y, a);
+	}
+	
+	public static IPosition RootPosition(){
+		
+		return new Position(0, 0, 0);
 	}
 
 }

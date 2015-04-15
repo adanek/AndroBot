@@ -1,8 +1,11 @@
 package at.uibk.informatik.androbot.app;
 
 import java.util.List;
+import java.util.Observer;
 
+import android.database.Observable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import at.uibk.informatik.androbot.contracts.IDistanceSensor;
@@ -12,20 +15,32 @@ import at.uibk.informatik.androbot.programms.FindGoal;
 
 public class FindGoalActivity extends ProgramActivityBase implements IRobotResponseCallback{
 
+	protected static final String LOG_TAG = "FindGoalActivity";
+
 	private FindGoal findGoal;
 	
 	private static double X = 1.0;
 	private static double Y = 1.0;
 	private static double TH = 1.0;
 	
+
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_square);
+		setContentView(R.layout.activity_find);
 		
 		//create find goal instance
 		findGoal = new FindGoal(getApplicationContext(), this);
 		this.setProgramm(findGoal);
+		
+		findGoal.PropertyChanged().addObserver(new Observer() {
+			
+			@Override
+			public void update(java.util.Observable arg0, Object arg1) {
+				Log.d(LOG_TAG, "I should update the position control...");				
+			}
+		});
 	}
 
 	@Override
@@ -78,6 +93,7 @@ public class FindGoalActivity extends ProgramActivityBase implements IRobotRespo
 		findGoal.stop();
 		
 	}
+
 
 	@Override
 	public void onSensorDataReceived(List<IDistanceSensor> sensors) {		
