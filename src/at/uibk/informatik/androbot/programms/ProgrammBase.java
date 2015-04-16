@@ -42,9 +42,12 @@ public abstract class ProgrammBase implements IRobotResponseCallback{
 		this.uiHandler = new Handler(new Callback());
 		this.executing = false;
 
+		// Load settings
+		SharedPreferences settings = context.getSharedPreferences("Androbot_Settings", android.content.Context.MODE_PRIVATE);
+		
 		// Create the connection
 		IConnection conn;
-		if (SettingsActivity.useFakeConnection) {
+		if (settings.getBoolean(SettingsActivity.USE_FAKECONNECTION, false)) {
 			conn = new FakeConnection();
 		} else {
 			BluetoothConnection btc = new BluetoothConnection(context);
@@ -52,13 +55,12 @@ public abstract class ProgrammBase implements IRobotResponseCallback{
 			conn = btc;
 		}
 
-		// Create the robot
-		SharedPreferences settings = context.getSharedPreferences("Androbot_Settings", android.content.Context.MODE_PRIVATE);
+		// Create the robot		
 		this.robot = new Robot(conn, uiHandler);
 		this.robot.setAngularCorrection(SettingsActivity.AngularCorrecion);
 		this.robot.setAngularRuntimePerDegree(SettingsActivity.AngularRuntimePerDegree);
 		this.robot.setLinearCorrection(settings.getFloat(SettingsActivity.LINEAR_CORRECTION, 1.0f));
-		this.robot.setLinearRuntimePerCentimeter(SettingsActivity.LinearRuntimePerCentimeter);
+		this.robot.setLinearRuntimePerCentimeter(settings.getFloat(SettingsActivity.LINEAR_RUNTIME, 1.0f));
 	}
 
 	// ********************************************** Methods *********************************************************

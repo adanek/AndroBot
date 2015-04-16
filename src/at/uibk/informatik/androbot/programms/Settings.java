@@ -46,8 +46,23 @@ public class Settings extends ProgrammBase {
 		Log.d(LOG_TAG, "performing " + distance + " distance test");
 		getRobot().moveDistance(distance);
 	}
+	
 	public void setLinearCorrectionValue(float newValue){
 		getRobot().setLinearCorrection(newValue);
+	}
+	
+	public void runLinearRuntimeTest(){		
+		getRobot().moveForward();
+		Log.d(LOG_TAG, "Linear runtime test started");
+	}
+	
+	public void stopLinearRuntimeTest(){
+		getRobot().stop(true);
+		Log.d(LOG_TAG, "Linear runtime test finished");
+	}
+	
+	public void setLinearRuntime(float runtime){
+		getRobot().setLinearRuntimePerCentimeter(runtime);
 	}
 	
 	//get distance

@@ -18,6 +18,7 @@ public class SettingsActivity extends ProgramActivityBase implements IRobotRespo
 	public static final String LINEAR_CORRECTION = "LinearCorrection";
 	public static final String USE_FAKECONNECTION = "UseFakeConnection";	
 	private static final String LOG_TAG = "Settings";
+	public static final String LINEAR_RUNTIME = "LinearRuntime";
 
 	public static boolean useFakeConnection = true;
 	// public static String MacAddress = "00:26:83:30:F7:E8";
@@ -32,6 +33,7 @@ public class SettingsActivity extends ProgramActivityBase implements IRobotRespo
 	private Settings configuration;
 	private SharedPreferences settings;
 	private SharedPreferences.Editor editor;
+	private long TestStartTime;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -100,6 +102,32 @@ public class SettingsActivity extends ProgramActivityBase implements IRobotRespo
 		configuration.setLinearCorrectionValue(current);
 	}
 	
+	
+	public void startLinearRuntimeTest(View view){
+		
+		TestStartTime = System.currentTimeMillis();
+		configuration.runLinearRuntimeTest();
+	}
+	
+	
+	public void stopLinearRuntimeTest(View view){
+		
+		long endTime = System.currentTimeMillis();
+		configuration.stopLinearRuntimeTest();
+		
+		EditText dis = (EditText) findViewById(R.id.eLinearRuntimeDistance);
+		int distance = Integer.valueOf(dis.getText().toString());
+		
+		long diff = endTime - TestStartTime;
+		float current = settings.getFloat(LINEAR_RUNTIME, 1.0f);		
+		current = diff / (1.0f * distance); 
+		
+		Log.d(LOG_TAG, String.format("Linear runtime per centimeter set to %f", current));
+		editor.putFloat(LINEAR_RUNTIME, current);
+		editor.commit();
+		
+		configuration.setLinearRuntime(current);
+	}
 }
 
 
