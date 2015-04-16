@@ -42,6 +42,14 @@ public class Settings extends ProgrammBase {
 		}
 	}
 	
+	public void runLinearCorrectionTest(int distance){
+		Log.d(LOG_TAG, "performing " + distance + " distance test");
+		getRobot().moveDistance(distance);
+	}
+	public void setLinearCorrectionValue(float newValue){
+		getRobot().setLinearCorrection(newValue);
+	}
+	
 	//get distance
 	public int getDistance() {
 		return distance;

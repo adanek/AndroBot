@@ -9,6 +9,7 @@ import static at.uibk.informatik.androbot.contracts.Constants.TOAST;
 import java.util.List;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
@@ -52,10 +53,11 @@ public abstract class ProgrammBase implements IRobotResponseCallback{
 		}
 
 		// Create the robot
+		SharedPreferences settings = context.getSharedPreferences("Androbot_Settings", android.content.Context.MODE_PRIVATE);
 		this.robot = new Robot(conn, uiHandler);
 		this.robot.setAngularCorrection(SettingsActivity.AngularCorrecion);
 		this.robot.setAngularRuntimePerDegree(SettingsActivity.AngularRuntimePerDegree);
-		this.robot.setLinearCorrection(SettingsActivity.LinearCorrection);
+		this.robot.setLinearCorrection(settings.getFloat(SettingsActivity.LINEAR_CORRECTION, 1.0f));
 		this.robot.setLinearRuntimePerCentimeter(SettingsActivity.LinearRuntimePerCentimeter);
 	}
 
