@@ -16,7 +16,7 @@ public class FakeConnection implements IConnection {
 	private int state; 
 
 	int fr = 85;
-	int fm = 85;
+	int fm = 30;
 	int fl = 85;
 	
 	public FakeConnection(){
@@ -71,7 +71,7 @@ public class FakeConnection implements IConnection {
 
 	private void sendPositionResponse() {
 		String response;
-		response = "odometry: 0x01 0xFF 0xFF 0x01 0x00 0xFF";
+		response = "odometry: 0x00 0x00 0x00 0x00 0x00 0x00";
 		
 		Log.d(LOG_TAG, "Receiving: " + response);
 		

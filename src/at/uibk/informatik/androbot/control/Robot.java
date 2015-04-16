@@ -210,12 +210,22 @@ public class Robot implements IRobot {
 	}
 
 	@Override
-	public void requestSensorData() {
-		Request req = new Request(connection, connectionHandler, false);
-		req.setCommand('q');
-		connectionHandler.post(req);
-		//addSimpleCommandRequest('q');
+	public void requestSensorData(boolean immediately) {
+		
+		if(immediately){
+			Request req = new Request(connection, connectionHandler, false);
+			req.setCommand('q');
+			connectionHandler.post(req);
+			return;
+		}
+
+		addSimpleCommandRequest('q');
 	}
+	
+	@Override
+	public void requestSensorData() {
+		requestSensorData(true);
+	};
 
 	@Override
 	public void requestCurrentPosition() {

@@ -161,9 +161,30 @@ public interface IRobot {
 	 * Values between 10 - 80 can be interpreted as distance in cm to the detected obstacle
 	 * Value 0 can be interpreted as too close to the obstacle for measurement
 	 * Value 99 can be interpreted as no obstacle detected
+	 * 
+	 * @param immediately Should the request sent immediately or added to the queue
 	 */
-	void requestSensorData();	
-		
+	void requestSensorData(boolean immediately);	
+	
+	
+	/**
+	 * Requests the remote device to sent its current sensor data.
+	 * The robot sends a message with the received data to the callback handler
+	 * of the caller
+	 * 
+	 * Message.what = CONSTANTS.DATA_EVENT
+	 * Message.arg1 = CONSTANTS.SENSOR_DATA_RECEIVED
+	 * Message.object = List<IDistanceSensor>
+	 * 
+	 * Each sensor has a name and a particular value. 
+	 * Values between 10 - 80 can be interpreted as distance in cm to the detected obstacle
+	 * Value 0 can be interpreted as too close to the obstacle for measurement
+	 * Value 99 can be interpreted as no obstacle detected
+	 * 
+	 * Calls requestSensorData(true);
+	 */
+	void requestSensorData();
+	
 	/**
 	 * Requests the current odomentry data from the remote device
 	 * The robot sents a message with the received data to the callback handler
