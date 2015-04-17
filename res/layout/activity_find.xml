@@ -102,21 +102,13 @@
             android:ems="5"
             android:inputType="numberDecimal" />
             
-            <TextView
-            android:id="@+id/txtLblRL"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="185dp"
-            android:layout_marginLeft="20dp"
-            android:text="RL"
-            android:textAppearance="?android:attr/textAppearanceSmall" />
-            
+
             <TextView
             android:id="@+id/txtLblFL"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="185dp"
-            android:layout_marginLeft="70dp"
+            android:layout_marginLeft="20dp"
             android:text="FL"
             android:textAppearance="?android:attr/textAppearanceSmall" />
     
@@ -125,7 +117,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="185dp"
-            android:layout_marginLeft="120dp"
+            android:layout_marginLeft="70dp"
             android:text="FM"
             android:textAppearance="?android:attr/textAppearanceSmall" />            
          
@@ -134,34 +126,18 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="185dp"
-            android:layout_marginLeft="170dp"
+            android:layout_marginLeft="120dp"
             android:text="FR"
             android:textAppearance="?android:attr/textAppearanceSmall" /> 
             
-            <TextView
-            android:id="@+id/txtLblRR"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="185dp"
-            android:layout_marginLeft="220dp"
-            android:text="RR"
-            android:textAppearance="?android:attr/textAppearanceSmall" />
 
-            <TextView
-                android:id="@+id/txtRL"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-           		android:layout_marginTop="210dp"
-           	    android:layout_marginLeft="20dp"
-                android:text="0"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
-            
+
               <TextView
                 android:id="@+id/txtFL"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
            		android:layout_marginTop="210dp"
-           	    android:layout_marginLeft="70dp"
+           	    android:layout_marginLeft="20dp"
                 android:text="0"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
             
@@ -170,7 +146,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
            		android:layout_marginTop="210dp"
-           	    android:layout_marginLeft="120dp"
+           	    android:layout_marginLeft="70dp"
                 android:text="0"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
                
@@ -179,36 +155,68 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
            		android:layout_marginTop="210dp"
-           	    android:layout_marginLeft="170dp"
+           	    android:layout_marginLeft="120dp"
                 android:text="0"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
                 
-                <TextView
-                android:id="@+id/txtRR"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-           		android:layout_marginTop="210dp"
-           	    android:layout_marginLeft="220dp"
-                android:text="0"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
-                
-            <TextView
-            android:id="@+id/txtLblLog"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="240dp"
-            android:layout_marginLeft="20dp"
-            android:text="Log"
-            android:textAppearance="?android:attr/textAppearanceSmall" />
 
             <TextView
-                android:id="@+id/txtLog"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="260dp"
-                 android:layout_marginLeft="20dp"
-                android:text=" " />
+            android:id="@+id/txtLblCurrentX"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="X"
+            android:layout_marginTop="250dp"
+            android:layout_marginLeft="20dp"
+            android:textAppearance="?android:attr/textAppearanceSmall" />
+    
+            <TextView
+            android:id="@+id/txtX"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="0"
+            android:layout_marginTop="280dp"
+            android:layout_marginLeft="20dp"
+            android:textAppearance="?android:attr/textAppearanceMedium" />        
+                    
+            <TextView
+            android:id="@+id/txtLblCurrentY"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="250dp"
+            android:layout_marginLeft="70dp"
+            android:text="Y"
+            android:textAppearance="?android:attr/textAppearanceSmall" />            
+         
+            <TextView
+            android:id="@+id/txtY"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="280dp"
+            android:layout_marginLeft="70dp"
+            android:text="0"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+            
+            <TextView
+            android:id="@+id/txtLblCurrentTH"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="250dp"
+            android:layout_marginLeft="120dp"
+            android:text="TH"
+            android:textAppearance="?android:attr/textAppearanceSmall" /> 
+        
+            <TextView
+            android:id="@+id/txtTH"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="280dp"
+            android:layout_marginLeft="120dp"
+            android:text="0"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
                 
+                
+
+
 </RelativeLayout>
 
 </ScrollView>
