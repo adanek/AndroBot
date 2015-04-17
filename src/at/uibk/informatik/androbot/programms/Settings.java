@@ -65,6 +65,18 @@ public class Settings extends ProgrammBase {
 		getRobot().setLinearRuntimePerCentimeter(runtime);
 	}
 	
+	public void runAngularCorrectionTest(int factor){
+		
+		IRobot rob = getRobot();
+		
+		Direction dir = factor > 0 ? Direction.LEFT: Direction.RIGHT;
+		factor = Math.abs(factor);
+		
+		for(int i = 0; i < factor; i++){
+			rob.turn(dir, 90);
+		}
+	}
+	
 	//get distance
 	public int getDistance() {
 		return distance;

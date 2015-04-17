@@ -1,15 +1,12 @@
 package at.uibk.informatik.androbot.app;
 
-import java.util.List;
-
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.EditText;
-import at.uibk.informatik.androbot.contracts.IDistanceSensor;
-import at.uibk.informatik.androbot.contracts.IPosition;
+import at.uibk.informatik.androbot.contracts.Direction;
 import at.uibk.informatik.androbot.contracts.IRobotResponseCallback;
 import at.uibk.informatik.androbot.programms.Settings;
 
@@ -26,7 +23,7 @@ public class SettingsActivity extends ProgramActivityBase implements IRobotRespo
 	// public static String MacAddress = "0C:8B:FD:CC:54:51"; //Laptop Andi
 
 	public static double LinearRuntimePerCentimeter = 100;
-	public static double AngularCorrecion = 1.1; // Last Value 1.55
+	public static double AngularCorrecion = 1.0; // Last Value 1.55
 	public static double AngularRuntimePerDegree = 25;
 
 
@@ -127,6 +124,14 @@ public class SettingsActivity extends ProgramActivityBase implements IRobotRespo
 		editor.commit();
 		
 		configuration.setLinearRuntime(current);
+	}
+	
+	public void runAngularCorrectionTest(View view){
+		
+		EditText tvFactor =  (EditText) findViewById(R.id.eAngularCorrectionExpect);
+		int factor = Integer.valueOf(tvFactor.getText().toString());
+		
+		configuration.runAngularCorrectionTest(factor);		
 	}
 }
 
