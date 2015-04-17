@@ -136,6 +136,22 @@ public class SettingsActivity extends ProgramActivityBase implements IRobotRespo
 		configuration.runAngularCorrectionTest(factor);		
 	}
 	
+	public void setAngularCorrection(){
+		
+		EditText tvFactor =  (EditText) findViewById(R.id.eAngularCorrectionExpect);
+		int factor = Integer.valueOf(tvFactor.getText().toString());
+		
+		EditText tvRes = (EditText) findViewById(R.id.eAngularCorrectionGot);
+		int res = Integer.valueOf(tvRes.getText().toString());
+		
+		factor = Math.abs(factor);
+		
+		int expected = factor * 90;
+		
+		float correction = expected / factor * 1.0f;
+		
+	}
+	
 	public void runAngularRuntimeTest(View view){
 		TestStartTime = System.currentTimeMillis();
 		configuration.runAngularRuntimeTest();

@@ -1,5 +1,6 @@
 package at.uibk.informatik.androbot.control;
 
+import java.nio.ByteBuffer;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
@@ -215,6 +216,7 @@ public class Robot implements IRobot {
 		if(immediately){
 			Request req = new Request(connection, connectionHandler, false);
 			req.setCommand('q');
+			
 			connectionHandler.post(req);
 			return;
 		}
@@ -227,14 +229,41 @@ public class Robot implements IRobot {
 		requestSensorData(true);
 	};
 
+	
+	@Override
+	public void requestCurrentPosition(boolean immediately) {
+		
+		if(immediately){
+			Request req = new Request(connection, connectionHandler, false);
+			req.setCommand('h');
+			connectionHandler.post(req);
+			return;
+		}
+		
+		addSimpleCommandRequest('h');
+	}
+	
+	
 	@Override
 	public void requestCurrentPosition() {
-		addSimpleCommandRequest('h');
+		requestCurrentPosition(false);
 	}
 
 	@Override
 	public void setOdomentry(IPosition position) {
-		// TODO Auto-generated method stub
+		
+		Request r = new Request(connection, connectionHandler);
+		r.setCommand('j');
+		
+		Integer x = position.getX();	
+		
+		byte[] bytes = ByteBuffer.allocate(4).putInt(x).array();
+		byte xl;
+		byte xh;
+		byte yl;
+		byte yh;
+		byte ah;
+		byte al;
 
 	}
 

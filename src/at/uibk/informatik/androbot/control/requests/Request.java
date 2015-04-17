@@ -94,6 +94,7 @@ public class Request implements IRequest {
 		send();
 
 		if (confirm) {
+			Log.d(LOG_TAG, String.format("Request done %s", getCommand()));
 			Message doneMsg = handler.obtainMessage(REQUEST_EVENT, REQUEST_SENT, -1);
 			handler.sendMessageDelayed(doneMsg, getRuntime());
 		}

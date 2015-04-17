@@ -201,4 +201,6 @@ public interface IRobot {
 	 * @param position the values to set
 	 */
 	void setOdomentry(IPosition position);
+
+	void requestCurrentPosition(boolean immediately);
 }

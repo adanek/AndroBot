@@ -97,6 +97,10 @@ public abstract class ProgrammBase implements IRobotResponseCallback{
 		onExecute();
 
 	}
+	
+	protected boolean isExecuting(){
+		return executing;
+	}
 
 	protected abstract void onExecute();
 	

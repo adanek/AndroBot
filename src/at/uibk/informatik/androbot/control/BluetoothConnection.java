@@ -378,7 +378,7 @@ public class BluetoothConnection implements IConnection {
 							pos++;
 						}
 					}
-
+					
 					if(lineComplete){
 						// Send the obtained bytes to the caller
 						Log.d(LOG_TAG, "Message received: " + new String(buffer, 0, pos));

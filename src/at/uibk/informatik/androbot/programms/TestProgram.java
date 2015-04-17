@@ -5,6 +5,7 @@ import java.util.List;
 import android.content.Context;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 import at.uibk.informatik.androbot.contracts.IDistanceSensor;
 import at.uibk.informatik.androbot.contracts.IPosition;
 import at.uibk.informatik.androbot.contracts.IRobot;
@@ -15,9 +16,9 @@ public class TestProgram extends ProgrammBase {
 
 	public static final int SENSORS = 20;
 	public static final int POSITION = 30;
+	private static String LOG_TAG = "TestApp";
 
 	private Handler requester;
-	private boolean running = false;
 
 	public TestProgram(Context context, IRobotResponseCallback listener) {
 		super(context, listener);
@@ -29,33 +30,37 @@ public class TestProgram extends ProgrammBase {
 	protected void onExecute() {
 
 		IRobot rob = getRobot();
-		this.running = true;
 
-		rob.setOdomentry(Position.RootPosition());
-		rob.requestSensorData();
-		rob.requestCurrentPosition();
-
-		rob.moveForward();
-
+		// requester.obtainMessage(SENSORS).sendToTarget();
+		//requester.obtainMessage(POSITION).sendToTarget();
+		//rob.moveForward();
+		//rob.setOdomentry(Position.RootPosition());
+		
+		requester.obtainMessage(POSITION).sendToTarget();
+		//requester.obtainMessage(SENSORS).sendToTarget();
+		//rob.moveForward();
+		
+		
 	}
 
 	@Override
 	public void onPositionReceived(IPosition position) {
 		super.onPositionReceived(position);
 
-		if (running ) {
+		if (isExecuting()) {
+			
 			Message msg = requester.obtainMessage(POSITION);
 			requester.sendMessageDelayed(msg, 200);
 		}
 	}
-	
+
 	@Override
 	public void onSensorDataReceived(List<IDistanceSensor> sensors) {
 		super.onSensorDataReceived(sensors);
-		
-		if (running ) {
+
+		if (isExecuting()) {
 			Message msg = requester.obtainMessage(SENSORS);
-			requester.sendMessageDelayed(msg, 200);
+			requester.sendMessageDelayed(msg, 2000);
 		}
 	}
 
@@ -67,11 +72,11 @@ public class TestProgram extends ProgrammBase {
 			switch (msg.what) {
 
 			case SENSORS:
-				getRobot().requestSensorData();
+				getRobot().requestSensorData(false);
 				break;
 
 			case POSITION:
-				getRobot().requestCurrentPosition();
+				getRobot().requestCurrentPosition(false);
 				break;
 
 			default:
