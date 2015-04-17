@@ -156,6 +156,7 @@ public class Robot implements IRobot {
 	@Override
 	public void turn(Direction direction, int degrees) {
 
+		Log.d(LOG_TAG, String.format("angular correction %f %f",  angularCorrection, angularRuntimePerDegree));
 		int deg = (int) (degrees * angularCorrection);
 
 		while (deg > 0) {

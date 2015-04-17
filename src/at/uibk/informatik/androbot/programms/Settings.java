@@ -51,8 +51,8 @@ public class Settings extends ProgrammBase {
 		getRobot().setLinearCorrection(newValue);
 	}
 	
-	public void runLinearRuntimeTest(){		
-		getRobot().moveForward();
+	public void runLinearRuntimeTest(int distance){		
+		getRobot().moveDistance(distance);
 		Log.d(LOG_TAG, "Linear runtime test started");
 	}
 	

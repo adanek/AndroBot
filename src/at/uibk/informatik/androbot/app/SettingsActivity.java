@@ -105,8 +105,11 @@ public class SettingsActivity extends ProgramActivityBase implements IRobotRespo
 	
 	public void startLinearRuntimeTest(View view){
 		
+		EditText dis = (EditText) findViewById(R.id.eLinearRuntimeDistance);
+		int distance = Integer.valueOf(dis.getText().toString());
+		
 		TestStartTime = System.currentTimeMillis();
-		configuration.runLinearRuntimeTest();
+		configuration.runLinearRuntimeTest(distance);
 	}
 	
 	
@@ -137,7 +140,7 @@ public class SettingsActivity extends ProgramActivityBase implements IRobotRespo
 		configuration.runAngularCorrectionTest(factor);		
 	}
 	
-	public void setAngularCorrection(){
+	public void setAngularCorrection(View v){
 		
 		EditText tvFactor = (EditText) findViewById(R.id.eAngularCorrectionExpect);
 		EditText tvRes    = (EditText) findViewById(R.id.eAngularCorrectionGot);
