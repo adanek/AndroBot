@@ -51,7 +51,7 @@ public abstract class ProgrammBase implements IRobotResponseCallback{
 			conn = new FakeConnection();
 		} else {
 			BluetoothConnection btc = new BluetoothConnection(context);
-			btc.setDeviceAddress(SettingsActivity.MacAddress);
+			btc.setDeviceAddress("20:13:08:16:10:50");
 			conn = btc;
 		}
 

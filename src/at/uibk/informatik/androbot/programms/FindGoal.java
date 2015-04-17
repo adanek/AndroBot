@@ -49,7 +49,7 @@ public class FindGoal extends ProgrammBase {
 
 		// Set odometry
 		rob.setOdomentry(Position.RootPosition());
-		this.setTarget(new Position(4, 3, 90));
+		//this.setTarget(new Position(4, 3, 90));
 
 		// Start sensors
 		requester.obtainMessage(REQUEST_POSITION).sendToTarget();
