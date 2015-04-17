@@ -13,6 +13,7 @@ import at.uibk.informatik.androbot.programms.Settings;
 public class SettingsActivity extends ProgramActivityBase implements IRobotResponseCallback {
 
 	public static final String LINEAR_CORRECTION = "LinearCorrection";
+	public static final String ANGULAR_CORRECTION = "AngularCorrection";
 	public static final String USE_FAKECONNECTION = "UseFakeConnection";	
 	private static final String LOG_TAG = "Settings";
 	public static final String LINEAR_RUNTIME = "LinearRuntime";
@@ -138,17 +139,24 @@ public class SettingsActivity extends ProgramActivityBase implements IRobotRespo
 	
 	public void setAngularCorrection(){
 		
-		EditText tvFactor =  (EditText) findViewById(R.id.eAngularCorrectionExpect);
-		int factor = Integer.valueOf(tvFactor.getText().toString());
+		EditText tvFactor = (EditText) findViewById(R.id.eAngularCorrectionExpect);
+		EditText tvRes    = (EditText) findViewById(R.id.eAngularCorrectionGot);
 		
-		EditText tvRes = (EditText) findViewById(R.id.eAngularCorrectionGot);
-		int res = Integer.valueOf(tvRes.getText().toString());
+		int factor = Integer.valueOf(tvFactor.getText().toString());
+		int res    = Integer.valueOf(tvRes.getText().toString());
 		
 		factor = Math.abs(factor);
 		
 		int expected = factor * 90;
 		
-		float correction = expected / factor * 1.0f;
+		float current = settings.getFloat(ANGULAR_CORRECTION, 1.0f); 
+		current *= expected * 1.0f / res;
+		
+		Log.d(LOG_TAG, String.format("Angular correction set to %f", current));
+		editor.putFloat(ANGULAR_CORRECTION, current);
+		editor.commit();
+		
+		configuration.setLinearCorrectionValue(current);
 		
 	}
 	
