@@ -156,7 +156,7 @@ public class SettingsActivity extends ProgramActivityBase implements IRobotRespo
 		editor.putFloat(ANGULAR_CORRECTION, current);
 		editor.commit();
 		
-		configuration.setLinearCorrectionValue(current);
+		configuration.setAngularCorrectionValue(current);
 		
 	}
 	
