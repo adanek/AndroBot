@@ -95,16 +95,19 @@
             android:text="0"
             android:textAppearance="?android:attr/textAppearanceMedium" />
             
-            
-            
-            
-        <Button
+            <Button
             android:id="@+id/start"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="81dp"
             android:onClick="onStart"
             android:text="Start" />
+        
+            <Button
+            android:id="@+id/stop"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="onStop"
+            android:text="Stop" />
 
 </LinearLayout>
 

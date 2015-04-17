@@ -41,6 +41,10 @@ public class MainActivity extends ProgramActivityBase implements IRobotResponseC
 		test.start();
 	}
 	
+	public void onStop(View view){
+		test.stop();
+	}
+	
 	@Override
 	public void onSensorDataReceived(List<IDistanceSensor> sensors) {
 
