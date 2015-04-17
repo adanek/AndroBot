@@ -30,15 +30,11 @@ public class TestProgram extends ProgrammBase {
 	protected void onExecute() {
 
 		IRobot rob = getRobot();
-
-		// requester.obtainMessage(SENSORS).sendToTarget();
-		//requester.obtainMessage(POSITION).sendToTarget();
-		//rob.moveForward();
-		//rob.setOdomentry(Position.RootPosition());
+		
+		rob.setOdomentry(Position.RootPosition());		
+		rob.moveForward();
 		
 		requester.obtainMessage(POSITION).sendToTarget();
-		//requester.obtainMessage(SENSORS).sendToTarget();
-		//rob.moveForward();
 		
 		
 	}
@@ -50,7 +46,7 @@ public class TestProgram extends ProgrammBase {
 		if (isExecuting()) {
 			
 			Message msg = requester.obtainMessage(POSITION);
-			requester.sendMessageDelayed(msg, 200);
+			requester.sendMessageDelayed(msg, 500);
 		}
 	}
 

@@ -34,7 +34,7 @@ public class Request implements IRequest {
 		super();
 		this.conn = conn;
 		this.handler = handler;
-		this.setRuntime(0);
+		this.setRuntime(100);
 		this.params = new LinkedList<Byte>();
 		this.setCommand((char) 0);
 		this.confirm = confirm;
@@ -114,7 +114,7 @@ public class Request implements IRequest {
 		sb.append(command);
 
 		for (Byte b : params) {
-			sb.append(String.format(" 0x%2X", b));
+			sb.append(String.format(" 0x%02X", b));
 		}
 
 		sb.append("\r\n");

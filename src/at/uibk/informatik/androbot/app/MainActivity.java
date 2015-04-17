@@ -92,6 +92,9 @@ public class MainActivity extends ProgramActivityBase implements IRobotResponseC
 	@Override
 	public void onPositionReceived(IPosition position) {		
 		
+		if(position == null)
+			return;
+		
 		//get position values
 		int x = position.getX();
 		int y = position.getY();

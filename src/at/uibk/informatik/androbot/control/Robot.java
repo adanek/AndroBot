@@ -255,16 +255,29 @@ public class Robot implements IRobot {
 		Request r = new Request(connection, connectionHandler);
 		r.setCommand('j');
 		
-		Integer x = position.getX();	
+		int x = position.getX();
+		int y = position.getY();
+		int a = position.getOrientation();
 		
-		byte[] bytes = ByteBuffer.allocate(4).putInt(x).array();
-		byte xl;
-		byte xh;
-		byte yl;
-		byte yh;
-		byte ah;
-		byte al;
-
+		byte[] xb = new byte[] {(byte) (x >>> 8), (byte) (x) };
+		byte[] yb = new byte[] {(byte) (x >>> 8), (byte) (x) };
+		byte[] ab = new byte[] {(byte) (x >>> 8), (byte) (x) };		
+		
+		byte xl = xb[1];
+		byte xh = xb[0];
+		byte yl = yb[1];
+		byte yh = yb[0];
+		byte ah = ab[1];
+		byte al = ab[0];
+		
+		r.addParameter(xl);
+		r.addParameter(xh);
+		r.addParameter(yl);
+		r.addParameter(yh);
+		r.addParameter(al);
+		r.addParameter(ah);
+		
+		this.addRequest(r);
 	}
 
 	private void addSimpleCommandRequest(char command) {

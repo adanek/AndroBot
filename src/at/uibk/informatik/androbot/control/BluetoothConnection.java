@@ -40,10 +40,10 @@ public class BluetoothConnection implements IConnection {
 	public BluetoothConnection(Context context) {
 
 		btAdapter = BluetoothAdapter.getDefaultAdapter();
-		
-		//TODO: Activate Bluetooth
-		
-		this.state = STATE_NONE;		
+
+		// TODO: Activate Bluetooth
+
+		this.state = STATE_NONE;
 	}
 
 	/**
@@ -85,27 +85,25 @@ public class BluetoothConnection implements IConnection {
 	public synchronized int getState() {
 		return this.state;
 	}
-	
 
 	@Override
 	public synchronized void setReadHandler(Handler readHandler) {
-		
-		if(this.state != STATE_NONE)
+
+		if (this.state != STATE_NONE)
 			return;
-		
-		this.handler = readHandler;		
+
+		this.handler = readHandler;
 	}
 
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see Sprint.IConnecition#connect(android.bluetooth.BluetoothDevice,
-	 * boolean)
+	 * @see Sprint.IConnecition#connect(android.bluetooth.BluetoothDevice, boolean)
 	 */
 	@Override
 	public synchronized void connect() {
 
-		Log.d(LOG_TAG, "connect to: " + getDeviceAddress());		
+		Log.d(LOG_TAG, "connect to: " + getDeviceAddress());
 
 		// Cancel any thread attempting to make a connection
 		if (state == STATE_CONNECTING) {
@@ -137,7 +135,7 @@ public class BluetoothConnection implements IConnection {
 	 */
 	public synchronized void connected(BluetoothSocket socket, BluetoothDevice device) {
 
-		Log.d(LOG_TAG, "connected to " + device.getName());		
+		Log.d(LOG_TAG, "connected to " + device.getName());
 
 		// Cancel the thread that completed the connection
 		if (connectThread != null) {
@@ -252,12 +250,12 @@ public class BluetoothConnection implements IConnection {
 
 		private final BluetoothSocket btSocket;
 		private final BluetoothDevice btDevice;
-		
+
 		public ConnectThread(String deviceAdress) {
-			
+
 			btDevice = btAdapter.getRemoteDevice(deviceAdress);
 			BluetoothSocket tmp = null;
-			
+
 			// Get a BluetoothSocket for a connection with the
 			// given BluetoothDevice
 			try {
@@ -266,7 +264,7 @@ public class BluetoothConnection implements IConnection {
 			} catch (IOException e) {
 				Log.e(LOG_TAG, "Socket create() failed", e);
 			}
-			
+
 			btSocket = tmp;
 		}
 
@@ -285,7 +283,7 @@ public class BluetoothConnection implements IConnection {
 				btSocket.connect();
 			} catch (IOException e) {
 				Log.e(LOG_TAG, "Connection failed", e);
-				
+
 				// Close the socket
 				try {
 					btSocket.close();
@@ -349,45 +347,42 @@ public class BluetoothConnection implements IConnection {
 			byte[] buffer = new byte[1024];
 			int bytes;
 			int pos = 0;
-			
+
 			boolean lineComplete = false;
 
 			// Keep listening to the InputStream while connected
 			while (true) {
 				try {
 					// Read from the InputStream
-					//bytes = btInStream.read(buffer);
-				
-					
-					while(true){
+					// bytes = btInStream.read(buffer);
+
+					while (true) {
 						int r = btInStream.read();
-						//Log.d(LOG_TAG, String.format("%d", r));
-						
-						if(r == -1){
+						// Log.d(LOG_TAG, String.format("%d", r));
+
+						if (r == -1) {
 							break;
-						} else if(r == 13){
+						} else if (r == 13) {
 							break;
-						}
-						else if(r == 10){
-							
+						} else if (r == 10) {
+
 							lineComplete = true;
 							break;
-						}
-						else{
-							buffer[pos] = (byte)r;
+						} else {
+							buffer[pos] = (byte) r;
 							pos++;
 						}
 					}
-					
-					if(lineComplete){
+
+					if (lineComplete) {
 						// Send the obtained bytes to the caller
 						Log.d(LOG_TAG, "Message received: " + new String(buffer, 0, pos));
 						handler.obtainMessage(Constants.MESSAGE_READ, pos, -1, buffer).sendToTarget();
-						
-						pos=0;
-						lineComplete=false;
+
+						pos = 0;
+						lineComplete = false;
 					}
-					
+
 				} catch (IOException e) {
 					Log.i(LOG_TAG, "disconnected");
 
@@ -399,7 +394,7 @@ public class BluetoothConnection implements IConnection {
 					}
 
 					break;
-				}
+				} 
 			}
 
 			Log.i(LOG_TAG, "END ConnectedThread");
@@ -416,7 +411,7 @@ public class BluetoothConnection implements IConnection {
 				btOutStream.write(buffer);
 
 				// Share the sent message back to the caller
-				handler.obtainMessage(Constants.MESSAGE_WRITE, -1, -1, buffer).sendToTarget();
+				// handler.obtainMessage(Constants.MESSAGE_WRITE, -1, -1, buffer).sendToTarget();
 
 			} catch (IOException e) {
 				Log.e(LOG_TAG, "Exception during write", e);
