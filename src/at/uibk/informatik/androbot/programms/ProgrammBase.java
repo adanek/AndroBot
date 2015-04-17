@@ -72,6 +72,10 @@ public abstract class ProgrammBase implements IRobotResponseCallback{
 	public void disconnect() {
 
 		this.robot.disconnect();
+		
+		if(this.executing){
+			this.start();
+		}
 	}
 
 	public void start() {
@@ -100,6 +104,17 @@ public abstract class ProgrammBase implements IRobotResponseCallback{
 		Log.d(LOG_TAG, "Robot is idle");
 	}
 
+	@Override
+	public void onSensorDataReceived(List<IDistanceSensor> sensors) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onPositionReceived(IPosition position) {
+		// TODO Auto-generated method stub
+		
+	}
 	// ******************************************** Properties ********************************************************
 
 	public IRobot getRobot() {
@@ -141,8 +156,8 @@ public abstract class ProgrammBase implements IRobotResponseCallback{
 			case MESSAGE_DEVICE_NAME:
 				String connectedDeviceName = msg.getData().getString(DEVICE_NAME);
 				Toast.makeText(context, "Connected to " + connectedDeviceName, Toast.LENGTH_SHORT).show();
-
 				break;
+				
 			case MESSAGE_TOAST:
 				Toast.makeText(context, msg.getData().getString(TOAST), Toast.LENGTH_SHORT).show();
 				break;
@@ -154,13 +169,16 @@ public abstract class ProgrammBase implements IRobotResponseCallback{
 					onPositionReceived((IPosition) msg.obj);
 					listener.onPositionReceived((IPosition) msg.obj);
 					break;
+					
 				case IRobot.SENSOR_DATA_RECEIVED:
 					onSensorDataReceived((List<IDistanceSensor>) msg.obj);
 					listener.onSensorDataReceived((List<IDistanceSensor>) msg.obj);
 					break;
+					
 				case IRobot.IDLE:
 					onRobotIsIdle();
 					break;
+					
 				default:
 					Log.d(LOG_TAG, "Unexpected message received: " + msg.toString());
 					break;
