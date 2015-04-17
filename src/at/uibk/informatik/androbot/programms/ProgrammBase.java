@@ -60,7 +60,7 @@ public abstract class ProgrammBase implements IRobotResponseCallback{
 		this.robot.setAngularCorrection(SettingsActivity.AngularCorrecion);
 		this.robot.setAngularRuntimePerDegree(SettingsActivity.AngularRuntimePerDegree);
 		this.robot.setLinearCorrection(settings.getFloat(SettingsActivity.LINEAR_CORRECTION, 1.0f));
-		this.robot.setLinearRuntimePerCentimeter(settings.getFloat(SettingsActivity.LINEAR_RUNTIME, 1.0f));
+		this.robot.setLinearRuntimePerCentimeter(settings.getFloat(SettingsActivity.LINEAR_RUNTIME, 100.0f));
 	}
 
 	// ********************************************** Methods *********************************************************
