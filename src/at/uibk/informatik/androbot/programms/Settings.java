@@ -101,6 +101,10 @@ public class Settings extends ProgrammBase {
 		getRobot().turn(Direction.LEFT, 100);
 	}
 	
+	public void setAngularCorrectionValue(float newValue){
+		getRobot().setAngularCorrection(newValue);
+	}
+	
 	public void setAngularRuntime(float runtime){
 		getRobot().setAngularRuntimePerDegree(runtime);
 	}
