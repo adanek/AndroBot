@@ -155,6 +155,27 @@
             android:layout_height="wrap_content"
             android:text="Save" />
 
+        <TextView
+            android:id="@+id/textView9"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Angular Runtime Calibration"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <Button
+            android:id="@+id/btnAngularRuntimeTestStart"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="runAngularRuntimeTest"
+            android:text="Start" />
+
+        <Button
+            android:id="@+id/btnAngularRuntimeTestStop"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="stopAngularRuntimeTest"
+            android:text="Stop" />
+
     </LinearLayout>
 
 </ScrollView>

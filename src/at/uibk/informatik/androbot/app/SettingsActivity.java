@@ -16,6 +16,7 @@ public class SettingsActivity extends ProgramActivityBase implements IRobotRespo
 	public static final String USE_FAKECONNECTION = "UseFakeConnection";	
 	private static final String LOG_TAG = "Settings";
 	public static final String LINEAR_RUNTIME = "LinearRuntime";
+	public static final String ANGULAR_RUNTIME = "AngularRuntime";
 
 	public static boolean useFakeConnection = true;
 	// public static String MacAddress = "00:26:83:30:F7:E8";
@@ -133,6 +134,28 @@ public class SettingsActivity extends ProgramActivityBase implements IRobotRespo
 		
 		configuration.runAngularCorrectionTest(factor);		
 	}
+	
+	public void runAngularRuntimeTest(View view){
+		TestStartTime = System.currentTimeMillis();
+		configuration.runAngularRuntimeTest();
+	}
+	
+	public void stopAngularRuntimeTest(View view){
+		
+		long endTime = System.currentTimeMillis();		
+		long diff = endTime - TestStartTime;
+		
+		float current = settings.getFloat(ANGULAR_RUNTIME, 1.0f);		
+		current = diff / (1.0f * 90); 
+		
+		Log.d(LOG_TAG, String.format("Angular runtime per centimeter set to %f", current));
+		editor.putFloat(ANGULAR_RUNTIME, current);
+		editor.commit();
+		
+		configuration.setAngularRuntime(current);		
+	}
+	
+	
 }
 
 

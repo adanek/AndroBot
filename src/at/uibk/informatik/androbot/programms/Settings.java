@@ -96,6 +96,14 @@ public class Settings extends ProgrammBase {
 	public void setDegrees(int degrees) {
 		this.degrees = degrees;
 	}
+	
+	public void runAngularRuntimeTest(){
+		getRobot().turn(Direction.LEFT, 100);
+	}
+	
+	public void setAngularRuntime(float runtime){
+		getRobot().setAngularRuntimePerDegree(runtime);
+	}
 
 	@Override
 	public void onSensorDataReceived(List<IDistanceSensor> sensors) {
