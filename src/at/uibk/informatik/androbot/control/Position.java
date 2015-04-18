@@ -1,9 +1,14 @@
 package at.uibk.informatik.androbot.control;
 
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
+
+import android.util.Log;
 import at.uibk.informatik.androbot.contracts.IPosition;
 
 public class Position implements IPosition {
 
+	private static final String LOG_TAG = "PositionParser";
 	private int x;
 	private int y;
 	private int alpha;
@@ -36,18 +41,36 @@ public class Position implements IPosition {
 	}
 
 	public static IPosition parse(String data) {
-				
+	
+		// Ordering of the values according to robot.c
 		// xlow, xheigh, ylow, yheigh, alphalow, alphaheigh
-		// odometry: 0x%02x 0x%02x 0x%02x 0x%02x 0x%02x 0x%02x
+		// low byte first -> ByteOrder LITTLE_ENDIAN
+		
+		// Expected String for position 100 200 300:
+		// "odometry: 0x64 0x00 0xC8 0x00 0x2C 0x01"
 		String[] fields = data.split(" ");
 		
-		if(fields.length != 7)
+		// Check if the data is valid
+		if(fields.length != 7){
+			Log.w(LOG_TAG, String.format("Invalid data received: %s", data));
 			return null;
-
-		int x = Integer.decode(fields[1]) + (Integer.decode(fields[2]) << 8);
-		int y = Integer.decode(fields[3]) + (Integer.decode(fields[4]) << 8);
-		int a = Integer.decode(fields[5]) + (Integer.decode(fields[6]) << 8);
-
+		}		
+		
+		// Extract bytes from string
+		byte[] bytes = new byte[fields.length - 1];
+		for(int i = 1; i < fields.length; i++){
+			bytes[i-1] = Integer.decode(fields[i]).byteValue();
+		}
+		
+		// Rebuild values
+		ByteBuffer buf = ByteBuffer.allocate(bytes.length);
+		buf.order(ByteOrder.LITTLE_ENDIAN);
+		buf.put(bytes);
+		
+		int x = buf.getShort(0);
+		int y = buf.getShort(2);
+		int a = buf.getShort(4);
+		
 		return new Position(x, y, a);
 	}
 	
