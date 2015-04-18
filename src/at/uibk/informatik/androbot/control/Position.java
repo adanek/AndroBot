@@ -37,10 +37,10 @@ public class Position implements IPosition {
 
 	@Override
 	public String toString() {
-		return String.format("x=%04X\ty=%04X\talpha=%04X", this.x, this.y, this.alpha);
+		return String.format("x: %d y: %d a: %d", this.x, this.y, this.alpha);
 	}
 
-	public static IPosition parse(String data) {
+	public static IPosition parse(String data, double linearCorrection, double angularCorrection) {
 	
 		// Ordering of the values according to robot.c
 		// xlow, xheigh, ylow, yheigh, alphalow, alphaheigh
@@ -70,6 +70,11 @@ public class Position implements IPosition {
 		int x = buf.getShort(0);
 		int y = buf.getShort(2);
 		int a = buf.getShort(4);
+		
+		// Correct the values
+		x /= linearCorrection;
+		y /= linearCorrection;
+		a /= angularCorrection;
 		
 		return new Position(x, y, a);
 	}
