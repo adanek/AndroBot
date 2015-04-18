@@ -47,7 +47,7 @@ public abstract class ProgrammBase implements IRobotResponseCallback{
 		
 		// Create the connection
 		IConnection conn;
-		if (settings.getBoolean(SettingsActivity.USE_FAKECONNECTION, false)) {
+		if (settings.getBoolean(SettingsActivity.USE_FAKECONNECTION, true)) {
 			conn = new FakeConnection();
 		} else {
 			BluetoothConnection btc = new BluetoothConnection(context);
@@ -57,10 +57,13 @@ public abstract class ProgrammBase implements IRobotResponseCallback{
 
 		// Create the robot		
 		this.robot = new Robot(conn, uiHandler);
-		this.robot.setAngularCorrection(settings.getFloat(SettingsActivity.ANGULAR_CORRECTION, 1.0f));
+		
+		// Set the linear calibration
+		this.robot.setAngularCorrection(settings.getFloat(SettingsActivity.ANGULAR_CORRECTION, 2.0f));
 		this.robot.setAngularRuntimePerDegree(settings.getFloat(SettingsActivity.ANGULAR_RUNTIME, 100.0f));
-		this.robot.setLinearCorrection(settings.getFloat(SettingsActivity.LINEAR_CORRECTION, 1.0f));
-		this.robot.setAngularCorrection(settings.getFloat(SettingsActivity.ANGULAR_CORRECTION, 1.0f));
+		
+		// Set the angular calibration
+		this.robot.setLinearCorrection(settings.getFloat(SettingsActivity.LINEAR_CORRECTION, 0.5f));		
 		this.robot.setLinearRuntimePerCentimeter(settings.getFloat(SettingsActivity.LINEAR_RUNTIME, 100.0f));
 	}
 

@@ -149,5 +149,13 @@ public class BasicControlActivity extends ProgramActivityBase implements
 			pos.setText(position.toString());
 		}
 	}
+	
+	@Override
+	protected void onResume() {
+		
+		super.onResume();
+		
+		basic.start();
+	}
 
 }

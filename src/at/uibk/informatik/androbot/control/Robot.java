@@ -350,7 +350,7 @@ public class Robot implements IRobot {
 	 */
 	private void sendPositionData(String response) {
 
-		IPosition pos = Position.parse(response);
+		IPosition pos = Position.parse(response, linearCorrection, angularCorrection);
 		caller.obtainMessage(ROBOT_RESPONSE_RECEIVED, POSITION_RECEIVED, -1, pos).sendToTarget();
 	}
 

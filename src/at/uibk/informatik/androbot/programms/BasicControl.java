@@ -10,6 +10,7 @@ import at.uibk.informatik.androbot.contracts.IDistanceSensor;
 import at.uibk.informatik.androbot.contracts.IPosition;
 import at.uibk.informatik.androbot.contracts.IRobot;
 import at.uibk.informatik.androbot.contracts.IRobotResponseCallback;
+import at.uibk.informatik.androbot.control.Position;
 
 public class BasicControl extends ProgrammBase {
 	
@@ -21,7 +22,11 @@ public class BasicControl extends ProgrammBase {
 
 	@Override
 	protected void onExecute() {
-				
+		getRobot().setOdomentry(Position.RootPosition());
+	}
+	
+	public void resetOdo(){
+		getRobot().setOdomentry(Position.RootPosition());
 	}
 	
 	// move
