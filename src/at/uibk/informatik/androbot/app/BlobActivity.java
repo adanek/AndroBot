@@ -41,7 +41,7 @@ import at.uibk.informatik.androbot.programms.SquareTest;
 public class BlobActivity extends ProgramActivityBase implements IRobotResponseCallback, OnTouchListener, CvCameraViewListener2{
 
 	private BlobDetection blob;
-    private static final String LOG_TAG = "OCVSample::Activity";
+    private static final String LOG_TAG = "BlobActivity";
 	
     private CameraBridgeViewBase mOpenCvCameraView;
 
@@ -49,7 +49,7 @@ public class BlobActivity extends ProgramActivityBase implements IRobotResponseC
     private Mat                  mRgba;
     private Scalar               mBlobColorRgba;
     private Scalar               mBlobColorHsv;
-    private BlobDetection        mDetector;
+    //private BlobDetection        mDetector;
     private Mat                  mSpectrum;
     private Size                 SPECTRUM_SIZE;
     private Scalar               CONTOUR_COLOR;
@@ -85,7 +85,7 @@ public class BlobActivity extends ProgramActivityBase implements IRobotResponseC
         mOpenCvCameraView.setCvCameraViewListener(this);
 		
 		
-		//create square test instance
+		//create blob detector
 		blob = new BlobDetection(getApplicationContext(), this);
 		this.setProgramm(blob);
 	}
@@ -98,11 +98,9 @@ public class BlobActivity extends ProgramActivityBase implements IRobotResponseC
 
 	@Override
 	protected void onPause() {
-	    {
-	        super.onPause();
-	        if (mOpenCvCameraView != null)
-	            mOpenCvCameraView.disableView();
-	    }
+	    super.onPause();
+	    if (mOpenCvCameraView != null)
+	        mOpenCvCameraView.disableView();
 	}
 
     public void onDestroy() {
@@ -139,7 +137,8 @@ public class BlobActivity extends ProgramActivityBase implements IRobotResponseC
 	public void onCameraViewStarted(int width, int height) {
 
         mRgba = new Mat(height, width, CvType.CV_8UC4);
-        mDetector = new BlobDetection(getApplicationContext(), this);
+        //mDetector = new BlobDetection(getApplicationContext(), this);
+        //blob = new BlobDetection(getApplicationContext(), this);
         mSpectrum = new Mat();
         mBlobColorRgba = new Scalar(255);
         mBlobColorHsv = new Scalar(255);
@@ -198,9 +197,9 @@ public class BlobActivity extends ProgramActivityBase implements IRobotResponseC
         Log.i(LOG_TAG, "Touched rgba color: (" + mBlobColorRgba.val[0] + ", " + mBlobColorRgba.val[1] +
                 ", " + mBlobColorRgba.val[2] + ", " + mBlobColorRgba.val[3] + ")");
 
-        mDetector.setHsvColor(mBlobColorHsv);
+        blob.setHsvColor(mBlobColorHsv);
 
-        Imgproc.resize(mDetector.getSpectrum(), mSpectrum, SPECTRUM_SIZE);
+        Imgproc.resize(blob.getSpectrum(), mSpectrum, SPECTRUM_SIZE);
 
         mIsColorSelected = true;
 
