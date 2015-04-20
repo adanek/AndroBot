@@ -47,7 +47,7 @@ public abstract class ProgrammBase implements IRobotResponseCallback{
 		
 		// Create the connection
 		IConnection conn;
-		if (settings.getBoolean(SettingsActivity.USE_FAKECONNECTION, true)) {
+		if (settings.getBoolean(SettingsActivity.USE_FAKECONNECTION, false)) {
 			conn = new FakeConnection();
 		} else {
 			BluetoothConnection btc = new BluetoothConnection(context);
