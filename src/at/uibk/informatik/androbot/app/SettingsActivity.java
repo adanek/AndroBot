@@ -100,6 +100,9 @@ public class SettingsActivity extends ProgramActivityBase implements IRobotRespo
 		editor.commit();
 		
 		configuration.setLinearCorrectionValue(current);
+		
+		//reset Text
+		tvGot.setText("");
 	}
 	
 	
@@ -160,6 +163,9 @@ public class SettingsActivity extends ProgramActivityBase implements IRobotRespo
 		editor.commit();
 		
 		configuration.setAngularCorrectionValue(current);
+		
+		//reset text
+		tvRes.setText("");
 		
 	}
 	
