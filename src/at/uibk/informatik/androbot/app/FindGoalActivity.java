@@ -21,9 +21,9 @@ public class FindGoalActivity extends ProgramActivityBase implements IRobotRespo
 
 	private FindGoal findGoal;
 	
-	private int X  = 1;
-	private int Y  = 1;
-	private int TH = 1;
+	private int X  = 0;
+	private int Y  = 0;
+	private int TH = 0;
 	
 
 	
