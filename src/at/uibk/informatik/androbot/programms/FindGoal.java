@@ -20,7 +20,7 @@ public class FindGoal extends ProgrammBase {
 	private Position target;
 	public static final int SENSORS = 20;
 	public static final int POSITION = 30;
-	private static String LOG_TAG = "TestApp";
+	private static String LOG_TAG = "FindGoal";
 
 	private Handler requester;
 
@@ -32,7 +32,8 @@ public class FindGoal extends ProgrammBase {
 
 	@Override
 	protected void onExecute() {
-
+		Log.d(LOG_TAG, "blue cow");
+		
 		IRobot rob = getRobot();
 
 		current = new Position(0, 0, 0);
@@ -52,7 +53,7 @@ public class FindGoal extends ProgrammBase {
 		Log.d(LOG_TAG, String.format("Target detected @ %d degrees, %d distance", angle, dis));
 
 		rob.turn(Direction.LEFT, angle);
-		rob.moveForward();
+		rob.moveDistance(dis);
 	}
 
 	@Override
@@ -74,7 +75,7 @@ public class FindGoal extends ProgrammBase {
 		int x = getDistanceToTarget();
 
 		Log.d(LOG_TAG, String.format("red cow %d", x));
-		if (x <= 30) {
+		if (x <= 10) {
 			getRobot().stop(true);
 			atTarget();
 		}
@@ -139,8 +140,10 @@ public class FindGoal extends ProgrammBase {
 
 	public int getAngleToTarget() {
 
-		double x = Math.abs(target.getX() - current.getX());
-		double y = Math.abs(target.getY() - current.getY());
+		double x = (target.getX() - current.getX());
+		double y = (target.getY() - current.getY());
+		
+		
 		int res = 0;
 
 		if (x == 0) {
@@ -154,7 +157,7 @@ public class FindGoal extends ProgrammBase {
 			res = (int) Math.round(ang);
 		}
 
-		Log.d(LOG_TAG, String.format("new Angle to target: %d", res));
+		Log.d(LOG_TAG, String.format("sending new Angle to target: %d", res));
 		return res;
 	}
 

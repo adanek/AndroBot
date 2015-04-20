@@ -278,6 +278,8 @@ public class Robot implements IRobot {
 		r.addParameter(al);
 		r.addParameter(ah);
 		
+		r.setRuntime(1000);
+		
 		this.addRequest(r);
 	}
 

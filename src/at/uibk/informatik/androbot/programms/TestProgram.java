@@ -29,10 +29,10 @@ public class TestProgram extends ProgrammBase {
 
 	@Override
 	protected void onExecute() {
-
+		
 		IRobot rob = getRobot();
 
-		target = new Position(400, 0, 0);
+		target = new Position(50, 50, 80);
 		current = new Position(0, 0, 0);
 		rob.setOdomentry(current);
 
@@ -40,7 +40,7 @@ public class TestProgram extends ProgrammBase {
 
 		requester.obtainMessage(POSITION).sendToTarget();
 		requester.obtainMessage(SENSORS).sendToTarget();
-
+		
 	}
 
 	private void moveTowardsTarget(IRobot rob) {
