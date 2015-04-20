@@ -82,7 +82,7 @@
             android:layout_marginLeft="70dp"
             android:layout_marginTop="130dp"
             android:ems="5"
-            android:inputType="numberDecimal" />
+            android:inputType="numberDecimal|numberSigned" />
                     
             <EditText
             android:id="@+id/inputY"
@@ -91,7 +91,7 @@
             android:layout_marginLeft="140dp"
             android:layout_marginTop="130dp"
             android:ems="5"
-            android:inputType="numberDecimal" />
+            android:inputType="numberDecimal|numberSigned" />
                             
             <EditText
             android:id="@+id/inputTH"
@@ -100,7 +100,7 @@
             android:layout_marginLeft="210dp"
             android:layout_marginTop="130dp"
             android:ems="5"
-            android:inputType="numberDecimal" />
+            android:inputType="numberDecimal|numberSigned" />
             
 
             <TextView
