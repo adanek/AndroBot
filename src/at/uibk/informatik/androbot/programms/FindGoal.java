@@ -16,52 +16,114 @@ import at.uibk.informatik.androbot.control.Position;
 
 public class FindGoal extends ProgrammBase {
 
-	private static final String LOG_TAG = "FindGoal";
-	private static final int REQUEST_SENSORS = 1;
-	private static final int REQUEST_POSITION = 2;
-	private Handler requester;
-
-	private double X;
-	private double Y;
-	private double TH;
-	private IPosition target;
 	private IPosition current;
-	private PropertyChangedEvent propChanged;
-	private boolean sensorsRunning = false;
-	private boolean obstacleDetected = false;
+	private Position target;
+	public static final int SENSORS = 20;
+	public static final int POSITION = 30;
+	private static String LOG_TAG = "TestApp";
+
+	private Handler requester;
 
 	public FindGoal(Context context, IRobotResponseCallback listener) {
 		super(context, listener);
 
 		this.requester = new Handler(new Callback());
-		this.propChanged = new PropertyChangedEvent();
-		this.current = Position.RootPosition();
-		this.target = Position.RootPosition();
 	}
 
 	@Override
 	protected void onExecute() {
 
-		// Log
-		Log.d(LOG_TAG, "Find Goal started");
-
 		IRobot rob = getRobot();
 
-		// Set odometry
-		rob.setOdomentry(Position.RootPosition());
-		//this.setTarget(new Position(4, 3, 90));
+		current = new Position(0, 0, 0);
+		rob.setOdomentry(current);
 
-		// Start sensors
-		requester.obtainMessage(REQUEST_POSITION).sendToTarget();
+		moveTowardsTarget(rob);	
+
+		requester.obtainMessage(POSITION).sendToTarget();
+		requester.obtainMessage(SENSORS).sendToTarget();
 
 	}
 
-	public IPosition getTarget() {
-		return this.target;
+	private void moveTowardsTarget(IRobot rob) {
+		
+		int angle = getAngleToTarget();
+		int dis = getDistanceToTarget();
+		Log.d(LOG_TAG, String.format("Target detected @ %d degrees, %d distance", angle, dis));
+
+		rob.turn(Direction.LEFT, angle);
+		rob.moveForward();
 	}
 
-	public void setTarget(IPosition target) {
-		this.target = target;
+	@Override
+	public void onPositionReceived(IPosition position) {
+		super.onPositionReceived(position);
+
+		if (isExecuting()) {
+
+			Message msg = requester.obtainMessage(POSITION);
+			requester.sendMessageDelayed(msg, 100);
+		}
+
+		if (position == null) {
+			return;
+		}
+
+		current = position;
+
+		int x = getDistanceToTarget();
+
+		Log.d(LOG_TAG, String.format("red cow %d", x));
+		if (x <= 30) {
+			getRobot().stop(true);
+			atTarget();
+		}
+	}
+
+	@Override
+	public void onSensorDataReceived(List<IDistanceSensor> sensors) {
+		super.onSensorDataReceived(sensors);
+
+		if (isExecuting()) {
+			Message msg = requester.obtainMessage(SENSORS);
+			requester.sendMessageDelayed(msg, 200);
+		}
+
+		if (sensors == null)
+			return;
+
+		int min = 99;
+		for (IDistanceSensor s : sensors) {
+			if (s.getCurrentDistance() < min) {
+				min = s.getCurrentDistance();
+			}
+		}
+
+		if (min <= 20) {
+			getRobot().stop(true);
+			stop();
+		}
+
+	}
+
+	void atTarget() {
+		Log.d(LOG_TAG, "Target location reached");
+
+		Log.d(LOG_TAG, String.format("little red riding hood %d %d", current.getOrientation(), target.getOrientation()));
+		// check orientation
+		if (current.getOrientation() != target.getOrientation()) {
+
+			Log.d(LOG_TAG, "I#m turning im turning ");
+			int angle = target.getOrientation() - current.getOrientation();
+			Direction dir = angle > 0 ? Direction.LEFT : Direction.RIGHT;
+			angle = Math.abs(angle);
+
+			Log.d(LOG_TAG, String.format("Adjust oriendation by %d degree to the %s", angle, dir.toString()));
+			getRobot().turn(dir, angle);
+		}
+
+		Log.d(LOG_TAG, "Target reached.");
+		// stop();
 	}
 
 	public int getDistanceToTarget() {
@@ -79,163 +141,21 @@ public class FindGoal extends ProgrammBase {
 
 		double x = Math.abs(target.getX() - current.getX());
 		double y = Math.abs(target.getY() - current.getY());
+		int res = 0;
 
-		if (x == 0)
-			return 0;
+		if (x == 0) {
+			
+			res = y < 0 ? 270 : 90;
+		} else if (y == 0) {
 
-		double ang = Math.toDegrees(Math.atan(y / x));
-
-		Log.d(LOG_TAG, String.format("new Angle to target: %f", ang));
-		return (int) Math.round(ang);
-	}
-
-	public Observable PropertyChanged() {
-		return this.propChanged;
-
-	}
-
-	@Override
-	public void onPositionReceived(IPosition position) {
-
-		// Update screen
-		if (!this.current.equals(position)) {
-			this.current = position;
-			this.propChanged.onChanged();
+			res = x < 0 ? 180 : 0;
+		} else {
+			double ang = Math.toDegrees(Math.atan(y / x));
+			res = (int) Math.round(ang);
 		}
 
-		if (obstacleDetected)
-			return;
-
-		moveTowardsTarget();
-	}
-
-	private void moveTowardsTarget() {
-		IRobot rob = this.getRobot();
-
-		Log.d(LOG_TAG, String.format("target : %d %d %d", target.getX(), target.getY(), target.getOrientation()));
-		Log.d(LOG_TAG, String.format("current: %d %d %d", current.getX(), current.getY(), current.getOrientation()));
-
-		// Check if target is reached
-		if ((current.getX() == target.getX()) && (current.getY() == target.getY())) {
-
-			Log.d(LOG_TAG, "Target location reached");
-
-			// check orientation
-			if (current.getOrientation() != target.getOrientation()) {
-				int angle = target.getOrientation() - current.getOrientation();
-				Direction dir = angle > 0 ? Direction.LEFT : Direction.RIGHT;
-
-				Log.d(LOG_TAG, String.format("Adjust oriendation by %d degree to the %s", angle, dir.toString()));
-				rob.turn(dir, angle);
-			}
-
-			Log.d(LOG_TAG, "Target reached.");
-
-			return;
-		}
-
-		Log.d(LOG_TAG, "Not yet at target location");
-
-		// face target
-		int angle = getAngleToTarget();
-		Direction dir = angle > 0 ? Direction.LEFT : Direction.RIGHT;
-		if (Math.abs(angle) > 5) {
-			Log.d(LOG_TAG, String.format("Angle offset is %d. Turn to the %s", angle, dir.toString()));
-			rob.stop(true);
-			rob.turn(dir, Math.abs(angle));
-
-		}
-
-		if (!sensorsRunning) {
-			sensorsRunning = true;
-			requester.obtainMessage(REQUEST_SENSORS).sendToTarget();
-		}
-
-		rob.moveForward();
-	}
-
-	public double getX() {
-		return X;
-	}
-
-	public void setX(double x) {
-		X = x;
-	}
-
-	public double getY() {
-		return Y;
-	}
-
-	public void setY(double y) {
-		Y = y;
-	}
-
-	public double getTH() {
-		return TH;
-	}
-
-	public void setTH(double tH) {
-		TH = tH;
-	}
-
-	@Override
-	public void onSensorDataReceived(List<IDistanceSensor> sensors) {
-
-		if (obstacleDetected) {
-			avoidObstacle(sensors);
-			return;
-		}
-
-		detectObstacles(sensors);
-
-	}
-
-	private void detectObstacles(List<IDistanceSensor> sensors) {
-
-		IRobot rob = this.getRobot();
-
-		for (IDistanceSensor s : sensors) {
-
-			if (s.getCurrentDistance() <= 15) {
-				rob.stop(true);
-
-				Log.w(LOG_TAG, String.format("Obstacle detected @ %s", s.getName()));
-				obstacleDetected = true;
-				break;
-			}
-		}
-
-		Message msg = requester.obtainMessage(REQUEST_SENSORS);
-		requester.sendMessageDelayed(msg, 200);
-
-	}
-	
-	private boolean turning = false;
-	private boolean moving = false;
-
-	private void avoidObstacle(List<IDistanceSensor> sensors) {
-		Log.d(LOG_TAG, "I'm avoiding the obstacle");
-
-		
-		IDistanceSensor fl = sensors.get(0);
-		IDistanceSensor fm = sensors.get(1);
-		IDistanceSensor fr = sensors.get(2);
-		
-		// Find the direction to turn
-		Direction dir = fl.getCurrentDistance() < fr.getCurrentDistance() ? Direction.RIGHT : Direction.LEFT;
-
-	}
-
-	private class PropertyChangedEvent extends Observable {
-
-		public PropertyChangedEvent() {
-
-		}
-
-		public void onChanged() {
-			this.setChanged();
-			this.notifyObservers();
-		}
+		Log.d(LOG_TAG, String.format("new Angle to target: %d", res));
+		return res;
 	}
 
 	private class Callback implements Handler.Callback {
@@ -245,12 +165,12 @@ public class FindGoal extends ProgrammBase {
 
 			switch (msg.what) {
 
-			case REQUEST_SENSORS:
-				getRobot().requestSensorData();
+			case SENSORS:
+				getRobot().requestSensorData(false);
 				break;
 
-			case REQUEST_POSITION:
-				getRobot().requestCurrentPosition();
+			case POSITION:
+				getRobot().requestCurrentPosition(false);
 				break;
 
 			default:
@@ -261,4 +181,22 @@ public class FindGoal extends ProgrammBase {
 		}
 
 	}
+
+	public IPosition getCurrent() {
+		return current;
+	}
+
+	public void setCurrent(IPosition current) {
+		this.current = current;
+	}
+
+	public Position getTarget() {
+		return target;
+	}
+
+	public void setTarget(Position target) {
+		this.target = target;
+	}
+	
+	
 }

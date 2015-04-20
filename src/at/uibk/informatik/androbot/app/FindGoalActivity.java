@@ -36,13 +36,6 @@ public class FindGoalActivity extends ProgramActivityBase implements IRobotRespo
 		findGoal = new FindGoal(getApplicationContext(), this);
 		this.setProgramm(findGoal);
 		
-		findGoal.PropertyChanged().addObserver(new Observer() {
-			
-			@Override
-			public void update(java.util.Observable arg0, Object arg1) {
-				Log.d(LOG_TAG, "I should update the position control...");				
-			}
-		});
 	}
 
 	@Override
