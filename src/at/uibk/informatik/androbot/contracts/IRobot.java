@@ -57,6 +57,7 @@ public interface IRobot {
 	 * @param linearRuntimePerCentimeter
 	 */
 	void setLinearRuntimePerCentimeter(double linearRuntimePerCentimeter);
+	double getLinearRuntimePerCentimeter();
 
 	/**
 	 * Sets the runtime for turning 1 degree

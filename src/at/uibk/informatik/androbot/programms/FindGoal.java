@@ -39,11 +39,12 @@ public class FindGoal extends ProgrammBase {
 		current = new Position(0, 0, 0);
 		rob.setOdomentry(current);
 
-		moveTowardsTarget(rob);	
+		moveTowardsTarget(rob);
+		atTarget();
 
-		requester.obtainMessage(POSITION).sendToTarget();
 		requester.obtainMessage(SENSORS).sendToTarget();
-
+		requester.obtainMessage(POSITION).sendToTarget();
+		
 	}
 
 	private void moveTowardsTarget(IRobot rob) {
@@ -53,6 +54,7 @@ public class FindGoal extends ProgrammBase {
 		Log.d(LOG_TAG, String.format("Target detected @ %d degrees, %d distance", angle, dis));
 
 		rob.turn(Direction.LEFT, angle);
+		current = new Position(current.getY(), current.getY(), angle);
 		rob.moveDistance(dis);
 	}
 
@@ -75,7 +77,7 @@ public class FindGoal extends ProgrammBase {
 		int x = getDistanceToTarget();
 
 		Log.d(LOG_TAG, String.format("red cow %d", x));
-		if (x <= 10) {
+		if (x <= 30) {
 			getRobot().stop(true);
 			atTarget();
 		}
@@ -169,7 +171,7 @@ public class FindGoal extends ProgrammBase {
 			switch (msg.what) {
 
 			case SENSORS:
-				getRobot().requestSensorData(false);
+				getRobot().requestSensorData(true);
 				break;
 
 			case POSITION:

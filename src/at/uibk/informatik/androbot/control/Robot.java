@@ -117,23 +117,44 @@ public class Robot implements IRobot {
 
 	@Override
 	public void moveDistance(int distance_cm) {
+		
+		
+		long runtime = (long) (distance_cm * linearRuntimePerCentimeter);
+		Log.d(LOG_TAG, String.format("Calculated runtime: %d",	runtime));
+		
+		Request move = new Request(connection, connectionHandler);
+		move.setCommand('i');
+		move.addParameter((byte)20);
+		move.addParameter((byte)20);
+		
+		Request stop = new Request(connection, connectionHandler);
+		stop.setCommand('s');
+		
+		connectionHandler.post(move);
+		connectionHandler.postDelayed(stop, runtime);
+		
+		
+		
+		
+		
+		
 
-		// Calculate total distance
-		int distanceLeft = (int) (distance_cm * this.linearCorrection);
-
-		// Split large distances into smaller parts
-		while (distanceLeft > 0) {
-
-			int maxStepSize = Byte.MAX_VALUE;
-			byte step = (byte) (distanceLeft > maxStepSize ? maxStepSize : distanceLeft);
-			distanceLeft -= step;
-
-			// Calculate the runtime
-			long runtime = (long) (linearRuntimePerCentimeter * step);
-
-			IRequest req = new MoveDistanceRequest(connection, connectionHandler, step, runtime);
-			this.addRequest(req);
-		}
+//		// Calculate total distance
+//		int distanceLeft = (int) (distance_cm * this.linearCorrection);
+//
+//		// Split large distances into smaller parts
+//		while (distanceLeft > 0) {
+//
+//			int maxStepSize = Byte.MAX_VALUE;
+//			byte step = (byte) (distanceLeft > maxStepSize ? maxStepSize : distanceLeft);
+//			distanceLeft -= step;
+//
+//			// Calculate the runtime
+//			long runtime = (long) (linearRuntimePerCentimeter * step);
+//
+//			IRequest req = new MoveDistanceRequest(connection, connectionHandler, step, runtime);
+//			this.addRequest(req);
+//		}
 	}
 
 	@Override
@@ -315,7 +336,7 @@ public class Robot implements IRobot {
 		}
 
 		this.executing = true;
-		connectionHandler.post(requests.remove());
+		connectionHandler.postDelayed(requests.remove(), 0);
 	}
 
 	private void stopExecution(){
@@ -401,5 +422,11 @@ public class Robot implements IRobot {
 
 			return true;
 		}
+	}
+
+	@Override
+	public double getLinearRuntimePerCentimeter() {
+		
+		return this.linearRuntimePerCentimeter;
 	}
 }

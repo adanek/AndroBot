@@ -15,171 +15,29 @@ import at.uibk.informatik.androbot.control.Position;
 
 public class TestProgram extends ProgrammBase {
 
-	public static final int SENSORS = 20;
-	public static final int POSITION = 30;
-	private static String LOG_TAG = "TestApp";
-
-	private Handler requester;
+	private static final String LOG_TAG = "Testing";
 
 	public TestProgram(Context context, IRobotResponseCallback listener) {
 		super(context, listener);
-
-		this.requester = new Handler(new Callback());
+		
 	}
 
 	@Override
-	protected void onExecute() {
+	protected void onExecute()  {
+		
+		Log.d(LOG_TAG, "Executing...");
 		
 		IRobot rob = getRobot();
-
-		target = new Position(50, 50, 80);
-		current = new Position(0, 0, 0);
-		rob.setOdomentry(current);
-
-		moveTowardsTarget(rob);	
-
-		requester.obtainMessage(POSITION).sendToTarget();
-		requester.obtainMessage(SENSORS).sendToTarget();
 		
-	}
-
-	private void moveTowardsTarget(IRobot rob) {
+		Log.d(LOG_TAG, String.format("linear runtime: %f",rob.getLinearRuntimePerCentimeter()));
 		
-		int angle = getAngleToTarget();
-		int dis = getDistanceToTarget();
-		Log.d(LOG_TAG, String.format("Target detected @ %d degrees, %d distance", angle, dis));
-
-		rob.turn(Direction.LEFT, angle);
-		rob.moveForward();
+		rob.setLinearRuntimePerCentimeter(54);
+		
+		rob.moveDistance(250);		// 54 
+		//rob.stop(true);		
 	}
+	
 
-	@Override
-	public void onPositionReceived(IPosition position) {
-		super.onPositionReceived(position);
 
-		if (isExecuting()) {
-
-			Message msg = requester.obtainMessage(POSITION);
-			requester.sendMessageDelayed(msg, 100);
-		}
-
-		if (position == null) {
-			return;
-		}
-
-		current = position;
-
-		int x = getDistanceToTarget();
-
-		Log.d(LOG_TAG, String.format("red cow %d", x));
-		if (x <= 30) {
-			getRobot().stop(true);
-			atTarget();
-		}
-	}
-
-	@Override
-	public void onSensorDataReceived(List<IDistanceSensor> sensors) {
-		super.onSensorDataReceived(sensors);
-
-		if (isExecuting()) {
-			Message msg = requester.obtainMessage(SENSORS);
-			requester.sendMessageDelayed(msg, 200);
-		}
-
-		if (sensors == null)
-			return;
-
-		int min = 99;
-		for (IDistanceSensor s : sensors) {
-			if (s.getCurrentDistance() < min) {
-				min = s.getCurrentDistance();
-			}
-		}
-
-		if (min <= 20) {
-			getRobot().stop(true);
-			stop();
-		}
-
-	}
-
-	void atTarget() {
-		Log.d(LOG_TAG, "Target location reached");
-
-		Log.d(LOG_TAG, String.format("little red riding hood %d %d", current.getOrientation(), target.getOrientation()));
-		// check orientation
-		if (current.getOrientation() != target.getOrientation()) {
-
-			Log.d(LOG_TAG, "I#m turning im turning ");
-			int angle = target.getOrientation() - current.getOrientation();
-			Direction dir = angle > 0 ? Direction.LEFT : Direction.RIGHT;
-			angle = Math.abs(angle);
-
-			Log.d(LOG_TAG, String.format("Adjust oriendation by %d degree to the %s", angle, dir.toString()));
-			getRobot().turn(dir, angle);
-		}
-
-		Log.d(LOG_TAG, "Target reached.");
-		// stop();
-	}
-
-	private IPosition current;
-	private Position target;
-
-	public int getDistanceToTarget() {
-
-		double x = Math.abs(target.getX() - current.getX());
-		double y = Math.abs(target.getY() - current.getY());
-
-		double dis = Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2));
-
-		Log.d(LOG_TAG, String.format("new distance to target: %d", (int) dis));
-		return (int) dis;
-	}
-
-	public int getAngleToTarget() {
-
-		double x = Math.abs(target.getX() - current.getX());
-		double y = Math.abs(target.getY() - current.getY());
-		int res = 0;
-
-		if (x == 0) {
-			
-			res = y < 0 ? 270 : 90;
-		} else if (y == 0) {
-
-			res = x < 0 ? 180 : 0;
-		} else {
-			double ang = Math.toDegrees(Math.atan(y / x));
-			res = (int) Math.round(ang);
-		}
-
-		Log.d(LOG_TAG, String.format("new Angle to target: %d", res));
-		return res;
-	}
-
-	private class Callback implements Handler.Callback {
-
-		@Override
-		public boolean handleMessage(Message msg) {
-
-			switch (msg.what) {
-
-			case SENSORS:
-				getRobot().requestSensorData(false);
-				break;
-
-			case POSITION:
-				getRobot().requestCurrentPosition(false);
-				break;
-
-			default:
-				return false;
-			}
-
-			return true;
-		}
-
-	}
+	
 }

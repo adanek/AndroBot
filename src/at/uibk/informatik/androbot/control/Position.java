@@ -72,9 +72,9 @@ public class Position implements IPosition {
 		int a = buf.getShort(4);
 		
 		// Correct the values
-		x /= linearCorrection;
-		y /= linearCorrection;
-		a /= angularCorrection;
+//		x /= linearCorrection;
+//		y /= linearCorrection;
+//		a /= angularCorrection;
 		
 		return new Position(x, y, a);
 	}

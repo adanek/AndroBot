@@ -95,6 +95,8 @@ public abstract class ProgrammBase implements IRobotResponseCallback{
 	public void stop() {
 		this.executing = false;
 		this.robot.stop(true);
+		
+		Log.d(LOG_TAG, "Program finished");
 	}
 
 	private void execute() {
