@@ -32,7 +32,7 @@ public class FindGoal extends ProgrammBase {
 
 	@Override
 	protected void onExecute() {
-		Log.d(LOG_TAG, "blue cow");
+		  Log.d(LOG_TAG, "blue cow");
 		
 		IRobot rob = getRobot();
 
