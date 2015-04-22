@@ -12,6 +12,7 @@ public interface MessageTypes {
 
 	public static final int CONNECTION_EVENT = 100;
 	public static final int REQUEST_EVENT = 200;
+	public static final int ROBOT_EVENT = 300;
 
 	public static final int CONNECTION_STATE_CHANGED = 110;
 	public static final int CONNECTION_STATE_CONNECTING = 111;
@@ -26,5 +27,7 @@ public interface MessageTypes {
 	
 	
 	public static final int REQUEST_DONE = 201;
+	
+	public static final int ROBOT_SENSORDATA_RECEIVED = 301;
 
 }

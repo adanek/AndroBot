@@ -133,7 +133,7 @@ public class Request implements Runnable {
 	}
 
 	// Returns a byte array representing the request
-	private byte[] getData() {
+	public byte[] getData() {
 		int len = COMMAND_LENGTH + this.params.size() + SUFFIX_LENGTH;
 		byte[] data = new byte[len];
 

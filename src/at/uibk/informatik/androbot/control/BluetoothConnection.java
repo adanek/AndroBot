@@ -5,6 +5,7 @@ package at.uibk.informatik.androbot.control;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.List;
 import java.util.UUID;
 
 import android.bluetooth.BluetoothAdapter;
@@ -27,6 +28,7 @@ public class BluetoothConnection implements IConnection {
 	private ConnectThread connectThread;
 	private ConnectedThread connectedThread;
 	private String deviceAddress;
+	
 
 	/**
 	 * CONSTRUCTOR: Creates a new instance of an BluetoothConnecion
@@ -360,14 +362,36 @@ public class BluetoothConnection implements IConnection {
 					if (lineComplete) {
 						
 						// Send the obtained bytes to the caller
-						String s = new String(buffer, 0, pos);						
-						Log.d(LOG_TAG, "Message received: " + s);
-						Message msg = handler.obtainMessage(MessageTypes.CONNECTION_MESSAGE_EVENT);
-						msg.arg1 = MessageTypes.CONNECTION_MESSAGE_RECEIVED;
-						msg.obj = s;
+						String msg = new String(buffer, 0, pos);						
+						Log.d(LOG_TAG, "Message received: " + msg);
+//						Message msg = handler.obtainMessage(MessageTypes.CONNECTION_MESSAGE_EVENT);
+//						msg.arg1 = MessageTypes.CONNECTION_MESSAGE_RECEIVED;
+//						msg.obj = s;
+//						msg.sendToTarget();
+						
 
 						pos = 0;
 						lineComplete = false;
+						
+						if(msg.contains("sensor")){
+							List<DistanceSensor> sensors = DistanceSensor.parse(msg);
+							
+							if (sensors == null)
+								return;
+						
+							int min = 99;
+							for (DistanceSensor s : sensors) {
+								if (s.getCurrentDistance() < min) {
+									min = s.getCurrentDistance();
+								}
+							}
+
+							if (min <= 20) {
+
+								Log.d(LOG_TAG , "Sensors detect obstacle");
+								setInteruptRequest(true);
+							}
+						}
 					}
 
 				} catch (IOException e) {
@@ -416,4 +440,22 @@ public class BluetoothConnection implements IConnection {
 			}
 		}
 	}
+	
+	
+	
+	// Demo abschnitt
+
+	private boolean interupt;
+	
+	@Override
+	public synchronized boolean hasInteruptRequest() {
+		
+		return this.interupt;
+	}
+	
+	public synchronized void setInteruptRequest(boolean val){
+		this.interupt = val;
+	}
+
+
 }

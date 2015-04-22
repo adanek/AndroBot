@@ -1,10 +1,12 @@
 package at.uibk.informatik.androbot.app;
 
 import android.app.Activity;
+import android.util.Log;
 import at.uibk.informatik.androbot.programms.ProgrammBase;
 
 public abstract class ProgramActivityBase extends Activity {
 
+	private static final String LOG_TAG = "ProgramActivityBase";
 	private ProgrammBase program;	
 	
 	@Override
@@ -12,6 +14,7 @@ public abstract class ProgramActivityBase extends Activity {
 		super.onResume();
 		
 		getProgram().connect();
+		Log.d(LOG_TAG, "onResume");
 	}
 	
 	@Override

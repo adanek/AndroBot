@@ -41,5 +41,7 @@ public interface IConnection {
 	 * @param readHandler The handler which should receive the ReadEvents
 	 */
 	public abstract void setReadHandler(Handler readHandler);
-
+	
+	public boolean hasInteruptRequest();
+	public void setInteruptRequest(boolean val);
 }

@@ -13,12 +13,14 @@ import at.uibk.informatik.androbot.control.BluetoothConnection;
 import at.uibk.informatik.androbot.control.DistanceSensor;
 import at.uibk.informatik.androbot.control.IConnection;
 import at.uibk.informatik.androbot.control.MessageTypes;
+import at.uibk.informatik.androbot.control.Position;
 import at.uibk.informatik.androbot.control.Robot;
 
 public abstract class ProgrammBase {
 
 	private static final String LOG_TAG = "ProgrammBase";
 	private Robot robot;
+	private IConnection conn;
 	private Context context;
 	private Handler uiHandler;
 	private boolean executing;
@@ -36,7 +38,7 @@ public abstract class ProgrammBase {
 				android.content.Context.MODE_PRIVATE);
 
 		// Create the connection
-		IConnection conn;
+		
 		if (settings.getBoolean(SettingsActivity.USE_FAKECONNECTION, false)) {
 			conn = null;// new FakeConnection();
 		} else {
@@ -50,11 +52,13 @@ public abstract class ProgrammBase {
 
 		// Set the linear calibration
 		this.robot.setAngularCorrection(settings.getFloat(SettingsActivity.ANGULAR_CORRECTION, 2.0f));
-		this.robot.setAngularRuntimePerDegree(settings.getFloat(SettingsActivity.ANGULAR_RUNTIME, 100.0f));
+		//this.robot.setAngularRuntimePerDegree(settings.getFloat(SettingsActivity.ANGULAR_RUNTIME, 100.0f));
+		this.robot.setAngularRuntimePerDegree(21.3);
 
 		// Set the angular calibration
 		this.robot.setLinearCorrection(settings.getFloat(SettingsActivity.LINEAR_CORRECTION, 0.5f));
-		this.robot.setLinearRuntimePerCentimeter(settings.getFloat(SettingsActivity.LINEAR_RUNTIME, 100.0f));
+		//this.robot.setLinearRuntimePerCentimeter(settings.getFloat(SettingsActivity.LINEAR_RUNTIME, 100.0f));
+		this.robot.setLinearRuntimePerCentimeter(54);
 	}
 
 	// ********************************************** Methods *********************************************************
@@ -66,10 +70,6 @@ public abstract class ProgrammBase {
 	public void disconnect() {
 
 		this.robot.disconnect();
-
-		if (this.executing) {
-			this.start();
-		}
 	}
 
 	public void start() {
@@ -77,31 +77,19 @@ public abstract class ProgrammBase {
 		this.executing = true;
 
 		if (robot.isConnected())
-			this.execute();
+			onExecute();
 		else
 			this.connect();
 	}
-
-	public void stop() {
-		this.executing = false;
-		this.robot.stop(true);
-
-		Log.d(LOG_TAG, "Program finished");
-	}
-
-	private void execute() {
-		onExecute();
-
-	}
-
-	protected boolean isExecuting() {
-		return executing;
-	}
-
+	
 	protected abstract void onExecute();
-
-	protected void onRobotIsIdle() {
-		Log.d(LOG_TAG, "Robot is idle");
+	
+	public boolean hasInteruptRequest() {
+		return this.conn.hasInteruptRequest();
+	}
+	
+	public void interruptHandled(){
+		this.conn.setInteruptRequest(false);
 	}
 
 	// ******************************************** Properties ********************************************************
@@ -116,6 +104,65 @@ public abstract class ProgrammBase {
 	
 	protected void onSensordataReceived(List<DistanceSensor> sensors){
 		
+	}
+	
+	public void moveDistance(int distance){
+		
+		int runtime = robot.getRuntime(distance);
+		
+		long start = System.currentTimeMillis();
+
+		robot.moveForward();
+		
+		long last = start;		
+		while (System.currentTimeMillis() < (start + runtime)) {
+			
+			long now = System.currentTimeMillis();
+			
+			if(now -last > 250){
+				last = now;
+				robot.requestSensorData();
+				Log.d(LOG_TAG, "Sensors requested");
+			}			
+			
+			if (hasInteruptRequest()) {
+				interruptHandled();
+				onObstacleDetected();				
+				break;			
+			}
+		}
+		robot.stop();
+	}
+
+	protected void onObstacleDetected() {
+		
+		
+	}
+	
+	public void turn(int degrees){		
+		
+		int runtime = (int) (Math.abs(degrees) * robot.getAngularRuntimePerDegree());
+		
+		byte l = -9;
+		byte r = 9;
+		
+		if(degrees < 0){
+			l *= -1;
+			r *= -1;
+		}
+		robot.setVelocity(l, r);
+		
+		long start  = System.currentTimeMillis();
+		while(System.currentTimeMillis() < start + runtime);
+		robot.stop();
+	}
+	
+	public int getAngle(Position current, Position target){
+		return (int) Math.toDegrees(Math.atan2(target.getY() - current.getY(), target.getX() - current.getX()));
+	}
+	
+	public int getDistanceToTarget(Position current, Position target){		
+		return (int) Math.sqrt(Math.pow(target.getX()-current.getX(), 2) + Math.pow(target.getY()-current.getY(),2));	
 	}
 
 	// ********************************************** Classes *********************************************************
@@ -141,15 +188,34 @@ public abstract class ProgrammBase {
 					Toast.makeText(context, "Disconnected", Toast.LENGTH_SHORT).show();
 					break;
 				case MessageTypes.CONNECTION_STATE_CONNECTED:
-					if (executing)
-						execute();
+					Toast.makeText(context, "Connected", Toast.LENGTH_SHORT).show();
+					if (executing){
+						start();
+					}
 					break;
 				default:
 					Log.w(LOG_TAG, "Unexpected message received: " + msg.toString());
 					return false;
 				}
 				break;
+				
+			case MessageTypes.ROBOT_EVENT:
+				if(msg.arg1 == MessageTypes.ROBOT_SENSORDATA_RECEIVED){
+					onSensordataReceived((List<DistanceSensor>)msg.obj);
+				}
 
+			case MessageTypes.CONNECTION_MESSAGE_EVENT:
+				switch(msg.arg1){
+				
+				case MessageTypes.CONNECTION_MESSAGE_RECEIVED:
+					
+					
+					break;
+				default:
+					Log.w(LOG_TAG, "Unexpected: "+ msg.toString());
+				}
+					
+					break;
 			// case Robot.ROBOT_RESPONSE_RECEIVED:
 			// switch (msg.arg1) {
 			//

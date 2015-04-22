@@ -23,68 +23,58 @@ public class MainActivity extends ProgramActivityBase{
 		this.test= new TestProgram(getApplicationContext());
 		setProgramm(test);
 	}
-
-	@Override
-	protected void onResume() {
-		super.onResume();				
-	}
-
-	@Override
-	protected void onPause() {
-		super.onPause();	
-	}
 	
 	public void onStart(View view){
 		test.start();
 	}
 	
 	public void onStop(View view){
-		test.stop();
-	}
-	
-	
-	public void onSensorDataReceived(List<DistanceSensor> sensors) {
-
-		// log
-		Log.d(LOG_TAG, "sensor data received");
-
-		// no sensor data available
-		if (sensors == null) {
-			return;
-		}
-
-		for (int i = 0; i < sensors.size(); i++) {
-
-			TextView text = null;
-
-			DistanceSensor sensor = sensors.get(i);
-
-			// no sensor
-			if (sensor == null) {
-				continue;
-			}
-
-			String name = sensor.getName();
-
-			// get sensor view element
-			if (name == "Front-Middle") {
-				text = (TextView) findViewById(R.id.txtFM);
-			} else if (name == "Front-Left") {
-				text = (TextView) findViewById(R.id.txtFL);
-			} else if (name == "Front-Right") {
-				text = (TextView) findViewById(R.id.txtFR);
-			}	
-
-			// set text on screen
-			if (text != null) {
-				// set text on screen
-				text.setText(Integer.toString(sensors.get(i)
-						.getCurrentDistance()));
-			}
-		}
-		
 		
 	}
+	
+//	
+//	public void onSensorDataReceived(List<DistanceSensor> sensors) {
+//
+//		// log
+//		Log.d(LOG_TAG, "sensor data received");
+//
+//		// no sensor data available
+//		if (sensors == null) {
+//			return;
+//		}
+//
+//		for (int i = 0; i < sensors.size(); i++) {
+//
+//			TextView text = null;
+//
+//			DistanceSensor sensor = sensors.get(i);
+//
+//			// no sensor
+//			if (sensor == null) {
+//				continue;
+//			}
+//
+//			String name = sensor.getName();
+//
+//			// get sensor view element
+//			if (name == "Front-Middle") {
+//				text = (TextView) findViewById(R.id.txtFM);
+//			} else if (name == "Front-Left") {
+//				text = (TextView) findViewById(R.id.txtFL);
+//			} else if (name == "Front-Right") {
+//				text = (TextView) findViewById(R.id.txtFR);
+//			}	
+//
+//			// set text on screen
+//			if (text != null) {
+//				// set text on screen
+//				text.setText(Integer.toString(sensors.get(i)
+//						.getCurrentDistance()));
+//			}
+//		}
+//		
+//		
+//	}
 
 //	@Override
 //	public void onPositionReceived(Position position) {		

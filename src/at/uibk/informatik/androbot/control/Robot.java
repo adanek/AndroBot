@@ -67,6 +67,9 @@ public class Robot {
 	public void setAngularRuntimePerDegree(double angularRuntimePerDegree) {
 		this.angularRuntimePerDegree = angularRuntimePerDegree;
 	}
+	public double getAngularRuntimePerDegree(){
+		return this.angularRuntimePerDegree;
+	}
 
 	// ********************************************** Methods *********************************************************
 
@@ -82,78 +85,115 @@ public class Robot {
 		return this.connection.getState() == MessageTypes.CONNECTION_STATE_CONNECTED;
 	}
 
-	public void moveDistance(int distance_cm) {
-
-		long runtime = (long) (distance_cm * linearRuntimePerCentimeter);
-		Log.d(LOG_TAG, String.format("Calculated runtime: %d", runtime));
-
-		Request move = new Request(connection, connectionHandler);
-		move.setCommand('i');
-		move.addParameter((byte) 20);
-		move.addParameter((byte) 20);
-		move.setRuntime(runtime);
-
-		addRequest(move);
-		this.stop(false);
-	}
+//	public void moveDistance(int distance_cm) {
+//
+//		long runtime = (long) (distance_cm * linearRuntimePerCentimeter);
+//		Log.d(LOG_TAG, String.format("Calculated runtime: %d", runtime));
+//
+//		Request move = new Request(connection, connectionHandler);
+//		move.setCommand('i');
+//		move.addParameter((byte) 20);
+//		move.addParameter((byte) 20);
+//		move.setRuntime(runtime);
+//
+//		addRequest(move);
+//		this.stop(false);
+//	}
 
 	public void setVelocity(byte left, byte right) {
+		
+		Request req = new Request(connection, connectionHandler);
+		req.setCommand('i');
+		
+		req.addParameter(left);
+		req.addParameter(right);		
 
+		sendRequest(req);
 	}
-
-	public synchronized void stop(boolean immediately) {
-
+	
+	public void moveForward(){
+		byte speed = 20;
+		this.setVelocity(speed, speed);		
 	}
-
-	// public void turn(int degrees) {
-	//
-	// Log.d(LOG_TAG, String.format("angular correction %f %f", angularCorrection, angularRuntimePerDegree));
-	// int deg = (int) (degrees * angularCorrection);
-	//
-	// while (deg > 0) {
-	//
-	// // Calculate the step width
-	// byte step = (byte) (deg > Byte.MAX_VALUE ? Byte.MAX_VALUE : deg);
-	// deg -= step;
-	//
-	// // Calculate the runtime
-	// int runtime = (int) (angularRuntimePerDegree * step);
-	//
-	// }
-	// }
-
+	
+	public void moveBackward(){
+		byte speed = -15;
+		this.setVelocity(speed, speed);	
+	}
+	
+	public int getRuntime(int distance){
+		
+		return (int) (distance * linearRuntimePerCentimeter);		
+	}
+	
+	
+	private void sendRequest(Request r){
+		connection.write(r.getData());
+	}
+	
 	public void requestSensorData() {
+		Request r = new Request(connection, connectionHandler);
+		r.setCommand('q');
 
-		addSimpleCommandRequest('q');
+		sendRequest(r);
+	}
+	
+	public void stop(){
+		this.stop(true);
 	}
 
-	private void addSimpleCommandRequest(char command) {
+	public void stop(boolean immediately) {
 
+		byte speed = 0;
+		this.setVelocity(speed, speed);	
 	}
+//
+//	// public void turn(int degrees) {
+//	//
+//	// Log.d(LOG_TAG, String.format("angular correction %f %f", angularCorrection, angularRuntimePerDegree));
+//	// int deg = (int) (degrees * angularCorrection);
+//	//
+//	// while (deg > 0) {
+//	//
+//	// // Calculate the step width
+//	// byte step = (byte) (deg > Byte.MAX_VALUE ? Byte.MAX_VALUE : deg);
+//	// deg -= step;
+//	//
+//	// // Calculate the runtime
+//	// int runtime = (int) (angularRuntimePerDegree * step);
+//	//
+//	// }
+//	// }
+//
 
-	private synchronized void addRequest(Request request) {
-
-		this.requests.add(request);
-
-		if (executing)
-			return;
-
-		executeNext(-1);
-	}
-
-	private synchronized void executeNext(int id) {
-
-		Request req = requests.remove();
-		connectionHandler.postDelayed(req, 0);
-	}
-
+//
+//	private void addSimpleCommandRequest(char command) {
+//
+//	}
+//
+//	private synchronized void addRequest(Request request) {
+//
+//		this.requests.add(request);
+//
+//		if (executing)
+//			return;
+//
+//		executeNext(-1);
+//	}
+//
+//	private synchronized void executeNext(int id) {
+//
+//		Request req = requests.remove();
+//		connectionHandler.postDelayed(req, 0);
+//	}
+//
 	private void parseData(Message msg) {
 
 		if (msg.obj == null) {
 			Log.d(LOG_TAG, "Unable to parse message: " + msg.toString());
 		}
 
-		String response = new String((byte[]) msg.obj, 0, msg.arg1);
+		String response = (String)msg.obj;
 
 		if (response.contains("sensor:"))
 			sendSensorData(response);
@@ -164,10 +204,13 @@ public class Robot {
 	}
 
 	private void sendSensorData(String response) {
+		
+		
 
 		List<DistanceSensor> sensors = DistanceSensor.parse(response);
-		// caller.obtainMessage(ROBOT_RESPONSE_RECEIVED, SENSOR_DATA_RECEIVED, -1, sensors).sendToTarget();
-		requestSensorData();
+		caller.obtainMessage(MessageTypes.ROBOT_EVENT, MessageTypes.ROBOT_SENSORDATA_RECEIVED, -1, sensors).sendToTarget();
+		Log.d(LOG_TAG, "Sending sensors to program");
+		
 	};
 
 	// ******************************************* Helper Classes *****************************************************
@@ -182,38 +225,51 @@ public class Robot {
 
 		@Override
 		public boolean handleMessage(Message msg) {
-			switch (msg.what) {
-
-			case MessageTypes.REQUEST_EVENT:
-				switch (msg.arg1) {
-				case MessageTypes.REQUEST_DONE:
-					
-					// execute next request in queue
-					executeNext(msg.arg2);
-					break;
+			switch (msg.what) {			
+	
+			case MessageTypes.CONNECTION_MESSAGE_EVENT:
+				switch(msg.arg1){
 				
+				case MessageTypes.CONNECTION_MESSAGE_RECEIVED:
+					Log.d(LOG_TAG, "Sending sensors to program");
+					parseData(msg);
+					break;
 				default:
-					Log.w(LOG_TAG, "Unexpected Message received: " + msg.toString());
+					Log.w(LOG_TAG, "Unexpected: "+ msg.toString());
 				}
+					
+					break;
 
-				break;
-			// case Request.REQUEST_EVENT:
-			// switch (msg.arg1) {
-			// case Request.REQUEST_SENT:
-			// if (executing)
-			// executeNext(msg.arg2);
-			// break;
-			// }
-			// break;
-			case MessageTypes.CONNECTION_MESSAGE_RECEIVED:
-				parseData(msg);
-				break;
-			case MessageTypes.CONNECTION_STATE_CHANGED:
-				if (msg.arg1 == MessageTypes.CONNECTION_STATE_CONNECTED) {
-					requestSensorData();
-				}
-
-				// Should fall trough
+//			case MessageTypes.REQUEST_EVENT:
+//				switch (msg.arg1) {
+//				case MessageTypes.REQUEST_DONE:
+//					
+//					// execute next request in queue
+//					executeNext(msg.arg2);
+//					break;
+//				
+//				default:
+//					Log.w(LOG_TAG, "Unexpected Message received: " + msg.toString());
+//				}
+//
+//				break;
+//			// case Request.REQUEST_EVENT:
+//			// switch (msg.arg1) {
+//			// case Request.REQUEST_SENT:
+//			// if (executing)
+//			// executeNext(msg.arg2);
+//			// break;
+//			// }
+//			// break;
+//			case MessageTypes.CONNECTION_MESSAGE_RECEIVED:
+//				parseData(msg);
+//				break;
+//			case MessageTypes.CONNECTION_STATE_CHANGED:
+//				if (msg.arg1 == MessageTypes.CONNECTION_STATE_CONNECTED) {
+//					requestSensorData();
+//				}
+//
+//				// Should fall trough
 			default:
 				Message m = caller.obtainMessage();
 				m.copyFrom(msg);
