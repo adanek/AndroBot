@@ -11,12 +11,9 @@ import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
 import android.content.Context;
-import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
-import at.uibk.informatik.androbot.contracts.Constants;
-import at.uibk.informatik.androbot.contracts.IConnection;
 
 public class BluetoothConnection implements IConnection {
 
@@ -43,7 +40,7 @@ public class BluetoothConnection implements IConnection {
 
 		// TODO: Activate Bluetooth
 
-		this.state = STATE_NONE;
+		this.state = MessageTypes.CONNECTION_STATE_DISCONNECTED;
 	}
 
 	/**
@@ -73,7 +70,7 @@ public class BluetoothConnection implements IConnection {
 	 */
 	private synchronized void setState(int state) {
 		this.state = state;
-		handler.obtainMessage(Constants.MESSAGE_STATE_CHANGE, state, -1).sendToTarget();
+		handler.obtainMessage(MessageTypes.CONNECTION_STATE_CHANGED, state, -1).sendToTarget();
 	}
 
 	/*
@@ -89,7 +86,7 @@ public class BluetoothConnection implements IConnection {
 	@Override
 	public synchronized void setReadHandler(Handler readHandler) {
 
-		if (this.state != STATE_NONE)
+		if (this.state != MessageTypes.CONNECTION_STATE_DISCONNECTED)
 			return;
 
 		this.handler = readHandler;
@@ -106,7 +103,7 @@ public class BluetoothConnection implements IConnection {
 		Log.d(LOG_TAG, "connect to: " + getDeviceAddress());
 
 		// Cancel any thread attempting to make a connection
-		if (state == STATE_CONNECTING) {
+		if (state == MessageTypes.CONNECTION_STATE_CONNECTING) {
 			if (connectThread != null) {
 				connectThread.cancel();
 				connectThread = null;
@@ -122,7 +119,7 @@ public class BluetoothConnection implements IConnection {
 		// Start the thread to connect with the given device
 		connectThread = new ConnectThread(this.getDeviceAddress());
 		connectThread.start();
-		setState(STATE_CONNECTING);
+		setState(MessageTypes.CONNECTION_STATE_CONNECTING);
 	}
 
 	/**
@@ -153,14 +150,7 @@ public class BluetoothConnection implements IConnection {
 		connectedThread = new ConnectedThread(socket);
 		connectedThread.start();
 
-		// Send the name of the connected device back to the caller
-		Message msg = handler.obtainMessage(Constants.MESSAGE_DEVICE_NAME);
-		Bundle bundle = new Bundle();
-		bundle.putString(Constants.DEVICE_NAME, device.getName());
-		msg.setData(bundle);
-		handler.sendMessage(msg);
-
-		setState(STATE_CONNECTED);
+		setState(MessageTypes.CONNECTION_STATE_CONNECTED);
 	}
 
 	/*
@@ -182,7 +172,7 @@ public class BluetoothConnection implements IConnection {
 			connectedThread = null;
 		}
 
-		setState(STATE_NONE);
+		setState(MessageTypes.CONNECTION_STATE_DISCONNECTED);
 	}
 
 	/*
@@ -198,7 +188,7 @@ public class BluetoothConnection implements IConnection {
 
 		// Synchronize a copy of the ConnectedThread
 		synchronized (this) {
-			if (state != STATE_CONNECTED)
+			if (state != MessageTypes.CONNECTION_STATE_CONNECTED)
 				return;
 			r = connectedThread;
 		}
@@ -213,10 +203,8 @@ public class BluetoothConnection implements IConnection {
 	private void connectionFailed() {
 
 		// Send a failure message back to the Activity
-		Message msg = handler.obtainMessage(Constants.MESSAGE_TOAST);
-		Bundle bundle = new Bundle();
-		bundle.putString(Constants.TOAST, "Unable to connect device");
-		msg.setData(bundle);
+		Message msg = handler.obtainMessage(MessageTypes.CONNECTION_STATE_CHANGED);
+		msg.arg1 = MessageTypes.CONNECTION_STATE_FAILED;
 		handler.sendMessage(msg);
 	}
 
@@ -226,10 +214,8 @@ public class BluetoothConnection implements IConnection {
 	private void connectionLost() {
 
 		// Send a failure message back to the Activity
-		Message msg = handler.obtainMessage(Constants.MESSAGE_TOAST);
-		Bundle bundle = new Bundle();
-		bundle.putString(Constants.TOAST, "Device connection was lost");
-		msg.setData(bundle);
+		Message msg = handler.obtainMessage(MessageTypes.CONNECTION_STATE_CHANGED);
+		msg.arg1 = MessageTypes.CONNECTION_STATE_LOST;
 		handler.sendMessage(msg);
 	}
 
@@ -239,10 +225,8 @@ public class BluetoothConnection implements IConnection {
 	private void connectionClosed() {
 
 		// Send a failure message back to the Activity
-		Message msg = handler.obtainMessage(Constants.MESSAGE_TOAST);
-		Bundle bundle = new Bundle();
-		bundle.putString(Constants.TOAST, "Device connection closed");
-		msg.setData(bundle);
+		Message msg = handler.obtainMessage(MessageTypes.CONNECTION_STATE_CHANGED);
+		msg.arg1 = MessageTypes.CONNECTION_STATE_DISCONNECTED;
 		handler.sendMessage(msg);
 	}
 
@@ -291,7 +275,7 @@ public class BluetoothConnection implements IConnection {
 					Log.e(LOG_TAG, "unable to close() socket during connection failure", e2);
 				}
 				connectionFailed();
-				setState(STATE_NONE);
+				setState(MessageTypes.CONNECTION_STATE_DISCONNECTED);
 				return;
 			}
 
@@ -345,7 +329,6 @@ public class BluetoothConnection implements IConnection {
 
 			Log.i(LOG_TAG, "BEGIN ConnectedThread");
 			byte[] buffer = new byte[1024];
-			int bytes;
 			int pos = 0;
 
 			boolean lineComplete = false;
@@ -375,9 +358,13 @@ public class BluetoothConnection implements IConnection {
 					}
 
 					if (lineComplete) {
+						
 						// Send the obtained bytes to the caller
-						Log.d(LOG_TAG, "Message received: " + new String(buffer, 0, pos));
-						handler.obtainMessage(Constants.MESSAGE_READ, pos, -1, buffer).sendToTarget();
+						String s = new String(buffer, 0, pos);						
+						Log.d(LOG_TAG, "Message received: " + s);
+						Message msg = handler.obtainMessage(MessageTypes.CONNECTION_MESSAGE_EVENT);
+						msg.arg1 = MessageTypes.CONNECTION_MESSAGE_RECEIVED;
+						msg.obj = s;
 
 						pos = 0;
 						lineComplete = false;
@@ -394,7 +381,7 @@ public class BluetoothConnection implements IConnection {
 					}
 
 					break;
-				} 
+				}
 			}
 
 			Log.i(LOG_TAG, "END ConnectedThread");
@@ -406,15 +393,17 @@ public class BluetoothConnection implements IConnection {
 		 * @param buffer
 		 *            The bytes to write
 		 */
-		public void write(byte[] buffer) {
+		public synchronized void write(byte[] buffer) {
 			try {
 				btOutStream.write(buffer);
 
-				// Share the sent message back to the caller
-				// handler.obtainMessage(Constants.MESSAGE_WRITE, -1, -1, buffer).sendToTarget();
+				// give the robot some time to process the command
+				Thread.sleep(50);
 
 			} catch (IOException e) {
 				Log.e(LOG_TAG, "Exception during write", e);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
 			}
 		}
 

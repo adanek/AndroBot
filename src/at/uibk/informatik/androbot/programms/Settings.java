@@ -3,17 +3,14 @@ package at.uibk.informatik.androbot.programms;
 import java.util.List;
 
 import android.content.Context;
+import android.graphics.Path.Direction;
 import android.util.Log;
-import at.uibk.informatik.androbot.contracts.Direction;
-import at.uibk.informatik.androbot.contracts.IDistanceSensor;
-import at.uibk.informatik.androbot.contracts.IPosition;
-import at.uibk.informatik.androbot.contracts.IRobot;
-import at.uibk.informatik.androbot.contracts.IRobotResponseCallback;
+import at.uibk.informatik.androbot.control.Robot;
 
 public class Settings extends ProgrammBase {
 
-	public Settings(Context context, IRobotResponseCallback listener) {
-		super(context, listener);
+	public Settings(Context context) {
+		super(context);
 	}
 
 	private static final String LOG_TAG = "Settings";
@@ -24,22 +21,8 @@ public class Settings extends ProgrammBase {
 	public int test;
 
 	@Override
-	protected void onExecute() {
-				
-		IRobot robot = super.getRobot();
-		
-		switch(test){
-		case 0:
-			//Log
-			Log.d(LOG_TAG, "performing " + distance + " distance test");
-			robot.moveDistance((byte) distance);
-			break;
-		case 1:
-			//Log
-			Log.d(LOG_TAG, "performing " + degrees + " degrees test");
-			robot.turn(Direction.LEFT, degrees);
-			break;	
-		}
+	protected void onExecute() {				
+
 	}
 	
 	public void runLinearCorrectionTest(int distance){
@@ -66,15 +49,7 @@ public class Settings extends ProgrammBase {
 	}
 	
 	public void runAngularCorrectionTest(int factor){
-		
-		IRobot rob = getRobot();
-		
-		Direction dir = factor > 0 ? Direction.LEFT: Direction.RIGHT;
-		factor = Math.abs(factor);
-		
-		for(int i = 0; i < factor; i++){
-			rob.turn(dir, 90);
-		}
+
 	}
 	
 	//get distance
@@ -98,7 +73,7 @@ public class Settings extends ProgrammBase {
 	}
 	
 	public void runAngularRuntimeTest(){
-		getRobot().turn(Direction.LEFT, 100);
+		//getRobot().turn(100);
 	}
 	
 	public void setAngularCorrectionValue(float newValue){
@@ -107,17 +82,5 @@ public class Settings extends ProgrammBase {
 	
 	public void setAngularRuntime(float runtime){
 		getRobot().setAngularRuntimePerDegree(runtime);
-	}
-
-	@Override
-	public void onSensorDataReceived(List<IDistanceSensor> sensors) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void onPositionReceived(IPosition position) {
-		// TODO Auto-generated method stub
-		
 	}	
 }

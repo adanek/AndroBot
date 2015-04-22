@@ -2,17 +2,14 @@ package at.uibk.informatik.androbot.app;
 
 import java.util.List;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
-import at.uibk.informatik.androbot.contracts.IDistanceSensor;
-import at.uibk.informatik.androbot.contracts.IPosition;
-import at.uibk.informatik.androbot.contracts.IRobotResponseCallback;
+import at.uibk.informatik.androbot.control.DistanceSensor;
 import at.uibk.informatik.androbot.programms.TestProgram;
 
-public class MainActivity extends ProgramActivityBase implements IRobotResponseCallback{
+public class MainActivity extends ProgramActivityBase{
 
 	private static final String LOG_TAG = "TestActivity";
 	
@@ -23,7 +20,7 @@ public class MainActivity extends ProgramActivityBase implements IRobotResponseC
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		
-		this.test= new TestProgram(getApplicationContext(), this);
+		this.test= new TestProgram(getApplicationContext());
 		setProgramm(test);
 	}
 
@@ -45,8 +42,8 @@ public class MainActivity extends ProgramActivityBase implements IRobotResponseC
 		test.stop();
 	}
 	
-	@Override
-	public void onSensorDataReceived(List<IDistanceSensor> sensors) {
+	
+	public void onSensorDataReceived(List<DistanceSensor> sensors) {
 
 		// log
 		Log.d(LOG_TAG, "sensor data received");
@@ -60,7 +57,7 @@ public class MainActivity extends ProgramActivityBase implements IRobotResponseC
 
 			TextView text = null;
 
-			IDistanceSensor sensor = sensors.get(i);
+			DistanceSensor sensor = sensors.get(i);
 
 			// no sensor
 			if (sensor == null) {
@@ -89,26 +86,26 @@ public class MainActivity extends ProgramActivityBase implements IRobotResponseC
 		
 	}
 
-	@Override
-	public void onPositionReceived(IPosition position) {		
-		
-		if(position == null)
-			return;
-		
-		//get position values
-		int x = position.getX();
-		int y = position.getY();
-		int th = position.getOrientation();
-		
-		//get screen elements
-		TextView txtX  = (TextView) findViewById(R.id.txtX);
-		TextView txtY  = (TextView) findViewById(R.id.txtY);
-		TextView txtTH = (TextView) findViewById(R.id.txtTH);
-		
-		//set values on screen
-		txtX.setText(Integer.toString(x));
-		txtY.setText(Integer.toString(y));
-		txtTH.setText(Integer.toString(th));
-		
-	}
+//	@Override
+//	public void onPositionReceived(Position position) {		
+//		
+//		if(position == null)
+//			return;
+//		
+//		//get position values
+//		int x = position.getX();
+//		int y = position.getY();
+//		int th = position.getOrientation();
+//		
+//		//get screen elements
+//		TextView txtX  = (TextView) findViewById(R.id.txtX);
+//		TextView txtY  = (TextView) findViewById(R.id.txtY);
+//		TextView txtTH = (TextView) findViewById(R.id.txtTH);
+//		
+//		//set values on screen
+//		txtX.setText(Integer.toString(x));
+//		txtY.setText(Integer.toString(y));
+//		txtTH.setText(Integer.toString(th));
+//		
+//	}
 }

@@ -6,11 +6,9 @@ import android.util.Log;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.EditText;
-import at.uibk.informatik.androbot.contracts.Direction;
-import at.uibk.informatik.androbot.contracts.IRobotResponseCallback;
 import at.uibk.informatik.androbot.programms.Settings;
 
-public class SettingsActivity extends ProgramActivityBase implements IRobotResponseCallback {
+public class SettingsActivity extends ProgramActivityBase{
 
 	public static final String LINEAR_CORRECTION = "LinearCorrection";
 	public static final String ANGULAR_CORRECTION = "AngularCorrection";
@@ -40,7 +38,7 @@ public class SettingsActivity extends ProgramActivityBase implements IRobotRespo
 		setContentView(R.layout.activity_settings);
 
 		// create settings distance
-		configuration = new Settings(getApplicationContext(), this);
+		configuration = new Settings(getApplicationContext());
 		this.setProgramm(configuration);
 	}
 

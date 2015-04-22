@@ -1,14 +1,9 @@
 package at.uibk.informatik.androbot.app;
 
-import java.util.List;
-
 import android.app.Activity;
-import at.uibk.informatik.androbot.contracts.IDistanceSensor;
-import at.uibk.informatik.androbot.contracts.IPosition;
-import at.uibk.informatik.androbot.contracts.IRobotResponseCallback;
 import at.uibk.informatik.androbot.programms.ProgrammBase;
 
-public abstract class ProgramActivityBase extends Activity implements IRobotResponseCallback{
+public abstract class ProgramActivityBase extends Activity {
 
 	private ProgrammBase program;	
 	
@@ -40,12 +35,6 @@ public abstract class ProgramActivityBase extends Activity implements IRobotResp
 		this.program = program;
 	}
 	
-	@Override
-	public void onSensorDataReceived(List<IDistanceSensor> sensors) {
-	}
-
-	@Override
-	public void onPositionReceived(IPosition position) {
-	}
+	
 
 }

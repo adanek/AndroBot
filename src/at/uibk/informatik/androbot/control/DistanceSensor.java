@@ -3,11 +3,8 @@ package at.uibk.informatik.androbot.control;
 import java.util.ArrayList;
 import java.util.List;
 
-import android.util.Log;
-import at.uibk.informatik.androbot.contracts.IDistanceSensor;
 
-
-public class DistanceSensor implements IDistanceSensor {
+public class DistanceSensor {
 
 	private String name;
 	private int distance;
@@ -16,13 +13,11 @@ public class DistanceSensor implements IDistanceSensor {
 		this.name = name;
 		this.setCurrentDistance(value);
 	}
-
-	@Override
+	
 	public String getName() {
 		return this.name;
 	}
-
-	@Override
+	
 	public int getCurrentDistance() {
 		return this.distance;
 	}
@@ -36,9 +31,9 @@ public class DistanceSensor implements IDistanceSensor {
 			this.distance = 99;
 	}
 
-	public static List<IDistanceSensor> parse(String data) {
+	public static List<DistanceSensor> parse(String data) {
 		
-		List<IDistanceSensor> result = new ArrayList<IDistanceSensor>();
+		List<DistanceSensor> result = new ArrayList<DistanceSensor>();
 		String[] fields = data.split(" ");
 		
 		if(fields.length != 9)
@@ -47,10 +42,8 @@ public class DistanceSensor implements IDistanceSensor {
 		result.add(new DistanceSensor("Front-Left", Integer.decode(fields[3])));
 		result.add(new DistanceSensor("Front-Middle", Integer.decode(fields[6])));
 		result.add(new DistanceSensor("Front-Right", Integer.decode(fields[4])));
-		//result.add(new DistanceSensor("Front-Bumber", Integer.decode(fields[8])));
-
+	
 		return result;
-
 	}
 
 }

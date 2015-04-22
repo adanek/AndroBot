@@ -1,4 +1,4 @@
-package at.uibk.informatik.androbot.control.requests;
+package at.uibk.informatik.androbot.control;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -6,38 +6,39 @@ import java.util.List;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
-import at.uibk.informatik.androbot.contracts.IConnection;
-import at.uibk.informatik.androbot.contracts.IRequest;
 
 /**
  * Encapsulates one command which will sent to the remote device in an own thread.
  */
-public class Request implements IRequest {
+public class Request implements Runnable {
 
 	private static final int SUFFIX_LENGTH = 2;
 	private static final int COMMAND_LENGTH = 1;
+	private static int nextId = 0;
 
 	// ********************************************** Locals **********************************************************
 
 	private static final String LOG_TAG = "Request";
 
+	private int id;
 	private IConnection conn;
 	private Handler handler;
 	private long runtime;
 	private List<Byte> params;
 	private char command;
-	private boolean confirm;
+	private boolean responseWhenDone;
 
 	// ******************************************** Constructors ******************************************************
 
-	public Request(IConnection conn, Handler handler, boolean confirm) {
+	public Request(IConnection conn, Handler handler, boolean responseWhenDone) {
 		super();
+		this.id = nextId++;
 		this.conn = conn;
 		this.handler = handler;
 		this.setRuntime(100);
 		this.params = new LinkedList<Byte>();
 		this.setCommand((char) 0);
-		this.confirm = confirm;
+		this.responseWhenDone = responseWhenDone;
 	}
 
 	public Request(IConnection conn, Handler handler) {
@@ -46,6 +47,10 @@ public class Request implements IRequest {
 
 	// ********************************************* Properties *******************************************************
 
+	public int getId(){
+		return this.id;
+	}
+	
 	/**
 	 * @return the command
 	 */
@@ -93,11 +98,15 @@ public class Request implements IRequest {
 
 		send();
 
-		if (confirm) {
-			Log.d(LOG_TAG, String.format("Request done %s", getCommand()));
-			Message doneMsg = handler.obtainMessage(REQUEST_EVENT, REQUEST_SENT, -1);
-			handler.sendMessageDelayed(doneMsg, getRuntime());
+		if (responseWhenDone) {
+			sentResponse();
 		}
+	}
+
+	private void sentResponse() {
+		Log.d(LOG_TAG, String.format("Request done %s", getCommand()));
+		Message doneMsg = handler.obtainMessage(MessageTypes.REQUEST_EVENT, MessageTypes.REQUEST_DONE, id);
+		handler.sendMessageDelayed(doneMsg, getRuntime());
 	};
 
 	// Writes the request to the connection
@@ -110,6 +119,7 @@ public class Request implements IRequest {
 	private void logRequest() {
 		StringBuilder sb = new StringBuilder();
 
+		sb.append(String.format("Request %d: ", id));
 		sb.append("Sending: ");
 		sb.append(command);
 

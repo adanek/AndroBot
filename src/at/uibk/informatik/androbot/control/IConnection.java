@@ -1,13 +1,8 @@
-package at.uibk.informatik.androbot.contracts;
+package at.uibk.informatik.androbot.control;
 
 import android.os.Handler;
 
 public interface IConnection {
-
-	// Constants that indicate the current connection state
-	public static final int STATE_NONE = 0; // we're doing nothing connections
-	public static final int STATE_CONNECTING = 2; // now initiating an outgoing connection
-	public static final int STATE_CONNECTED = 3; // now connected to a remote device
 
 	/**
 	 * Returns the current state of the connection

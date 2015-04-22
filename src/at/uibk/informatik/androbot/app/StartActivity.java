@@ -34,42 +34,6 @@ public class StartActivity extends Activity {
 		
 	}
 	
-	//Basic Control
-	public void onBasic(View v){
-		
-		//call basic control view
-		Intent basic = new Intent(this, BasicControlActivity.class);
-		startActivity(basic);
-		
-	}
-	
-	//Square Test
-	public void onSquare(View v){
-		
-		//call square test view
-		Intent square = new Intent(this, SquareTestActivity.class);
-		startActivity(square);
-		
-	}
-	
-	//Find Goal
-	public void onGoal(View v){
-		
-		//call square test view
-		Intent goal = new Intent(this, FindGoalActivity.class);
-		startActivity(goal);
-		
-	}
-	
-	//Blob detection
-	public void onBlob(View v){
-		
-		//call square test view
-		Intent blob = new Intent(this, BlobActivity.class);
-		startActivity(blob);
-		
-	}
-	
 	public void onTest(View v){
 		
 		//call square test view

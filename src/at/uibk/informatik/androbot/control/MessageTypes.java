@@ -3,27 +3,28 @@
  * https://developer.android.com/samples/BluetoothChat
  */
 
-package at.uibk.informatik.androbot.contracts;
-
-import at.uibk.informatik.androbot.control.BluetoothConnection;
+package at.uibk.informatik.androbot.control;
 
 /**
  * Defines several constants used between {@link BluetoothConnection} and the caller thread.
  */
-public interface Constants {
- 
-    // Message types sent from the BluetoothConnection Handler
-    public static final int MESSAGE_STATE_CHANGE = 1;
-    public static final int MESSAGE_READ = 2;
-    public static final int MESSAGE_WRITE = 3;
-    public static final int MESSAGE_DEVICE_NAME = 4;
-    public static final int MESSAGE_TOAST = 5;
- 
-    // Key names received from the BluetoothConnection Handler
-    public static final String DEVICE_NAME = "device_name";
-    public static final String TOAST = "toast";
+public interface MessageTypes {
+
+	public static final int CONNECTION_EVENT = 100;
+	public static final int REQUEST_EVENT = 200;
+
+	public static final int CONNECTION_STATE_CHANGED = 110;
+	public static final int CONNECTION_STATE_CONNECTING = 111;
+	public static final int CONNECTION_STATE_CONNECTED = 112;
+	public static final int CONNECTION_STATE_DISCONNECTED = 113;
+	public static final int CONNECTION_STATE_FAILED = 114;	
+	public static final int CONNECTION_STATE_LOST = 115;
+
+	public static final int CONNECTION_MESSAGE_EVENT = 130;
+	public static final int CONNECTION_MESSAGE_SENT = 131;
+	public static final int CONNECTION_MESSAGE_RECEIVED = 132;
 	
-    
-    public static final int REQUEST_EVENT = 100;
-    public static final int REQUEST_SENT = 101;    
+	
+	public static final int REQUEST_DONE = 201;
+
 }
