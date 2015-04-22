@@ -147,6 +147,25 @@ public class Robot {
 		byte speed = 0;
 		this.setVelocity(speed, speed);	
 	}
+	
+	public void setBar(byte level){
+		Request r = new Request(connection, connectionHandler);
+		r.setCommand('o');
+		r.addParameter(level);
+		
+		sendRequest(r);
+	}
+	
+	public void raiseBar(){
+		Request r = new Request(connection, connectionHandler);
+		r.setCommand('+');		
+		
+		for(int i = 0; i < 12; i++){
+			sendRequest(r);
+		}		
+	}
+	
+	
 //
 //	// public void turn(int degrees) {
 //	//
