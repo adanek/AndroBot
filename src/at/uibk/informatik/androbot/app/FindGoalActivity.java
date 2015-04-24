@@ -71,4 +71,12 @@ public class FindGoalActivity extends ProgramActivityBase{
 		
 	}
 	
+	//reset robots current position
+	public void onReset(View v){
+		
+		//set current position to 0,0,0
+		find.setCurrent(new Position());
+		
+	}
+	
 }
