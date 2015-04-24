@@ -15,6 +15,10 @@ public class FindGoalActivity extends ProgramActivityBase{
 	private static final String LOG_TAG = "FindGoalActivity";
 	
 	private findGoal find;
+	
+	private int X  = 100;
+	private int Y  = 100;
+	private int TH = 0;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
