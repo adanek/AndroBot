@@ -5,6 +5,7 @@ import java.util.List;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.TextView;
 import at.uibk.informatik.androbot.control.DistanceSensor;
 import at.uibk.informatik.androbot.control.Position;
@@ -29,12 +30,40 @@ public class FindGoalActivity extends ProgramActivityBase{
 		setProgramm(find);
 	}
 	
+	@Override
+	protected void onResume() {
+		super.onResume();
+		
+		//get screen elements
+		EditText x  = (EditText) findViewById(R.id.inputX);
+		EditText y  = (EditText) findViewById(R.id.inputY);
+		EditText th = (EditText) findViewById(R.id.inputTH);
+		
+		//set texts on screen
+		x.setText(String.valueOf(X));
+		y.setText(String.valueOf(Y));
+		th.setText(String.valueOf(TH));
+				
+	}
+	
+	//start find goal activity
 	public void onStart(View view){
 		
-		Position target = new Position(0,0,0);
+		EditText x  = (EditText) findViewById(R.id.inputX);
+		EditText y  = (EditText) findViewById(R.id.inputY);
+		EditText th = (EditText) findViewById(R.id.inputTH);
 		
+		X  = Integer.valueOf(x.getText().toString());
+		Y  = Integer.valueOf(y.getText().toString());
+		TH = Integer.valueOf(th.getText().toString());
+		
+		//create target position
+		Position target = new Position(X,Y,TH);
+		
+		//set target
 		find.setTarget(target);
 		
+		//start activity
 		find.start();
 	}
 	
