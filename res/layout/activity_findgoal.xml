@@ -1,0 +1,65 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/scrollView1"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" >    
+    
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="431dp"
+        android:orientation="vertical" >
+            
+            
+            <TextView
+            android:id="@+id/txtLblX"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="X"
+            android:textAppearance="?android:attr/textAppearanceSmall" />
+        
+            <EditText
+            android:id="@+id/inputX"
+            android:layout_width="70dp"
+            android:layout_height="wrap_content"
+            android:ems="5"
+            android:inputType="numberDecimal|numberSigned" />
+                    
+            <TextView
+            android:id="@+id/txtLblY"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Y"
+            android:textAppearance="?android:attr/textAppearanceSmall" /> 
+            
+            <EditText
+            android:id="@+id/inputY"
+            android:layout_width="70dp"
+            android:layout_height="wrap_content"
+            android:ems="5"
+            android:inputType="numberDecimal|numberSigned" />
+                
+            <TextView
+            android:id="@+id/txtLblTH"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="TH"
+            android:textAppearance="?android:attr/textAppearanceSmall" /> 
+            
+            <EditText
+            android:id="@+id/inputTH"
+            android:layout_width="70dp"
+            android:layout_height="wrap_content"
+            android:ems="5"
+            android:inputType="numberDecimal|numberSigned" />
+        
+ 
+            <Button
+            android:id="@+id/start"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="onStart"
+            android:text="Start" />
+
+</LinearLayout>
+
+</ScrollView>
