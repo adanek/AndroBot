@@ -24,8 +24,10 @@ public abstract class ProgrammBase {
 	private Context context;
 	private Handler uiHandler;
 	private boolean executing;
+	private long lastStart;
 
 	// ******************************************** Constructors ******************************************************
+	
 
 	public ProgrammBase(Context context) {
 
@@ -63,6 +65,15 @@ public abstract class ProgrammBase {
 
 	// ********************************************** Methods *********************************************************
 
+	
+	public long getLastStart() {
+		return lastStart;
+	}
+
+	public void setLastStart(long lastStart) {
+		this.lastStart = lastStart;
+	}
+	
 	public void connect() {
 		this.robot.connect();
 	}
@@ -110,12 +121,12 @@ public abstract class ProgrammBase {
 		
 		int runtime = robot.getRuntime(distance);
 		
-		long start = System.currentTimeMillis();
+		this.setLastStart(System.currentTimeMillis());
 
 		robot.moveForward();
 		
-		long last = start;		
-		while (System.currentTimeMillis() < (start + runtime)) {
+		long last = getLastStart();		
+		while (System.currentTimeMillis() < (getLastStart() + runtime)) {
 			
 			long now = System.currentTimeMillis();
 			
@@ -152,8 +163,8 @@ public abstract class ProgrammBase {
 		}
 		robot.setVelocity(l, r);
 		
-		long start  = System.currentTimeMillis();
-		while(System.currentTimeMillis() < start + runtime);
+		setLastStart(System.currentTimeMillis());
+		while(System.currentTimeMillis() < getLastStart() + runtime);
 		robot.stop();
 	}
 	

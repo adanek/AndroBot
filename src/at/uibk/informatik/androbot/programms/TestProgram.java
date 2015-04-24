@@ -9,7 +9,8 @@ public class TestProgram extends ProgrammBase {
 
 	private static final String LOG_TAG = "TestProgram";
 	private boolean obstacleDeteced;
-	Position current;
+	private Position current = new Position();
+	private Position target = new Position(100,100,0);
 
 	public TestProgram(Context context) {
 		super(context);
@@ -22,12 +23,7 @@ public class TestProgram extends ProgrammBase {
 		Log.d(LOG_TAG, "onExecute called");
 
 		obstacleDeteced = false;
-		
 
-
-		Position target = new Position(200, 0, 0);
-		current = new Position();
-		
 		start = System.currentTimeMillis();
 		moveTowardsTarget(target);
 		
@@ -99,4 +95,21 @@ public class TestProgram extends ProgrammBase {
 		Log.d(LOG_TAG, String.format("Moved distance: %d",  distance));
 		this.obstacleDeteced = true;
 	}
+	
+	public Position getTarget() {
+		return target;
+	}
+
+	public void setTarget(Position target) {
+		this.target = target;
+	}
+
+	public Position getCurrent() {
+		return current;
+	}
+
+	public void setCurrent(Position current) {
+		this.current = current;
+	}
+	
 }

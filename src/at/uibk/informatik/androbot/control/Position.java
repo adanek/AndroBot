@@ -35,4 +35,20 @@ public class Position {
 	public Position(){
 		this(0,0,0);
 	}
+	
+	@Override
+	public boolean equals(Object o) {	
+		
+		Position other = (Position) o;
+		
+		int dX = Math.abs(this.getX() - other.getX());
+		int dY = Math.abs(this.getY() - other.getY());
+		int tol = 3;
+		
+		if(dX < tol && dY < tol){
+			return true;
+		}
+		
+		return false;
+	}
 }
