@@ -22,8 +22,10 @@ public class TestProgram extends ProgrammBase {
 		Log.d(LOG_TAG, "onExecute called");
 
 		obstacleDeteced = false;
+		
 
-		Position target = new Position(200, -100, 180);
+
+		Position target = new Position(200, 0, 0);
 		current = new Position();
 		
 		start = System.currentTimeMillis();

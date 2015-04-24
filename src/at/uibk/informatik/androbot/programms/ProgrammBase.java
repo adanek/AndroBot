@@ -53,7 +53,7 @@ public abstract class ProgrammBase {
 		// Set the linear calibration
 		this.robot.setAngularCorrection(settings.getFloat(SettingsActivity.ANGULAR_CORRECTION, 2.0f));
 		//this.robot.setAngularRuntimePerDegree(settings.getFloat(SettingsActivity.ANGULAR_RUNTIME, 100.0f));
-		this.robot.setAngularRuntimePerDegree(21.3);
+		this.robot.setAngularRuntimePerDegree(21.2);
 
 		// Set the angular calibration
 		this.robot.setLinearCorrection(settings.getFloat(SettingsActivity.LINEAR_CORRECTION, 0.5f));
