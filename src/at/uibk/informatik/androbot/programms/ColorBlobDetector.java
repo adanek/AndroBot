@@ -11,13 +11,7 @@ import org.opencv.core.MatOfPoint;
 import org.opencv.core.Scalar;
 import org.opencv.imgproc.Imgproc;
 
-import android.content.Context;
-import android.util.Log;
-
-public class BlobDetection extends ProgrammBase {
-
-	private static final String LOG_TAG = "Blob detection";
-	
+public class ColorBlobDetector {
     // Lower and Upper bounds for range checking in HSV color space
     private Scalar mLowerBound = new Scalar(0);
     private Scalar mUpperBound = new Scalar(0);
@@ -34,24 +28,7 @@ public class BlobDetection extends ProgrammBase {
     Mat mMask = new Mat();
     Mat mDilatedMask = new Mat();
     Mat mHierarchy = new Mat();
-	
-	
-	public BlobDetection(Context context) {
-		super(context);
-	}	
 
-	@Override
-	protected void onExecute() {
-
-		//Log
-		Log.d(LOG_TAG, "Blob detection started");
-
-
-
-
-	}
-
-	
     public void setColorRadius(Scalar radius) {
         mColorRadius = radius;
     }
@@ -128,5 +105,4 @@ public class BlobDetection extends ProgrammBase {
     public List<MatOfPoint> getContours() {
         return mContours;
     }
-	
 }

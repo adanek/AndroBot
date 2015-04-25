@@ -1,54 +1,55 @@
 package at.uibk.informatik.androbot.app;
 
+import java.util.List;
 
 import org.opencv.android.BaseLoaderCallback;
-import org.opencv.android.CameraBridgeViewBase;
 import org.opencv.android.CameraBridgeViewBase.CvCameraViewFrame;
-import org.opencv.android.CameraBridgeViewBase.CvCameraViewListener2;
 import org.opencv.android.LoaderCallbackInterface;
 import org.opencv.android.OpenCVLoader;
 import org.opencv.core.Core;
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
+import org.opencv.core.MatOfPoint;
 import org.opencv.core.Rect;
 import org.opencv.core.Scalar;
 import org.opencv.core.Size;
+import org.opencv.android.CameraBridgeViewBase;
+import org.opencv.android.CameraBridgeViewBase.CvCameraViewListener2;
 import org.opencv.imgproc.Imgproc;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.View.OnTouchListener;
 import android.view.Window;
 import android.view.WindowManager;
-import at.uibk.informatik.androbot.programms.BlobDetection;
+import android.view.View.OnTouchListener;
+import at.uibk.informatik.androbot.programms.ColorBlobDetector;
 
-public class BlobActivity extends ProgramActivityBase implements OnTouchListener, CvCameraViewListener2{
-
-	private BlobDetection blob;
-    private static final String LOG_TAG = "BlobActivity";
-	
-    private CameraBridgeViewBase mOpenCvCameraView;
+public class ColorBlobDetectionActivity extends Activity implements OnTouchListener, CvCameraViewListener2 {
+    private static final String  TAG              = "OCVSample::Activity";
 
     private boolean              mIsColorSelected = false;
     private Mat                  mRgba;
     private Scalar               mBlobColorRgba;
     private Scalar               mBlobColorHsv;
-    //private BlobDetection        mDetector;
+    private ColorBlobDetector    mDetector;
     private Mat                  mSpectrum;
     private Size                 SPECTRUM_SIZE;
     private Scalar               CONTOUR_COLOR;
-    
+
+    private CameraBridgeViewBase mOpenCvCameraView;
+
     private BaseLoaderCallback  mLoaderCallback = new BaseLoaderCallback(this) {
         @Override
         public void onManagerConnected(int status) {
             switch (status) {
                 case LoaderCallbackInterface.SUCCESS:
                 {
-                    Log.i(LOG_TAG, "OpenCV loaded successfully");
+                    Log.i(TAG, "OpenCV loaded successfully");
                     mOpenCvCameraView.enableView();
-                    mOpenCvCameraView.setOnTouchListener(BlobActivity.this);
+                    mOpenCvCameraView.setOnTouchListener(ColorBlobDetectionActivity.this);
                 } break;
                 default:
                 {
@@ -57,79 +58,63 @@ public class BlobActivity extends ProgramActivityBase implements OnTouchListener
             }
         }
     };
-	
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		
+
+    public ColorBlobDetectionActivity() {
+        Log.i(TAG, "Instantiated new " + this.getClass());
+    }
+
+    /** Called when the activity is first created. */
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        Log.i(TAG, "called onCreate");
+        super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-		
-		setContentView(R.layout.activity_blob);
-		
+
+        setContentView(R.layout.color_blob_detection_surface_view);
+
         mOpenCvCameraView = (CameraBridgeViewBase) findViewById(R.id.color_blob_detection_activity_surface_view);
         mOpenCvCameraView.setCvCameraViewListener(this);
-		
-		
-		//create blob detector
-		blob = new BlobDetection(getApplicationContext());
-		this.setProgramm(blob);
-	}
+    }
 
-	@Override
-	protected void onResume() {
+    @Override
+    public void onPause()
+    {
+        super.onPause();
+        if (mOpenCvCameraView != null)
+            mOpenCvCameraView.disableView();
+    }
+
+    @Override
+    public void onResume()
+    {
         super.onResume();
-        OpenCVLoader.initAsync(OpenCVLoader.OPENCV_VERSION_2_4_3, this, mLoaderCallback);		
-	}
-
-	@Override
-	protected void onPause() {
-	    super.onPause();
-	    if (mOpenCvCameraView != null)
-	        mOpenCvCameraView.disableView();
-	}
+        OpenCVLoader.initAsync(OpenCVLoader.OPENCV_VERSION_2_4_3, this, mLoaderCallback);
+    }
 
     public void onDestroy() {
         super.onDestroy();
         if (mOpenCvCameraView != null)
             mOpenCvCameraView.disableView();
     }
-	
-	//Start
-	public void onStart(View v){
-		
-		//start square test
-		blob.start();
-		
-	}
-	
-	@Override
-	public void onCameraViewStarted(int width, int height) {
 
+    public void onCameraViewStarted(int width, int height) {
         mRgba = new Mat(height, width, CvType.CV_8UC4);
-        //mDetector = new BlobDetection(getApplicationContext(), this);
-        //blob = new BlobDetection(getApplicationContext(), this);
+        mDetector = new ColorBlobDetector();
         mSpectrum = new Mat();
         mBlobColorRgba = new Scalar(255);
         mBlobColorHsv = new Scalar(255);
         SPECTRUM_SIZE = new Size(200, 64);
         CONTOUR_COLOR = new Scalar(255,0,0,255);
-		
-	}
+    }
 
-	@Override
-	public void onCameraViewStopped() {
-		mRgba.release();	
-	}
+    public void onCameraViewStopped() {
+        mRgba.release();
+    }
 
-	@Override
-	public Mat onCameraFrame(CvCameraViewFrame inputFrame) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public boolean onTouch(View v, MotionEvent event) {
+    public boolean onTouch(View v, MotionEvent event) {
+    	
+    	Log.d(TAG, "Dont touch this!");
         int cols = mRgba.cols();
         int rows = mRgba.rows();
 
@@ -139,7 +124,7 @@ public class BlobActivity extends ProgramActivityBase implements OnTouchListener
         int x = (int)event.getX() - xOffset;
         int y = (int)event.getY() - yOffset;
 
-        Log.i(LOG_TAG, "Touch image coordinates: (" + x + ", " + y + ")");
+        Log.i(TAG, "Touch image coordinates: (" + x + ", " + y + ")");
 
         if ((x < 0) || (y < 0) || (x > cols) || (y > rows)) return false;
 
@@ -164,21 +149,47 @@ public class BlobActivity extends ProgramActivityBase implements OnTouchListener
 
         mBlobColorRgba = converScalarHsv2Rgba(mBlobColorHsv);
 
-        Log.i(LOG_TAG, "Touched rgba color: (" + mBlobColorRgba.val[0] + ", " + mBlobColorRgba.val[1] +
+        Log.i(TAG, "Touched rgba color: (" + mBlobColorRgba.val[0] + ", " + mBlobColorRgba.val[1] +
                 ", " + mBlobColorRgba.val[2] + ", " + mBlobColorRgba.val[3] + ")");
 
-        blob.setHsvColor(mBlobColorHsv);
+        
+        
+        
+        
+        
+        mDetector.setHsvColor(mBlobColorHsv);
 
-        Imgproc.resize(blob.getSpectrum(), mSpectrum, SPECTRUM_SIZE);
+        Imgproc.resize(mDetector.getSpectrum(), mSpectrum, SPECTRUM_SIZE);
 
         mIsColorSelected = true;
 
         touchedRegionRgba.release();
         touchedRegionHsv.release();
 
+        
+        Log.d(TAG, "Touch away");
         return false; // don't need subsequent touch events
-	}
-	
+    }
+
+    public Mat onCameraFrame(CvCameraViewFrame inputFrame) {
+        mRgba = inputFrame.rgba();
+
+        if (mIsColorSelected) {
+            mDetector.process(mRgba);
+            List<MatOfPoint> contours = mDetector.getContours();
+            Log.e(TAG, "Contours count: " + contours.size());
+            Imgproc.drawContours(mRgba, contours, -1, CONTOUR_COLOR);
+
+            Mat colorLabel = mRgba.submat(4, 68, 4, 68);
+            colorLabel.setTo(mBlobColorRgba);
+
+            Mat spectrumLabel = mRgba.submat(4, 4 + mSpectrum.rows(), 70, 70 + mSpectrum.cols());
+            mSpectrum.copyTo(spectrumLabel);
+        }
+
+        return mRgba;
+    }
+
     private Scalar converScalarHsv2Rgba(Scalar hsvColor) {
         Mat pointMatRgba = new Mat();
         Mat pointMatHsv = new Mat(1, 1, CvType.CV_8UC3, hsvColor);
@@ -186,5 +197,4 @@ public class BlobActivity extends ProgramActivityBase implements OnTouchListener
 
         return new Scalar(pointMatRgba.get(0, 0));
     }
-	
 }

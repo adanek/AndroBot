@@ -46,7 +46,7 @@ public class StartActivity extends Activity {
 	public void onBlob(View v){
 		
 		//call square test view
-		Intent blob = new Intent(this, BlobActivity.class);
+		Intent blob = new Intent(this, ColorBlobDetectionActivity.class);
 		startActivity(blob);		
 	}
 	
