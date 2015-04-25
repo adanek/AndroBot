@@ -82,7 +82,7 @@ public class BlobActivity extends ProgramActivityBase implements OnTouchListener
 		
 		
 		//create blob detector
-		blob = new BlobDetection(getApplicationContext(), this);
+		blob = new BlobDetection(getApplicationContext());
 		this.setProgramm(blob);
 	}
 
@@ -113,14 +113,6 @@ public class BlobActivity extends ProgramActivityBase implements OnTouchListener
 		
 	}
 	
-	//Stop
-	public void onStop(View v){
-		
-		//stop square test
-		blob.stop();
-		
-	}
-
 	@Override
 	public void onCameraViewStarted(int width, int height) {
 

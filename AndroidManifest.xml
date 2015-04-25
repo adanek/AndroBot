@@ -43,6 +43,10 @@
             android:name=".FindGoalActivity"
             android:label="@string/app_name" >
         </activity>
+        <activity
+            android:name=".BlobActivity"
+            android:label="@string/app_name" >
+        </activity>
     </application>
 
 </manifest>
