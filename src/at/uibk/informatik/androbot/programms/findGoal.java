@@ -7,7 +7,7 @@ import at.uibk.informatik.androbot.control.Robot;
 
 public class findGoal extends ProgrammBase {
 
-	private static final String LOG_TAG = "TestProgram";
+	private static final String LOG_TAG = "Find Goal Program";
 	private boolean obstacleDeteced;
 	private Position current = new Position();
 	private Position target = new Position(100, 100, 0);
@@ -23,28 +23,38 @@ public class findGoal extends ProgrammBase {
 		Log.d(LOG_TAG, "onExecute called");
 		obstacleDeteced = false;
 
-		while (!target.equals(current)) {
+		// while (!target.equals(current)) {
 
-			if (obstacleDeteced) {
-				// Do avoidance
-			} else {
-				moveTowardsTarget(target);
-			}
+		Log.d(LOG_TAG,
+				String.format("Pos: %d %d %d %b", current.getX(), current.getY(), current.getTh(), obstacleDeteced));
+		if (obstacleDeteced) {
+			// Do avoidance
+		} else {
+			moveTowardsTarget(target);
 		}
+		// }
+
+		Log.d(LOG_TAG, String.format("Done"));
 	}
 
 	public void moveTowardsTarget(Position target) {
 
+		Log.d(LOG_TAG, String.format("Searching target..."));
+		
 		// Richte dich auf das Ziel
 		int ang = getAngle(current, target);
-
-		
-		turn(ang);
-		current.setTh(current.getTh() + ang);
+		Log.d(LOG_TAG, String.format("Angle to target %d", ang));
+		if (ang != 0) {			
+			turn(ang);
+			current.setTh(current.getTh() + ang);
+		}
 
 		// Fahre auf das Ziel
 		int dis = getDistanceToTarget(current, target);
-		moveDistance(dis);
+		Log.d(LOG_TAG, String.format("Distance to target %d", dis));		
+		if(dis != 0){
+			moveDistance(dis);
+		}		
 
 		// Dreh dich in den gewünschten Winkel
 		if (!obstacleDeteced) {

@@ -196,6 +196,7 @@ public class BluetoothConnection implements IConnection {
 		}
 
 		// Perform the write unsynchronized
+		logRequest(out);
 		r.write(out);
 	}
 
@@ -457,5 +458,16 @@ public class BluetoothConnection implements IConnection {
 		this.interupt = val;
 	}
 
+	private void logRequest(byte[] data) {
+		StringBuilder sb = new StringBuilder();
+		sb.append("Sending: ");
+		sb.append((char)data[0]);
+
+		for (int i = 1; i < (data.length -2); i++) {
+			sb.append(String.format(" 0x%02X", data[i]));
+		}		
+
+		Log.d(LOG_TAG, sb.toString());
+	}
 
 }
