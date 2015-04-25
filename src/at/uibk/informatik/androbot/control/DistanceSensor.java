@@ -40,7 +40,7 @@ public class DistanceSensor {
 			return null;
 
 		result.add(new DistanceSensor("Front-Left", Integer.decode(fields[3])));
-		result.add(new DistanceSensor("Front-Middle", Integer.decode(fields[6])));
+		//result.add(new DistanceSensor("Front-Middle", Integer.decode(fields[6])));
 		result.add(new DistanceSensor("Front-Right", Integer.decode(fields[4])));
 	
 		return result;

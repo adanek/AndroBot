@@ -43,9 +43,10 @@ public class Position {
 		
 		int dX = Math.abs(this.getX() - other.getX());
 		int dY = Math.abs(this.getY() - other.getY());
+		int dT  =Math.abs(this.getTh() - other.getTh());
 		int tol = 3;
 		
-		if(dX < tol && dY < tol){
+		if(dX < tol && dY < tol && dT == 0){
 			return true;
 		}
 		

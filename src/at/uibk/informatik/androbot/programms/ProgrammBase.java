@@ -55,7 +55,7 @@ public abstract class ProgrammBase {
 		// Set the linear calibration
 		this.robot.setAngularCorrection(settings.getFloat(SettingsActivity.ANGULAR_CORRECTION, 2.0f));
 		//this.robot.setAngularRuntimePerDegree(settings.getFloat(SettingsActivity.ANGULAR_RUNTIME, 100.0f));
-		this.robot.setAngularRuntimePerDegree(21.2);
+		this.robot.setAngularRuntimePerDegree(21.5);
 
 		// Set the angular calibration
 		this.robot.setLinearCorrection(settings.getFloat(SettingsActivity.LINEAR_CORRECTION, 0.5f));
@@ -169,7 +169,8 @@ public abstract class ProgrammBase {
 	}
 	
 	public int getAngle(Position current, Position target){
-		return (int) Math.toDegrees(Math.atan2(target.getY() - current.getY(), target.getX() - current.getX()));
+		int total = (int) Math.toDegrees(Math.atan2(target.getY() - current.getY(), target.getX() - current.getX()));
+		return total -current.getTh();
 	}
 	
 	public int getDistanceToTarget(Position current, Position target){		
