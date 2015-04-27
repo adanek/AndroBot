@@ -101,6 +101,14 @@ public class ColorBlobDetectionActivity extends Activity implements OnTouchListe
     public void onCameraViewStarted(int width, int height) {
         mRgba = new Mat(height, width, CvType.CV_8UC4);
         mDetector = new ColorBlobDetector();
+        
+        
+        //Test
+        mDetector.setHsvColor(new Scalar(25.0,63.0,22.0,0.0));
+        mIsColorSelected = true;
+        //Test
+        
+        
         mSpectrum = new Mat();
         mBlobColorRgba = new Scalar(255);
         mBlobColorHsv = new Scalar(255);
