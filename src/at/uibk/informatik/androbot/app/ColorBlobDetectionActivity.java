@@ -29,6 +29,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.View.OnTouchListener;
+import android.widget.RadioButton;
 import at.uibk.informatik.androbot.programms.ColorBlobDetector;
 
 public class ColorBlobDetectionActivity extends Activity implements OnTouchListener, CvCameraViewListener2 {
@@ -265,6 +266,22 @@ public class ColorBlobDetectionActivity extends Activity implements OnTouchListe
 		return mRgba;
 	}
 
+	public void onRadioButtonToggle(View v){
+		
+		Log.d("Color", "changed");
+		
+		RadioButton red = (RadioButton) findViewById(R.id.radioRed);
+		
+		//red ball
+		if(red.isChecked()){
+			mDetector.setHsvColor(new Scalar(0, 255, 200, 0.0)); 
+		//green ball
+		}else {
+			mDetector.setHsvColor(new Scalar(85, 255, 75, 0.0)); 
+		}
+		
+	}
+	
 	private Scalar converScalarHsv2Rgba(Scalar hsvColor) {
 		Mat pointMatRgba = new Mat();
 		Mat pointMatHsv = new Mat(1, 1, CvType.CV_8UC3, hsvColor);
