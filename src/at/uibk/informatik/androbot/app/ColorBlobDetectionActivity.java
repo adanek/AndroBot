@@ -282,6 +282,16 @@ public class ColorBlobDetectionActivity extends Activity implements OnTouchListe
 		
 	}
 	
+	//on start
+	public void onStart(View v){
+		
+		//disable view
+		mOpenCvCameraView.disableView();
+		
+		Log.d("START", "started");
+
+	}
+	
 	private Scalar converScalarHsv2Rgba(Scalar hsvColor) {
 		Mat pointMatRgba = new Mat();
 		Mat pointMatHsv = new Mat(1, 1, CvType.CV_8UC3, hsvColor);

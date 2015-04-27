@@ -9,7 +9,7 @@
     android:layout_height="320dp" >
 <RadioGroup
     android:layout_marginTop="190dp"     
-    android:layout_width="wrap_content"
+    android:layout_width="100dp"
     android:layout_height="wrap_content"
     android:orientation="vertical">
     <RadioButton
@@ -23,6 +23,16 @@
         android:text="Red" 
         android:onClick="onRadioButtonToggle"/>
     </RadioGroup>
+    
+    <Button
+        android:id="@+id/btnStart"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="200dp"
+        android:layout_marginLeft="120dp"
+        android:onClick="onStart"
+        android:text="Start" />
+
     <org.opencv.android.JavaCameraView
         android:id="@+id/color_blob_detection_activity_surface_view"
         android:layout_width="fill_parent"
