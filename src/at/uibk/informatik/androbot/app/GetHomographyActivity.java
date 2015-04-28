@@ -22,6 +22,7 @@ import org.opencv.android.CameraBridgeViewBase.CvCameraViewListener2;
 import org.opencv.imgproc.Imgproc;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -32,9 +33,9 @@ import android.view.View.OnTouchListener;
 import android.widget.RadioButton;
 import at.uibk.informatik.androbot.programms.ColorBlobDetector;
 
-public class ColorBlobDetectionActivity extends ProgramActivityBase implements
+public class GetHomographyActivity extends Activity implements
 		CvCameraViewListener2 {
-	private static final String TAG = "ColorBlobDetectionActivty";
+	private static final String TAG = "GetHomography";
 
 	private boolean mIsColorSelected = false;
 	private Mat mRgba;
@@ -64,7 +65,7 @@ public class ColorBlobDetectionActivity extends ProgramActivityBase implements
 		}
 	};
 
-	public ColorBlobDetectionActivity() {
+	public GetHomographyActivity() {
 		Log.i(TAG, "Instantiated new " + this.getClass());
 	}
 
@@ -75,12 +76,6 @@ public class ColorBlobDetectionActivity extends ProgramActivityBase implements
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-
-		// get HSV color scalar from blob activity
-		mDetector.setHsvColor(BlobActivity.getColor()); // green or red
-
-		// color is selected
-		mIsColorSelected = true;
 
 		setContentView(R.layout.color_blob_detection_surface_view);
 
@@ -123,71 +118,81 @@ public class ColorBlobDetectionActivity extends ProgramActivityBase implements
 		mRgba.release();
 	}
 
+	public Mat getHomographyMatrix(Mat mRgba) {
+		final Size mPatternSize = new Size(6, 9); // number of inner corners in
+													// the used chessboard
+													// pattern
+		float x = -48.0f; // coordinates of first detected inner corner on
+							// chessboard
+		float y = 309.0f;
+		float delta = 12.0f; // size of a single square edge in chessboard
+		LinkedList<Point> PointList = new LinkedList<Point>();
+
+		// Define real-world coordinates for given chessboard pattern:
+		for (int i = 0; i < mPatternSize.height; i++) {
+			y = 309.0f;
+			for (int j = 0; j < mPatternSize.width; j++) {
+				PointList.addLast(new Point(x, y));
+				y += delta;
+			}
+			x += delta;
+		}
+		MatOfPoint2f RealWorldC = new MatOfPoint2f();
+		RealWorldC.fromList(PointList);
+
+		// Detect inner corners of chessboard pattern from image:
+		Mat gray = new Mat();
+		Imgproc.cvtColor(mRgba, gray, Imgproc.COLOR_RGBA2GRAY); // convert image
+																// to grayscale
+		MatOfPoint2f mCorners = new MatOfPoint2f();
+		boolean mPatternWasFound = Calib3d.findChessboardCorners(gray,
+				mPatternSize, mCorners);
+
+		Log.d(TAG, String.format("Pattern was found: %b", mPatternWasFound));
+
+		// Calculate homography:
+		if (mPatternWasFound) {
+			// Calib3d.drawChessboardCorners(mRgba, mPatternSize, mCorners,
+			// mPatternWasFound); // for visualization
+			return Calib3d.findHomography(mCorners, RealWorldC);
+		} else
+			return new Mat();
+	}
+
+	int frame = 0;
+
+	// on camera frame
 	public Mat onCameraFrame(CvCameraViewFrame inputFrame) {
 		mRgba = inputFrame.rgba();
 
-		if (mIsColorSelected) {
-			mDetector.process(mRgba);
-			List<MatOfPoint> contours = mDetector.getContours();
+		frame++;
+		Log.d(TAG, "Pattern " + frame);
+		if ((frame % 20) == 0) {
 
-			if (contours.size() > 0) {
-				MatOfPoint mat = contours.get(0);
+			Log.d(TAG, "Pattern Started");
 
-				List<Point> list = mat.toList();
+			for (int i = 0; i < 10; i++) {
 
-				Point min = new Point(Double.MIN_VALUE, Double.MIN_VALUE);
-				for (Point p : list) {
-					if (p.y > min.y) {
-						min = p;
-					}
+				// get homo matrix
+				Mat homoMat = getHomographyMatrix(mRgba);
+
+				// homo matrix was filled
+				if (homoMat.empty() == false) {
+					// set homo matrix
+					BlobActivity.setHomoMat(homoMat);
+
+					
+					
+					// go back to blob activity
+					Intent blob = new Intent(this, BlobActivity.class);
+					startActivity(blob);
+					finish();
+				} else {
+					break;
 				}
-				Log.d(TAG,
-						String.format("Min Position x: %f y: %f", min.x, min.y));
-
 			}
-			Log.e(TAG, "Contours count: " + contours.size());
-			Imgproc.drawContours(mRgba, contours, -1, CONTOUR_COLOR);
-
-			Mat colorLabel = mRgba.submat(4, 68, 4, 68);
-			colorLabel.setTo(mBlobColorRgba);
-
-			Mat spectrumLabel = mRgba.submat(4, 4 + mSpectrum.rows(), 70,
-					70 + mSpectrum.cols());
-			mSpectrum.copyTo(spectrumLabel);
 		}
 
-		
-		//
-		// Mat src = new Mat(1, 1, CvType.CV_32FC2);
-		// Mat dest = new Mat(1, 1, CvType.CV_32FC2);
-		// src.put(0, 0, new double[] { ps.x, ps.y }); // ps is a point in image
-		// coordinates
-		// Core.perspectiveTransform(src, dest, homography); //homography is
-		// your homography matrix
-		// Point dest_point = new Point(dest.get(0, 0)[0], dest.get(0, 0)[1]);
-		//
-		
-
 		return mRgba;
-	}
-
-	// on start
-	public void onStart(View v) {
-
-		// disable view
-		mOpenCvCameraView.disableView();
-
-		// start ball catching algo
-		Log.d("START", "started");
-
-	}
-
-	private Scalar converScalarHsv2Rgba(Scalar hsvColor) {
-		Mat pointMatRgba = new Mat();
-		Mat pointMatHsv = new Mat(1, 1, CvType.CV_8UC3, hsvColor);
-		Imgproc.cvtColor(pointMatHsv, pointMatRgba, Imgproc.COLOR_HSV2RGB_FULL,
-				4);
-
-		return new Scalar(pointMatRgba.get(0, 0));
 	}
 }
