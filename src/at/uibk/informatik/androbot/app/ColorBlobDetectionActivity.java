@@ -270,7 +270,7 @@ public class ColorBlobDetectionActivity extends Activity implements OnTouchListe
 		
 		Log.d("Color", "changed");
 		
-		RadioButton red = (RadioButton) findViewById(R.id.radioRed);
+		/*RadioButton red = (RadioButton) findViewById(R.id.radioRed);
 		
 		//red ball
 		if(red.isChecked()){
@@ -278,7 +278,7 @@ public class ColorBlobDetectionActivity extends Activity implements OnTouchListe
 		//green ball
 		}else {
 			mDetector.setHsvColor(new Scalar(85, 255, 75, 0.0)); 
-		}
+		}*/
 		
 	}
 	
