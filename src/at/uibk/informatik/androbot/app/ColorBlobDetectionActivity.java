@@ -45,8 +45,11 @@ public class ColorBlobDetectionActivity extends ProgramActivityBase implements
 	private Size SPECTRUM_SIZE;
 	private Scalar CONTOUR_COLOR;
 
-	public static Mat homoMat;
+	//destination point
+	Point dest_point = null;
 	
+	public static Mat homoMat;
+
 	private CameraBridgeViewBase mOpenCvCameraView;
 
 	private BaseLoaderCallback mLoaderCallback = new BaseLoaderCallback(this) {
@@ -146,6 +149,21 @@ public class ColorBlobDetectionActivity extends ProgramActivityBase implements
 				Log.d(TAG,
 						String.format("Min Position x: %f y: %f", min.x, min.y));
 
+				// map from image plane to ground plane
+				if (min.x != Double.MIN_VALUE && min.y != Double.MIN_VALUE) {
+					Mat src = new Mat(1, 1, CvType.CV_32FC2);
+					Mat dest = new Mat(1, 1, CvType.CV_32FC2);
+					src.put(0, 0, new double[] { min.x, min.y }); // ps is a
+																	// point in
+																	// image
+					// coordinates
+					Core.perspectiveTransform(src, dest, homoMat); // homography
+																	// is
+					// your homography matrix
+					dest_point = new Point(dest.get(0, 0)[0], dest.get(0,
+							0)[1]);
+				}
+
 			}
 			Log.e(TAG, "Contours count: " + contours.size());
 			Imgproc.drawContours(mRgba, contours, -1, CONTOUR_COLOR);
@@ -158,29 +176,23 @@ public class ColorBlobDetectionActivity extends ProgramActivityBase implements
 			mSpectrum.copyTo(spectrumLabel);
 		}
 
+		//ball located and position determined
+		if(dest_point != null){
+			// disable view
+			mOpenCvCameraView.disableView();
+		}
 		
-		//
-		// Mat src = new Mat(1, 1, CvType.CV_32FC2);
-		// Mat dest = new Mat(1, 1, CvType.CV_32FC2);
-		// src.put(0, 0, new double[] { ps.x, ps.y }); // ps is a point in image
-		// coordinates
-		// Core.perspectiveTransform(src, dest, homography); //homography is
-		// your homography matrix
-		// Point dest_point = new Point(dest.get(0, 0)[0], dest.get(0, 0)[1]);
-		//
-		
-
 		return mRgba;
 	}
 
 	// on start
 	public void onStart(View v) {
 
-		// disable view
-		mOpenCvCameraView.disableView();
-
 		// start ball catching algo
 		Log.d("START", "started");
+		
+		
+		
 
 	}
 
