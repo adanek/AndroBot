@@ -11,6 +11,28 @@
         android:layout_width="fill_parent"
         android:layout_height="300dp" />
 
+       <RadioGroup
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical" >
+        
+    <RadioButton
+        android:id="@+id/radioGreen"
+        android:text="Green"
+        android:checked="true"
+        android:onClick="onRadioButtonToggle" />
 
+        <RadioButton
+        android:id="@+id/radioRed"
+        android:text="Red" 
+        android:onClick="onRadioButtonToggle"/>
+    </RadioGroup>
+    
+    <Button
+        android:id="@+id/btnStart"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="onStart"
+        android:text="Start" />
 
 </LinearLayout>
