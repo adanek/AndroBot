@@ -45,6 +45,8 @@ public class ColorBlobDetectionActivity extends ProgramActivityBase implements
 	private Size SPECTRUM_SIZE;
 	private Scalar CONTOUR_COLOR;
 
+	public static Mat homoMat;
+	
 	private CameraBridgeViewBase mOpenCvCameraView;
 
 	private BaseLoaderCallback mLoaderCallback = new BaseLoaderCallback(this) {

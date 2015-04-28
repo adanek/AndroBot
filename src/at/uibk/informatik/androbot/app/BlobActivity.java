@@ -53,12 +53,17 @@ public class BlobActivity extends Activity{
 	//on start
 	public void onStart(View v){
 		
-		//set homography matrix
-		
-		//call homography activity
-		Intent colorblob = new Intent(this, ColorBlobDetectionActivity.class);
-		startActivity(colorblob);
-		
+		//if homography matrix is available
+		if(homoMat.empty() == false){
+			//set matrix in color blob detection activty
+			ColorBlobDetectionActivity.homoMat = homoMat;
+			
+			//call homography activity
+			Intent colorblob = new Intent(this, ColorBlobDetectionActivity.class);
+			startActivity(colorblob);
+			
+		}
+
 	}
 	
 	//on color toggle
