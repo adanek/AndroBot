@@ -180,6 +180,9 @@ public class ColorBlobDetectionActivity extends ProgramActivityBase implements
 		if(dest_point != null){
 			// disable view
 			mOpenCvCameraView.disableView();
+			
+			//log target coordinates
+			Log.d(TAG, "Target coordinates: x = " + dest_point.x + "; y = " + dest_point.y);
 		}
 		
 		return mRgba;
