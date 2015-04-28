@@ -5,6 +5,7 @@ import java.util.List;
 import org.opencv.core.Mat;
 import org.opencv.core.Scalar;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -12,7 +13,7 @@ import android.view.View;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
-public class BlobActivity extends ProgramActivityBase{
+public class BlobActivity extends Activity{
 
 	private static final String LOG_TAG = "BlobActivity";
 	private static Scalar color = new Scalar(85, 255, 75, 0.0);
