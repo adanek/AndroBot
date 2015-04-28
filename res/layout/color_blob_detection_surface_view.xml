@@ -10,9 +10,9 @@
     android:orientation="vertical">
     
         <org.opencv.android.JavaCameraView
-        android:id="@+id/color_blob_detection_activity_surface_view"
-        android:layout_width="fill_parent"
-        android:layout_height="300dp" />
+            android:id="@+id/color_blob_detection_activity_surface_view"
+            android:layout_width="fill_parent"
+            android:layout_height="52dp" />
 
        <RadioGroup
     android:layout_width="wrap_content"
