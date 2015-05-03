@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import at.uibk.informatik.androbot.control.Position;
@@ -24,6 +25,10 @@ public class BlobActivity extends Activity{
 	
 	private BlobDetection prog;
 	
+	private int X  = 100;
+	private int Y  = 100;
+	private int TH = 0;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -35,6 +40,16 @@ public class BlobActivity extends Activity{
 	@Override
 	protected void onResume() {
 		super.onResume();
+		
+		//get screen elements
+		EditText x  = (EditText) findViewById(R.id.inputX);
+		EditText y  = (EditText) findViewById(R.id.inputY);
+		EditText th = (EditText) findViewById(R.id.inputTH);
+		
+		//set texts on screen
+		x.setText(String.valueOf(X));
+		y.setText(String.valueOf(Y));
+		th.setText(String.valueOf(TH));
 		
 		RadioButton red = (RadioButton) findViewById(R.id.radioRed);
 		RadioButton green = (RadioButton) findViewById(R.id.radioGreen);
@@ -111,6 +126,20 @@ public class BlobActivity extends Activity{
 	
 	//on start
 	public void onStart(View v){
+		
+		EditText x  = (EditText) findViewById(R.id.inputX);
+		EditText y  = (EditText) findViewById(R.id.inputY);
+		EditText th = (EditText) findViewById(R.id.inputTH);
+		
+		X  = Integer.valueOf(x.getText().toString());
+		Y  = Integer.valueOf(y.getText().toString());
+		TH = Integer.valueOf(th.getText().toString());
+		
+		//create target position
+		Position target = new Position(X,Y,TH);
+		
+		//set target
+		prog.target = target;
 		
 		searchBall();
 	}

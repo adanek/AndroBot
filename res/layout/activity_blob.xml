@@ -41,6 +41,48 @@
         android:onClick="onHomography"
         android:text="Get Homography" />
 
+                    <TextView
+            android:id="@+id/txtLblX"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="X"
+            android:textAppearance="?android:attr/textAppearanceSmall" />
+        
+            <EditText
+            android:id="@+id/inputX"
+            android:layout_width="70dp"
+            android:layout_height="wrap_content"
+            android:ems="5"
+            android:inputType="numberDecimal|numberSigned" />
+                    
+            <TextView
+            android:id="@+id/txtLblY"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Y"
+            android:textAppearance="?android:attr/textAppearanceSmall" /> 
+            
+            <EditText
+            android:id="@+id/inputY"
+            android:layout_width="70dp"
+            android:layout_height="wrap_content"
+            android:ems="5"
+            android:inputType="numberDecimal|numberSigned" />
+                
+            <TextView
+            android:id="@+id/txtLblTH"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="TH"
+            android:textAppearance="?android:attr/textAppearanceSmall" /> 
+            
+            <EditText
+            android:id="@+id/inputTH"
+            android:layout_width="70dp"
+            android:layout_height="wrap_content"
+            android:ems="5"
+            android:inputType="numberDecimal|numberSigned" />
+        
 </LinearLayout>
 </ScrollView>
         
