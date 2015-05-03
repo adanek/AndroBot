@@ -67,15 +67,37 @@ public class BlobActivity extends Activity{
 			int x = (int) Math.round(ball.x);
 			int y = (int) Math.round(ball.y);
 			
+			// Catch the ball
 			int ang = prog.getAngle(new Position(), new Position(x, y, 0));
 			prog.turn(ang);
 			
-			int dis = prog.getDistanceToTarget(new Position(), new Position(x, y, 0)) -15;
+			int dis = prog.getDistanceToTarget(new Position(), new Position(x, y, 0)) -15; // 15 cm  vor dem Ball stehen bleiben.
 			prog.moveDistance(dis);	
 			
 			prog.getRobot().lowerBar();
 			
+			// Fahre zu der Ablieferposition
 			
+			ang = prog.getAngle(prog.getCurrent(), prog.target);
+			prog.turn(ang);
+			
+			dis = prog.getDistanceToTarget(prog.getCurrent(), prog.target);
+			prog.moveDistance(dis);		
+			
+			prog.getRobot().raiseBar();
+			
+			Position tar = new Position();
+			
+			ang = prog.getAngle(prog.getCurrent(),tar);
+			prog.turn(ang);
+			
+			dis = prog.getDistanceToTarget(prog.getCurrent(), tar);
+			prog.moveDistance(dis);	
+			
+			// Turn to x
+			if (prog.getCurrent().getTh() != 0){
+				prog.turn(prog.getCurrent().getTh() * -1);
+			}			
 		}
 		
 		running  = false;
