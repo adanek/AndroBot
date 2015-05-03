@@ -128,19 +128,19 @@ public abstract class ProgrammBase {
 		long last = getLastStart();		
 		while (System.currentTimeMillis() < (getLastStart() + runtime)) {
 			
-			long now = System.currentTimeMillis();
-			
-			if(now -last > 250){
-				last = now;
-				robot.requestSensorData();
-				Log.d(LOG_TAG, "Sensors requested");
-			}			
-			
-			if (hasInteruptRequest()) {
-				interruptHandled();
-				onObstacleDetected();				
-				break;			
-			}
+//			long now = System.currentTimeMillis();
+//			
+//			if(now -last > 250){
+//				last = now;
+//				//robot.requestSensorData();
+//				//Log.d(LOG_TAG, "Sensors requested");
+//			}			
+//			
+//			if (hasInteruptRequest()) {
+//				interruptHandled();
+//				onObstacleDetected();				
+//				break;			
+//			}
 		}
 		robot.stop();
 	}

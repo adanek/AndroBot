@@ -156,6 +156,10 @@ public class Robot {
 		sendRequest(r);
 	}
 	
+	public void lowerBar(){
+		setBar((byte)0);
+	}
+	
 	public void raiseBar(){
 		Request r = new Request(connection, connectionHandler);
 		r.setCommand('+');		

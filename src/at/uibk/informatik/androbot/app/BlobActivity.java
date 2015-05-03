@@ -1,6 +1,7 @@
 package at.uibk.informatik.androbot.app;
 
 import org.opencv.core.Mat;
+import org.opencv.core.Point;
 import org.opencv.core.Scalar;
 
 import android.app.Activity;
@@ -10,18 +11,25 @@ import android.util.Log;
 import android.view.View;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import at.uibk.informatik.androbot.control.Position;
+import at.uibk.informatik.androbot.programms.BlobDetection;
 
 public class BlobActivity extends Activity{
 
 	private static final String LOG_TAG = "BlobActivity";
-	private static Scalar color = new Scalar(85, 255, 75, 0.0);
+	private static Scalar color =  new Scalar(255.0, 255.0, 220.0, 0.0); 
 	private static Mat homoMat;
+	public static Point ball = null;
+	public static boolean running = false;
+	
+	private BlobDetection prog;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_blob);
 		
+		prog = new BlobDetection(this);
 	}
 	
 	@Override
@@ -32,14 +40,45 @@ public class BlobActivity extends Activity{
 		RadioButton green = (RadioButton) findViewById(R.id.radioGreen);
 		RadioGroup gr = (RadioGroup) findViewById(R.id.colorGroup);
 		
-		//check green
-		if(color.equals(new Scalar(85, 255, 75, 0.0))){
-			gr.check(green.getId());
 		//check red
-		}else{
+		if(color.equals( new Scalar(255.0, 255.0, 220.0, 0.0) )){
 			gr.check(red.getId());
+		//check green
+		}else{
+			gr.check(green.getId());
 		}
 		
+		if(running){
+			onRunning();
+		}
+		
+	}
+
+	private void onRunning() {
+		if(ball == null){
+			Log.d(LOG_TAG, "Robot turn");
+			
+			prog.turn(45);			
+			searchBall();
+			return;
+		} else{
+			Log.d(LOG_TAG, "Robot dirve to ball");
+			
+			int x = (int) Math.round(ball.x);
+			int y = (int) Math.round(ball.y);
+			
+			int ang = prog.getAngle(new Position(), new Position(x, y, 0));
+			prog.turn(ang);
+			
+			int dis = prog.getDistanceToTarget(new Position(), new Position(x, y, 0)) -15;
+			prog.moveDistance(dis);	
+			
+			prog.getRobot().lowerBar();
+			
+			
+		}
+		
+		running  = false;
 	}
 
 	@Override
@@ -51,21 +90,28 @@ public class BlobActivity extends Activity{
 	//on start
 	public void onStart(View v){
 		
+		searchBall();
+	}
+
+	private void searchBall() {
 		//if homography matrix is available
-		if(homoMat.empty() == false){
+		if(homoMat != null && homoMat.empty() == false){
 			//set matrix in color blob detection activty
 			ColorBlobDetectionActivity.homoMat = homoMat;
+			ColorBlobDetectionActivity.color = color;
 			
 			//call homography activity
-			Intent colorblob = new Intent(this, ColorBlobDetectionActivity.class);
-			startActivity(colorblob);
 			
+			running = true;
+			Intent colorblob = new Intent(this, ColorBlobDetectionActivity.class);
+			startActivity(colorblob);			
 		}
-
 	}
 	
 	//on color toggle
 	public void onRadioButtonToggle(View v){
+		
+		//mBlobColorHsv = new Scalar(105.0, 255.0, 130.0, 0.0); //now green red: 255 255 220 0
 		
 		Log.d(LOG_TAG, "changed");
 		
@@ -73,10 +119,10 @@ public class BlobActivity extends Activity{
 		
 		//red ball
 		if(red.isChecked()){
-			color = new Scalar(0, 255, 200, 0.0); 
+			color = new Scalar(255.0, 255.0, 220.0, 0.0); 
 		//green ball
 		}else {
-			color = new Scalar(85, 255, 75, 0.0); 
+			color = new Scalar(105.0, 255.0, 130.0, 0.0); 
 		}
 		
 	}

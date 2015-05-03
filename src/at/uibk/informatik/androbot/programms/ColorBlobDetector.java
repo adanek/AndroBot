@@ -8,11 +8,19 @@ import org.opencv.core.Core;
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfPoint;
+import org.opencv.core.Point;
 import org.opencv.core.Scalar;
 import org.opencv.imgproc.Imgproc;
 
-public class ColorBlobDetector {
-    // Lower and Upper bounds for range checking in HSV color space
+import android.content.Context;
+import android.util.Log;
+
+public class ColorBlobDetector{
+    
+
+
+	private static final String TAG = "ColorBlobDetectorProgram";
+	// Lower and Upper bounds for range checking in HSV color space
     private Scalar mLowerBound = new Scalar(0);
     private Scalar mUpperBound = new Scalar(0);
     // Minimum contour area in percent for contours filtering
@@ -22,13 +30,16 @@ public class ColorBlobDetector {
     private Mat mSpectrum = new Mat();
     private List<MatOfPoint> mContours = new ArrayList<MatOfPoint>();
 
+    private Mat homoMat;
+    
     // Cache
     Mat mPyrDownMat = new Mat();
     Mat mHsvMat = new Mat();
     Mat mMask = new Mat();
     Mat mDilatedMask = new Mat();
     Mat mHierarchy = new Mat();
-
+	public Point d;
+	
     public void setColorRadius(Scalar radius) {
         mColorRadius = radius;
     }
@@ -104,5 +115,26 @@ public class ColorBlobDetector {
 
     public List<MatOfPoint> getContours() {
         return mContours;
+    }	
+	
+    public Point getPos(Point ps){
+	    Mat src =  new Mat(1, 1, CvType.CV_32FC2);
+	    Mat dest = new Mat(1, 1, CvType.CV_32FC2);
+	    src.put(0, 0, new double[] { ps.x, ps.y }); // ps is a point in image coordinates
+	    Core.perspectiveTransform(src, dest, getHomoMat()); //homography is your homography matrix
+	    Point dest_point = new Point(dest.get(0, 0)[0], dest.get(0, 0)[1]);	    
+	    
+	    d = new Point(dest_point.y / 10, dest_point.x /10 * -1);
+	    Log.d(TAG, String.format("Ball @world x:%f y:%f", d.x, d.y));	    
+	    
+	    return d;	    
     }
+
+	public Mat getHomoMat() {
+		return homoMat;
+	}
+
+	public void setHomoMat(Mat homoMat) {
+		this.homoMat = homoMat;
+	}
 }
