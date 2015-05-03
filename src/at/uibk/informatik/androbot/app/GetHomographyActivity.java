@@ -173,12 +173,13 @@ public class GetHomographyActivity extends Activity implements
 					// set homo matrix
 					BlobActivity.setHomoMat(homoMat);
 
-					
+					//mOpenCvCameraView.disableView();
 					
 					// go back to blob activity
 					Intent blob = new Intent(this, BlobActivity.class);
 					startActivity(blob);
 					finish();
+					break;
 				} else {
 					break;
 				}

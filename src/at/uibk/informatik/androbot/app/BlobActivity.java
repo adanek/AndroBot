@@ -85,7 +85,10 @@ public class BlobActivity extends Activity{
 	public void onHomography(View v){
 		
 		//reset homoMat
-		homoMat = new Mat();
+		if(homoMat != null){
+		
+			homoMat.release();
+		}
 		
 		//call homography activity
 		Intent homo = new Intent(this, GetHomographyActivity.class);
