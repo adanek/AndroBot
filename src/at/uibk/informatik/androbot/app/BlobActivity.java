@@ -25,9 +25,9 @@ public class BlobActivity extends Activity{
 	
 	private BlobDetection prog;
 	
-	private int X  = 100;
-	private int Y  = 100;
-	private int TH = 0;
+	private static int X  = 100;
+	private static int Y  = 100;
+	private static int TH = 0;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -77,17 +77,28 @@ public class BlobActivity extends Activity{
 			searchBall();
 			return;
 		} else{
-			Log.d(LOG_TAG, "Robot dirve to ball");
+			Log.d(LOG_TAG, "Robot drive to ball");
+			
+			//create target position
+			Position target = new Position(X,Y,TH);			
+			prog.target = target;
 			
 			int x = (int) Math.round(ball.x);
 			int y = (int) Math.round(ball.y);
 			
+			Log.d(LOG_TAG, String.format("Ball: %d %d", x, y));
+			Log.d(LOG_TAG, String.format("Target: %d %d %d", prog.target.getX(),prog.target.getY(),prog.target.getTh()));
+			
+			Log.d(LOG_TAG, String.format("Position: %d %d %d", prog.getCurrent().getX(), prog.getCurrent().getY(), prog.getCurrent().getTh()));
+			
 			// Catch the ball
 			int ang = prog.getAngle(new Position(), new Position(x, y, 0));
 			prog.turn(ang);
+			Log.d(LOG_TAG, String.format("Position: %d %d %d", prog.getCurrent().getX(), prog.getCurrent().getY(), prog.getCurrent().getTh()));
 			
 			int dis = prog.getDistanceToTarget(new Position(), new Position(x, y, 0)) -15; // 15 cm  vor dem Ball stehen bleiben.
 			prog.moveDistance(dis);	
+			Log.d(LOG_TAG, String.format("Position: %d %d %d", prog.getCurrent().getX(), prog.getCurrent().getY(), prog.getCurrent().getTh()));
 			
 			prog.getRobot().lowerBar();
 			
@@ -95,9 +106,11 @@ public class BlobActivity extends Activity{
 			
 			ang = prog.getAngle(prog.getCurrent(), prog.target);
 			prog.turn(ang);
+			Log.d(LOG_TAG, String.format("Position: %d %d %d", prog.getCurrent().getX(), prog.getCurrent().getY(), prog.getCurrent().getTh()));
 			
 			dis = prog.getDistanceToTarget(prog.getCurrent(), prog.target);
 			prog.moveDistance(dis);		
+			Log.d(LOG_TAG, String.format("Position: %d %d %d", prog.getCurrent().getX(), prog.getCurrent().getY(), prog.getCurrent().getTh()));
 			
 			prog.getRobot().raiseBar();
 			
@@ -105,14 +118,17 @@ public class BlobActivity extends Activity{
 			
 			ang = prog.getAngle(prog.getCurrent(),tar);
 			prog.turn(ang);
+			Log.d(LOG_TAG, String.format("Position: %d %d %d", prog.getCurrent().getX(), prog.getCurrent().getY(), prog.getCurrent().getTh()));
 			
 			dis = prog.getDistanceToTarget(prog.getCurrent(), tar);
 			prog.moveDistance(dis);	
+			Log.d(LOG_TAG, String.format("Position: %d %d %d", prog.getCurrent().getX(), prog.getCurrent().getY(), prog.getCurrent().getTh()));
 			
 			// Turn to x
 			if (prog.getCurrent().getTh() != 0){
 				prog.turn(prog.getCurrent().getTh() * -1);
-			}			
+			}
+			Log.d(LOG_TAG, String.format("Position: %d %d %d", prog.getCurrent().getX(), prog.getCurrent().getY(), prog.getCurrent().getTh()));
 		}
 		
 		running  = false;
@@ -133,13 +149,7 @@ public class BlobActivity extends Activity{
 		
 		X  = Integer.valueOf(x.getText().toString());
 		Y  = Integer.valueOf(y.getText().toString());
-		TH = Integer.valueOf(th.getText().toString());
-		
-		//create target position
-		Position target = new Position(X,Y,TH);
-		
-		//set target
-		prog.target = target;
+		TH = Integer.valueOf(th.getText().toString());	
 		
 		searchBall();
 	}
