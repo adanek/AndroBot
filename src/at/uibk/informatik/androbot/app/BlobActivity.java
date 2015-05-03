@@ -1,7 +1,5 @@
 package at.uibk.informatik.androbot.app;
 
-import java.util.List;
-
 import org.opencv.core.Mat;
 import org.opencv.core.Scalar;
 
@@ -101,8 +99,8 @@ public class BlobActivity extends Activity{
 	}
 
 	//set homography matrix
-	public static void setHomoMat(Mat homoMat) {
-		homoMat = homoMat;
+	public static void setHomoMat(Mat newMat) {
+		homoMat = newMat;
 	}
 
 	//return color scalar
