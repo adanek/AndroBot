@@ -172,6 +172,7 @@ public class GetHomographyActivity extends Activity implements
 				if (homoMat.empty() == false) {
 					// set homo matrix
 					BlobActivity.setHomoMat(homoMat);
+					BeaconDetectionActivity.setHomoMat(homoMat);
 
 					//mOpenCvCameraView.disableView();
 					

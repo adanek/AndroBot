@@ -50,6 +50,10 @@
             android:name=".BlobActivity"
             android:label="@string/app_name">
         </activity>
+        <activity
+            android:name=".BeaconDetectionActivity"
+            android:label="@string/app_name">
+        </activity>
          <activity
             android:name=".GetHomographyActivity"
             android:label="@string/app_name"

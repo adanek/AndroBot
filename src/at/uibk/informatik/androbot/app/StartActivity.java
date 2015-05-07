@@ -50,6 +50,14 @@ public class StartActivity extends Activity {
 		startActivity(blob);		
 	}
 	
+	//beacon activity
+	public void onBeacon(View v){
+		
+		//call square test view
+		Intent beacon = new Intent(this, BeaconDetectionActivity.class);
+		startActivity(beacon);		
+	}
+	
 	public void onTest(View v){
 		
 		//call square test view
