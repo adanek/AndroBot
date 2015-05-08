@@ -117,7 +117,7 @@ public class ColorBlobDetectionActivity extends Activity implements OnTouchListe
         mBlobColorRgba = new Scalar(255);
         //mBlobColorHsv = new Scalar(255);
         SPECTRUM_SIZE = new Size(200, 64);
-        CONTOUR_COLOR = new Scalar(255,0,0,255);
+        CONTOUR_COLOR = new Scalar(125,125,125,255);
     
         
         mBlobColorHsv = color;
@@ -208,15 +208,15 @@ public class ColorBlobDetectionActivity extends Activity implements OnTouchListe
             		}
             	}
             	
-            	Log.d(TAG, String.format("Ball @ x:%f y:%f\n", ball.x, ball.y));   
+            	Log.d(TAG, String.format("Ball @screen x:%f y:%f\n", ball.x, ball.y));   
             	
             	
             	Point pos = mDetector.getPos(ball);            	
             	BlobActivity.ball = pos; 	
-            	
-            	Intent blob = new Intent(this, BlobActivity.class);
-				startActivity(blob);
-				finish();
+            	Log.d(TAG, String.format("Ball @world x:%f y:%f\n", pos.x, pos.y));   
+//            	Intent blob = new Intent(this, BlobActivity.class);
+//				startActivity(blob);
+//				finish();
             }
             
             Log.e(TAG, "Contours count: " + contours.size());
@@ -227,13 +227,13 @@ public class ColorBlobDetectionActivity extends Activity implements OnTouchListe
 
             Mat spectrumLabel = mRgba.submat(4, 4 + mSpectrum.rows(), 70, 70 + mSpectrum.cols());
             mSpectrum.copyTo(spectrumLabel);
-            
-            if(frames > 50){
-            	BlobActivity.ball = null;
-            	Intent blob = new Intent(this, BlobActivity.class);
-				startActivity(blob);
-				finish();
-            }
+//            
+//            if(frames > 20){
+//            	BlobActivity.ball = null;
+//            	Intent blob = new Intent(this, BlobActivity.class);
+//				startActivity(blob);
+//				finish();
+//            }
         }
 
         return mRgba;
