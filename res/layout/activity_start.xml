@@ -57,12 +57,21 @@
             android:onClick="onBlob"
             android:text="Blob detection" /> 
          
+           <Button
+            android:id="@+id/btnBeacon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="300dp"
+            android:onClick="onBeacon"
+            android:text="Beacon detection" />  
+         
         <Button
             android:id="@+id/btnTest"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="300dp"
+            android:layout_marginTop="360dp"
             android:onClick="onTest"
             android:text="Test" />
 
