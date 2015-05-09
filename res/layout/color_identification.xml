@@ -5,6 +5,7 @@
     android:layout_height="match_parent"
     android:orientation="horizontal" >
 
+    
     <org.opencv.android.JavaCameraView
         android:id="@+id/color_blob_detection_activity_surface_view"
         android:layout_width="260dp"
