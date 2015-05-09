@@ -69,6 +69,13 @@ public class BeaconDetectionActivity extends Activity{
 		
 	}
 	
+	public void onGetColor(View v){
+		
+		//call color detection activity
+		Intent color = new Intent(this, GetColorActivity.class);
+		startActivity(color);
+	}
+	
 	//get homography matrix
 	public static Mat getHomoMat() {
 		return homoMat;

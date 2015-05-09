@@ -1,0 +1,32 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/RelativeLayout1"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal" >
+
+    <org.opencv.android.JavaCameraView
+        android:id="@+id/color_blob_detection_activity_surface_view"
+        android:layout_width="260dp"
+        android:layout_height="match_parent"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true" />
+
+       <TextView
+        android:id="@+id/txtLblH"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="H"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="270dp" />
+
+    <SeekBar
+        android:id="@+id/seekH"
+        android:layout_width="202dp"
+        android:layout_height="wrap_content"
+        android:max="255"
+        android:layout_marginTop="30dp"
+        android:layout_marginLeft="270dp"  /> 
+    
+</RelativeLayout>
