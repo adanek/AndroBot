@@ -80,7 +80,7 @@ public class GetColorActivity extends Activity implements OnTouchListener, CvCam
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
-        setContentView(R.layout.color_identification);
+        setContentView(R.layout.color_ident);
 
         
         mOpenCvCameraView = (CameraBridgeViewBase) findViewById(R.id.color_blob_detection_activity_surface_view);        
