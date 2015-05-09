@@ -22,6 +22,8 @@ public class BeaconDetectionActivity extends Activity{
 
 	private BeaconDetection prog;
 	private static Mat homoMat;
+	public static Scalar color1;
+	public static Scalar color2;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +54,9 @@ public class BeaconDetectionActivity extends Activity{
 	public void onStart(View v){
 		
 		Log.d(LOG_TAG, "Beacon Detection started");
+		
+		Log.d(LOG_TAG, "Color1: " + color1.val[0] + " " + color1.val[1] + " " + color1.val[2]);
+		Log.d(LOG_TAG, "Color2: " + color2.val[0] + " " + color2.val[1] + " " + color2.val[2]);
 	}
 	
 	//call homography activity
