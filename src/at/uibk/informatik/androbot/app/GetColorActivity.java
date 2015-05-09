@@ -29,285 +29,224 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.View.OnTouchListener;
-import android.widget.SeekBar;
-import android.widget.TextView;
 import at.uibk.informatik.androbot.programms.ColorBlobDetector;
 
-public class GetColorActivity extends Activity implements OnTouchListener,
-		CvCameraViewListener2, SeekBar.OnSeekBarChangeListener {
-	private static final String TAG = "ColorDetection";
+public class GetColorActivity extends Activity implements OnTouchListener, CvCameraViewListener2 {
+    private static final String  TAG              = "ColorDetection";
 
-	private boolean mIsColorSelected = false;
-	private Mat mRgba;
-	private Scalar mBlobColorRgba;
-	private Scalar mBlobColorHsv;
-	private ColorBlobDetector mDetector;
-	private Mat mSpectrum;
-	private Size SPECTRUM_SIZE;
-	private Scalar CONTOUR_COLOR;
+    private boolean              mIsColorSelected = false;
+    private Mat                  mRgba;
+    private Scalar               mBlobColorRgba;
+    private Scalar               mBlobColorHsv;
+    private ColorBlobDetector    mDetector;
+    private Mat                  mSpectrum;
+    private Size                 SPECTRUM_SIZE;
+    private Scalar               CONTOUR_COLOR;
+    
+    public static Mat homoMat;
+    public static Scalar color;
+    private int frames;
 
-	public static Mat homoMat;
-	private Scalar defaultColor = new Scalar(120.0, 255.0, 110.0, 0.0);
+    private CameraBridgeViewBase mOpenCvCameraView;
+   
+    
+    private BaseLoaderCallback  mLoaderCallback = new BaseLoaderCallback(this) {
+        @Override
+        public void onManagerConnected(int status) {
+            switch (status) {
+                case LoaderCallbackInterface.SUCCESS:
+                {
+                    Log.i(TAG, "OpenCV loaded successfully");
+                    mOpenCvCameraView.enableView();
+                    mOpenCvCameraView.setOnTouchListener(GetColorActivity.this);
+                } break;
+                default:
+                {
+                    super.onManagerConnected(status);
+                } break;
+            }
+        }
+    };
 
-	private CameraBridgeViewBase mOpenCvCameraView;
+    public GetColorActivity() {
+        Log.i(TAG, "Instantiated new " + this.getClass());
+    }
 
-	private BaseLoaderCallback mLoaderCallback = new BaseLoaderCallback(this) {
-		@Override
-		public void onManagerConnected(int status) {
-			switch (status) {
-			case LoaderCallbackInterface.SUCCESS: {
-				Log.i(TAG, "OpenCV loaded successfully");
-				mOpenCvCameraView.enableView();
-				mOpenCvCameraView.setOnTouchListener(GetColorActivity.this);
-			}
-				break;
-			default: {
-				super.onManagerConnected(status);
-			}
-				break;
-			}
-		}
-	};
+    /** Called when the activity is first created. */
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        Log.i(TAG, "called onCreate");
+        super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
-	public GetColorActivity() {
-		Log.i(TAG, "Instantiated new " + this.getClass());
-	}
+        setContentView(R.layout.color_ident);
 
-	/** Called when the activity is first created. */
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		Log.i(TAG, "called onCreate");
-		super.onCreate(savedInstanceState);
-		requestWindowFeature(Window.FEATURE_NO_TITLE);
-		getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        
+        mOpenCvCameraView = (CameraBridgeViewBase) findViewById(R.id.color_blob_detection_activity_surface_view);        
+        mOpenCvCameraView.setCvCameraViewListener(this);
+        this.frames  =0;
+    }
 
-		setContentView(R.layout.color_identification);
+    @Override
+    public void onPause()
+    {
+        super.onPause();
+        if (mOpenCvCameraView != null)
+            mOpenCvCameraView.disableView();
+    }
 
-		// get seek bar objects
-		SeekBar h = (SeekBar) findViewById(R.id.seekH);
-		SeekBar s = (SeekBar) findViewById(R.id.seekS);
-		SeekBar v = (SeekBar) findViewById(R.id.seekV);
+    @Override
+    public void onResume()
+    {
+        super.onResume();
+        OpenCVLoader.initAsync(OpenCVLoader.OPENCV_VERSION_2_4_3, this, mLoaderCallback);
+    }
 
-		// register listeners
-		h.setOnSeekBarChangeListener(this);
-		s.setOnSeekBarChangeListener(this);
-		v.setOnSeekBarChangeListener(this);
+    public void onDestroy() {
+        super.onDestroy();
+        if (mOpenCvCameraView != null)
+            mOpenCvCameraView.disableView();
+    }
 
-		// set default values
-		h.setProgress((int) defaultColor.val[0]);
-		s.setProgress((int) defaultColor.val[1]);
-		v.setProgress((int) defaultColor.val[2]);
+    public void onCameraViewStarted(int width, int height) {
+        mRgba = new Mat(height, width, CvType.CV_8UC4);
+        mDetector = new ColorBlobDetector();
+        mDetector.setHomoMat(homoMat);
+        mSpectrum = new Mat();
+        mBlobColorRgba = new Scalar(255);
+        mBlobColorHsv = new Scalar(255);
+        SPECTRUM_SIZE = new Size(200, 64);
+        CONTOUR_COLOR = new Scalar(255,0,0,255);
+    
+        
+        //mBlobColorHsv = color;
+        //mDetector.setHsvColor(mBlobColorHsv);
+        //mIsColorSelected = true;       
+    }
 
-		TextView lblH = (TextView) findViewById(R.id.txtH);
-		TextView lblS = (TextView) findViewById(R.id.txtS);
-		TextView lblV = (TextView) findViewById(R.id.txtV);
+    public void onCameraViewStopped() {
+        mRgba.release();
+    }
 
-		// fill values on screen
-		lblH.setText(Integer.toString(h.getProgress()));
-		lblS.setText(Integer.toString(s.getProgress()));
-		lblV.setText(Integer.toString(v.getProgress()));
+    public boolean onTouch(View v, MotionEvent event) {
+        int cols = mRgba.cols();
+        int rows = mRgba.rows();
 
-		mOpenCvCameraView = (CameraBridgeViewBase) findViewById(R.id.color_blob_detection_activity_surface_view);
-		mOpenCvCameraView.setCvCameraViewListener(this);
+        int xOffset = (mOpenCvCameraView.getWidth() - cols) / 2;
+        int yOffset = (mOpenCvCameraView.getHeight() - rows) / 2;
 
-	}
+        int x = (int)event.getX() - xOffset;
+        int y = (int)event.getY() - yOffset;
 
-	@Override
-	public void onPause() {
-		super.onPause();
-		if (mOpenCvCameraView != null)
-			mOpenCvCameraView.disableView();
-	}
+        Log.i(TAG, "Touch image coordinates: (" + x + ", " + y + ")");
 
-	@Override
-	public void onResume() {
-		super.onResume();
-		OpenCVLoader.initAsync(OpenCVLoader.OPENCV_VERSION_2_4_3, this,
-				mLoaderCallback);
-	}
+        if ((x < 0) || (y < 0) || (x > cols) || (y > rows)) return false;
 
-	public void onDestroy() {
-		super.onDestroy();
-		if (mOpenCvCameraView != null)
-			mOpenCvCameraView.disableView();
-	}
+        Rect touchedRect = new Rect();
 
-	public void onCameraViewStarted(int width, int height) {
-		mRgba = new Mat(height, width, CvType.CV_8UC4);
-		mDetector = new ColorBlobDetector();
-		mDetector.setHomoMat(homoMat);
-		mSpectrum = new Mat();
-		mBlobColorRgba = new Scalar(255);
-		mBlobColorHsv = new Scalar(255);
-		SPECTRUM_SIZE = new Size(200, 64);
-		CONTOUR_COLOR = new Scalar(255, 0, 0, 255);
+        touchedRect.x = (x>4) ? x-4 : 0;
+        touchedRect.y = (y>4) ? y-4 : 0;
 
-		// default color
-		mBlobColorHsv = defaultColor;
-		mDetector.setHsvColor(mBlobColorHsv);
-		mIsColorSelected = true;
-	}
+        touchedRect.width = (x+4 < cols) ? x + 4 - touchedRect.x : cols - touchedRect.x;
+        touchedRect.height = (y+4 < rows) ? y + 4 - touchedRect.y : rows - touchedRect.y;
 
-	public void onCameraViewStopped() {
-		mRgba.release();
-	}
+        Mat touchedRegionRgba = mRgba.submat(touchedRect);
 
-	public boolean onTouch(View v, MotionEvent event) {
-		int cols = mRgba.cols();
-		int rows = mRgba.rows();
+        Mat touchedRegionHsv = new Mat();
+        Imgproc.cvtColor(touchedRegionRgba, touchedRegionHsv, Imgproc.COLOR_RGB2HSV_FULL);
 
-		int xOffset = (mOpenCvCameraView.getWidth() - cols) / 2;
-		int yOffset = (mOpenCvCameraView.getHeight() - rows) / 2;
+        // Calculate average color of touched region
+        mBlobColorHsv = Core.sumElems(touchedRegionHsv);
+        int pointCount = touchedRect.width*touchedRect.height;
+        for (int i = 0; i < mBlobColorHsv.val.length; i++)
+            mBlobColorHsv.val[i] /= pointCount;
 
-		int x = (int) event.getX() - xOffset;
-		int y = (int) event.getY() - yOffset;
+        Log.d(TAG, String.format("Touched values: %f %f %f %f", mBlobColorHsv.val[0], mBlobColorHsv.val[1], mBlobColorHsv.val[2], mBlobColorHsv.val[3]));
+        mBlobColorRgba = converScalarHsv2Rgba(mBlobColorHsv);
 
-		if ((x < 0) || (y < 0) || (x > cols) || (y > rows))
-			return false;
+        Log.i(TAG, "Touched rgba color: (" + mBlobColorRgba.val[0] + ", " + mBlobColorRgba.val[1] +
+                ", " + mBlobColorRgba.val[2] + ", " + mBlobColorRgba.val[3] + ")");
 
-		Rect touchedRect = new Rect();
+        mDetector.setHsvColor(mBlobColorHsv);
 
-		touchedRect.x = (x > 4) ? x - 4 : 0;
-		touchedRect.y = (y > 4) ? y - 4 : 0;
+        Imgproc.resize(mDetector.getSpectrum(), mSpectrum, SPECTRUM_SIZE);
 
-		touchedRect.width = (x + 4 < cols) ? x + 4 - touchedRect.x : cols
-				- touchedRect.x;
-		touchedRect.height = (y + 4 < rows) ? y + 4 - touchedRect.y : rows
-				- touchedRect.y;
+        mIsColorSelected = true;
 
-		Mat touchedRegionRgba = mRgba.submat(touchedRect);
+        touchedRegionRgba.release();
+        touchedRegionHsv.release();
 
-		Mat touchedRegionHsv = new Mat();
-		Imgproc.cvtColor(touchedRegionRgba, touchedRegionHsv,
-				Imgproc.COLOR_RGB2HSV_FULL);
+        return false; // don't need subsequent touch events
+    }
 
-		// Calculate average color of touched region
-		mBlobColorHsv = Core.sumElems(touchedRegionHsv);
-		int pointCount = touchedRect.width * touchedRect.height;
-		for (int i = 0; i < mBlobColorHsv.val.length; i++)
-			mBlobColorHsv.val[i] /= pointCount;
+    public Mat onCameraFrame(CvCameraViewFrame inputFrame) {   
+    	
+    	mRgba = inputFrame.rgba();
+    	frames++;
+    	
+    	if(frames < 10){
+    		return mRgba;
+    	}
 
-		Log.d(TAG, String.format("Touched values: %f %f %f %f",
-				mBlobColorHsv.val[0], mBlobColorHsv.val[1],
-				mBlobColorHsv.val[2], mBlobColorHsv.val[3]));
-		mBlobColorRgba = converScalarHsv2Rgba(mBlobColorHsv);
+        if (mIsColorSelected) {
+            mDetector.process(mRgba);
+            List<MatOfPoint> contours = mDetector.getContours();
+            
+            
+            if(contours.size() > 0){
+            	MatOfPoint mat = contours.get(0);
+            	
+            	List<Point> list = mat.toList();
+            	
+            	double min = Double.MAX_VALUE;
+            	Point ball = null;
+            	for(Point p: list){
+            		if(p.y < min){
+            			min = p.y;
+            			ball = p;
+            		}
+            	}
+            	
+            	Log.d(TAG, String.format("Ball @ x:%f y:%f\n", ball.x, ball.y));   
+            	
+            	
+            	Point pos = mDetector.getPos(ball);            	
+            	BlobActivity.ball = pos; 	
+            	
+            	Intent blob = new Intent(this, BlobActivity.class);
+				startActivity(blob);
+				finish();
+            }
+            
+            Log.e(TAG, "Contours count: " + contours.size());
+            Imgproc.drawContours(mRgba, contours, -1, CONTOUR_COLOR);
 
-		Log.i(TAG, "Touched rgba color: (" + mBlobColorRgba.val[0] + ", "
-				+ mBlobColorRgba.val[1] + ", " + mBlobColorRgba.val[2] + ", "
-				+ mBlobColorRgba.val[3] + ")");
+            Mat colorLabel = mRgba.submat(4, 68, 4, 68);
+            colorLabel.setTo(mBlobColorRgba);
 
-		mDetector.setHsvColor(mBlobColorHsv);
+            Mat spectrumLabel = mRgba.submat(4, 4 + mSpectrum.rows(), 70, 70 + mSpectrum.cols());
+            mSpectrum.copyTo(spectrumLabel);
+            
+            if(frames > 50){
+            	BlobActivity.ball = null;
+            	Intent blob = new Intent(this, BlobActivity.class);
+				startActivity(blob);
+				finish();
+            }
+        }
 
-		//set seek bar values
-		// get seek bar objects
-		SeekBar h   = (SeekBar) findViewById(R.id.seekH);
-		SeekBar s   = (SeekBar) findViewById(R.id.seekS);
-		SeekBar vau = (SeekBar) findViewById(R.id.seekV);
+        return mRgba;
+    }
 
-		// set default values
-		h.setProgress((int) mBlobColorHsv.val[0]);
-		s.setProgress((int) mBlobColorHsv.val[1]);
-		vau.setProgress((int) mBlobColorHsv.val[2]);
-		
-		Imgproc.resize(mDetector.getSpectrum(), mSpectrum, SPECTRUM_SIZE);
+    private Scalar converScalarHsv2Rgba(Scalar hsvColor) {
+        Mat pointMatRgba = new Mat();
+        Mat pointMatHsv = new Mat(1, 1, CvType.CV_8UC3, hsvColor);
+        Imgproc.cvtColor(pointMatHsv, pointMatRgba, Imgproc.COLOR_HSV2RGB_FULL, 4);
 
-		mIsColorSelected = true;
-
-		touchedRegionRgba.release();
-		touchedRegionHsv.release();
-
-		return false; // don't need subsequent touch events
-	}
-
-	public Mat onCameraFrame(CvCameraViewFrame inputFrame) {
-
-		mRgba = inputFrame.rgba();
-
-		if (mIsColorSelected) {
-			mDetector.process(mRgba);
-			List<MatOfPoint> contours = mDetector.getContours();
-
-			Log.e(TAG, "Contours count: " + contours.size());
-			Imgproc.drawContours(mRgba, contours, -1, CONTOUR_COLOR);
-
-			Mat colorLabel = mRgba.submat(4, 68, 4, 68);
-			colorLabel.setTo(mBlobColorRgba);
-
-			Mat spectrumLabel = mRgba.submat(4, 4 + mSpectrum.rows(), 70,
-					70 + mSpectrum.cols());
-			mSpectrum.copyTo(spectrumLabel);
-
-		}
-
-		return mRgba;
-	}
-
-	private Scalar converScalarHsv2Rgba(Scalar hsvColor) {
-		Mat pointMatRgba = new Mat();
-		Mat pointMatHsv = new Mat(1, 1, CvType.CV_8UC3, hsvColor);
-		Imgproc.cvtColor(pointMatHsv, pointMatRgba, Imgproc.COLOR_HSV2RGB_FULL,
-				4);
-
-		return new Scalar(pointMatRgba.get(0, 0));
-	}
-
-	@Override
-	public void onProgressChanged(SeekBar seekBar, int progress,
-			boolean fromUser) {
-
-		if (mDetector == null) {
-			return;
-		}
-
-		Log.d(TAG, "SeekBar: " + seekBar.getId() + "; Progress: " + progress);
-
-		switch (seekBar.getId()) {
-		case (R.id.seekH):
-			mBlobColorHsv.val[0] = (double) progress;
-			TextView lblH = (TextView) findViewById(R.id.txtH);
-			lblH.setText(Integer.toString(progress));
-			break;
-		case (R.id.seekS):
-			mBlobColorHsv.val[1] = (double) progress;
-			TextView lblS = (TextView) findViewById(R.id.txtS);
-			lblS.setText(Integer.toString(progress));
-			break;
-		case (R.id.seekV):
-			mBlobColorHsv.val[2] = (double) progress;
-			TextView lblV = (TextView) findViewById(R.id.txtV);
-			lblV.setText(Integer.toString(progress));
-			break;
-		}
-
-		// set new color in color detector
-		mDetector.setHsvColor(mBlobColorHsv);
-
-	}
-
-	@Override
-	public void onStartTrackingTouch(SeekBar seekBar) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void onStopTrackingTouch(SeekBar seekBar) {
-		// TODO Auto-generated method stub
-
-	}
-	
-	//select as color 1
-	public void onSetColor1(View v){
-		
-		BeaconDetectionActivity.color1 = mBlobColorHsv;
-		
-	}
-	
-	//select as color 2
-	public void onSetColor2(View v){
-		
-		BeaconDetectionActivity.color2 = mBlobColorHsv;
-		
-	}
+        return new Scalar(pointMatRgba.get(0, 0));
+    }
+    
 
 }
+
