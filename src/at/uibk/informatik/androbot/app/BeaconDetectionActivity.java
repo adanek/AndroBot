@@ -22,8 +22,10 @@ public class BeaconDetectionActivity extends Activity{
 
 	private BeaconDetection prog;
 	private static Mat homoMat;
-	public static Scalar color1;
-	public static Scalar color2;
+	public static Scalar red;
+	public static Scalar blue;
+	public static Scalar yellow;
+	public static Scalar white;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -53,10 +55,23 @@ public class BeaconDetectionActivity extends Activity{
 	//on start
 	public void onStart(View v){
 		
+		//check if homography matrix is set
+//		if(homoMat == null || homoMat.empty() == true){
+//			Log.d(LOG_TAG, "Homography matrix not set");
+//			return;
+//		}
+		
 		Log.d(LOG_TAG, "Beacon Detection started");
 		
-		Log.d(LOG_TAG, "Color1: " + color1.val[0] + " " + color1.val[1] + " " + color1.val[2]);
-		Log.d(LOG_TAG, "Color2: " + color2.val[0] + " " + color2.val[1] + " " + color2.val[2]);
+		//log color values
+		Log.d(LOG_TAG, "Red: " + red.val[0] + " " + red.val[1] + " " + red.val[2]);
+		Log.d(LOG_TAG, "Blue: " + blue.val[0] + " " + blue.val[1] + " " + blue.val[2]);
+		Log.d(LOG_TAG, "Yellow: " + yellow.val[0] + " " + yellow.val[1] + " " + yellow.val[2]);
+		Log.d(LOG_TAG, "White: " + white.val[0] + " " + white.val[1] + " " + white.val[2]);
+		
+		//call self localization activity
+		Intent sl = new Intent(this, SelfLocalizationActivity.class);
+		startActivity(sl);
 	}
 	
 	//call homography activity

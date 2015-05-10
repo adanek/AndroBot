@@ -31,11 +31,14 @@ import android.view.WindowManager;
 import android.view.View.OnTouchListener;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import at.uibk.informatik.androbot.data.Beacon;
+import at.uibk.informatik.androbot.data.Element;
+import at.uibk.informatik.androbot.enums.Colors;
 import at.uibk.informatik.androbot.programms.ColorBlobDetector;
 
-public class GetColorActivity extends Activity implements OnTouchListener,
-		CvCameraViewListener2, SeekBar.OnSeekBarChangeListener {
-	private static final String TAG = "ColorDetection";
+public class SelfLocalizationActivity extends Activity implements OnTouchListener,
+		CvCameraViewListener2 {
+	private static final String TAG = "SelfLocalization";
 
 	private boolean mIsColorSelected = false;
 	private Mat mRgba;
@@ -47,7 +50,14 @@ public class GetColorActivity extends Activity implements OnTouchListener,
 	private Scalar CONTOUR_COLOR;
 
 	public static Mat homoMat;
-	private Scalar defaultColor = new Scalar(120.0, 255.0, 110.0, 0.0);
+	private Scalar red;
+	private Scalar blue;
+	private Scalar yellow;
+	private Scalar white;
+	private Colors current;
+	private int frame = 0;
+	private List<Beacon> beacons;
+	private List<Element> elements;
 
 	private CameraBridgeViewBase mOpenCvCameraView;
 
@@ -58,7 +68,7 @@ public class GetColorActivity extends Activity implements OnTouchListener,
 			case LoaderCallbackInterface.SUCCESS: {
 				Log.i(TAG, "OpenCV loaded successfully");
 				mOpenCvCameraView.enableView();
-				mOpenCvCameraView.setOnTouchListener(GetColorActivity.this);
+				mOpenCvCameraView.setOnTouchListener(SelfLocalizationActivity.this);
 			}
 				break;
 			default: {
@@ -69,7 +79,7 @@ public class GetColorActivity extends Activity implements OnTouchListener,
 		}
 	};
 
-	public GetColorActivity() {
+	public SelfLocalizationActivity() {
 		Log.i(TAG, "Instantiated new " + this.getClass());
 	}
 
@@ -81,35 +91,17 @@ public class GetColorActivity extends Activity implements OnTouchListener,
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
-		setContentView(R.layout.color_identification);
-
-		// get seek bar objects
-		SeekBar h = (SeekBar) findViewById(R.id.seekH);
-		SeekBar s = (SeekBar) findViewById(R.id.seekS);
-		SeekBar v = (SeekBar) findViewById(R.id.seekV);
-
-		// register listeners
-		h.setOnSeekBarChangeListener(this);
-		s.setOnSeekBarChangeListener(this);
-		v.setOnSeekBarChangeListener(this);
-
-		// set default values
-		h.setProgress((int) defaultColor.val[0]);
-		s.setProgress((int) defaultColor.val[1]);
-		v.setProgress((int) defaultColor.val[2]);
-
-		TextView lblH = (TextView) findViewById(R.id.txtH);
-		TextView lblS = (TextView) findViewById(R.id.txtS);
-		TextView lblV = (TextView) findViewById(R.id.txtV);
-
-		// fill values on screen
-		lblH.setText(Integer.toString(h.getProgress()));
-		lblS.setText(Integer.toString(s.getProgress()));
-		lblV.setText(Integer.toString(v.getProgress()));
+		setContentView(R.layout.color_blob_detection_surface_view);
 
 		mOpenCvCameraView = (CameraBridgeViewBase) findViewById(R.id.color_blob_detection_activity_surface_view);
 		mOpenCvCameraView.setCvCameraViewListener(this);
 
+		//set colors
+		red = BeaconDetectionActivity.red;
+		blue = BeaconDetectionActivity.blue;
+		yellow = BeaconDetectionActivity.yellow;
+		white = BeaconDetectionActivity.white;
+		
 	}
 
 	@Override
@@ -124,6 +116,8 @@ public class GetColorActivity extends Activity implements OnTouchListener,
 		super.onResume();
 		OpenCVLoader.initAsync(OpenCVLoader.OPENCV_VERSION_2_4_3, this,
 				mLoaderCallback);
+		
+		initializeBeacons();
 	}
 
 	public void onDestroy() {
@@ -142,10 +136,13 @@ public class GetColorActivity extends Activity implements OnTouchListener,
 		SPECTRUM_SIZE = new Size(200, 64);
 		CONTOUR_COLOR = new Scalar(255, 0, 0, 255);
 
-		// default color
-		mBlobColorHsv = defaultColor;
+		// begin with red
+		mBlobColorHsv = red;
 		mDetector.setHsvColor(mBlobColorHsv);
 		mIsColorSelected = true;
+		
+		frame = 0;
+		current = Colors.RED;
 	}
 
 	public void onCameraViewStopped() {
@@ -198,17 +195,6 @@ public class GetColorActivity extends Activity implements OnTouchListener,
 
 		mDetector.setHsvColor(mBlobColorHsv);
 
-		//set seek bar values
-		// get seek bar objects
-		SeekBar h   = (SeekBar) findViewById(R.id.seekH);
-		SeekBar s   = (SeekBar) findViewById(R.id.seekS);
-		SeekBar vau = (SeekBar) findViewById(R.id.seekV);
-
-		// set default values
-		h.setProgress((int) mBlobColorHsv.val[0]);
-		s.setProgress((int) mBlobColorHsv.val[1]);
-		vau.setProgress((int) mBlobColorHsv.val[2]);
-		
 		Imgproc.resize(mDetector.getSpectrum(), mSpectrum, SPECTRUM_SIZE);
 
 		mIsColorSelected = true;
@@ -223,6 +209,29 @@ public class GetColorActivity extends Activity implements OnTouchListener,
 
 		mRgba = inputFrame.rgba();
 
+		frame++;
+		
+		//begin test
+		
+		//change color to blue
+		if(frame == 100){
+			mBlobColorHsv = blue;
+			mDetector.setHsvColor(mBlobColorHsv);
+			current = Colors.BLUE;
+		//change color to yellow
+		} else if(frame == 200){
+			mBlobColorHsv = yellow;
+			mDetector.setHsvColor(mBlobColorHsv);
+			current = Colors.YELLOW;
+		//change color to white
+		} else if(frame == 300){
+			mBlobColorHsv = white;
+			mDetector.setHsvColor(mBlobColorHsv);
+			current = Colors.WHITE;
+		}
+		
+		//end test
+		
 		if (mIsColorSelected) {
 			mDetector.process(mRgba);
 			List<MatOfPoint> contours = mDetector.getContours();
@@ -236,6 +245,49 @@ public class GetColorActivity extends Activity implements OnTouchListener,
 			Mat spectrumLabel = mRgba.submat(4, 4 + mSpectrum.rows(), 70,
 					70 + mSpectrum.cols());
 			mSpectrum.copyTo(spectrumLabel);
+			
+			
+			//check all contours
+			for(int i = 0; i < contours.size(); i++){
+				
+				//get current contour
+				MatOfPoint mat = contours.get(i);
+				
+				//get point list
+				List<Point> list = mat.toList();
+				
+            	double minX = Double.MAX_VALUE;
+            	double maxX = Double.MIN_VALUE;
+            	double minY = Double.MAX_VALUE;
+            	Point lowest = new Point();
+            	for(Point p: list){
+            		
+            		//lowest y
+            		if(p.y < minY){
+            			minY = p.y;
+            		}
+            		
+            		//minimum X
+            		if(p.x < minX){
+            			minX = p.x;
+            		}
+            		
+            		//maximum X
+            		if(p.x > maxX){
+            			minX = p.x;
+            		}
+            		
+            	}
+            	
+            	//calculate middle X
+            	lowest.y = minY;
+            	lowest.x = (maxX + minX) / 2;
+				
+				Element elem = new Element(current,lowest);
+				
+				//add element to elements list
+				elements.add(elem);
+			}
 
 		}
 
@@ -250,75 +302,49 @@ public class GetColorActivity extends Activity implements OnTouchListener,
 
 		return new Scalar(pointMatRgba.get(0, 0));
 	}
-
-	@Override
-	public void onProgressChanged(SeekBar seekBar, int progress,
-			boolean fromUser) {
-
-		if (mDetector == null) {
-			return;
+	
+	//initialize beacons
+	private void initializeBeacons(){
+		
+		//refresh beacons
+		if(beacons != null && beacons.isEmpty() == false){
+			beacons.clear();
 		}
-
-		Log.d(TAG, "SeekBar: " + seekBar.getId() + "; Progress: " + progress);
-
-		switch (seekBar.getId()) {
-		case (R.id.seekH):
-			mBlobColorHsv.val[0] = (double) progress;
-			TextView lblH = (TextView) findViewById(R.id.txtH);
-			lblH.setText(Integer.toString(progress));
-			break;
-		case (R.id.seekS):
-			mBlobColorHsv.val[1] = (double) progress;
-			TextView lblS = (TextView) findViewById(R.id.txtS);
-			lblS.setText(Integer.toString(progress));
-			break;
-		case (R.id.seekV):
-			mBlobColorHsv.val[2] = (double) progress;
-			TextView lblV = (TextView) findViewById(R.id.txtV);
-			lblV.setText(Integer.toString(progress));
-			break;
-		}
-
-		// set new color in color detector
-		mDetector.setHsvColor(mBlobColorHsv);
-
-	}
-
-	@Override
-	public void onStartTrackingTouch(SeekBar seekBar) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void onStopTrackingTouch(SeekBar seekBar) {
-		// TODO Auto-generated method stub
-
+		
+		//create beacon list
+		beacons.add(addBeacon(125,125,Colors.RED,Colors.YELLOW));
+		beacons.add(addBeacon(125,0,Colors.WHITE,Colors.RED));
+		beacons.add(addBeacon(125,-125,Colors.YELLOW,Colors.RED));
+		beacons.add(addBeacon(0,-125,Colors.RED,Colors.BLUE));
+		beacons.add(addBeacon(-125,-125,Colors.YELLOW,Colors.BLUE));
+		beacons.add(addBeacon(-125,0,Colors.WHITE,Colors.BLUE));
+		beacons.add(addBeacon(-125,125,Colors.BLUE,Colors.YELLOW));
+		beacons.add(addBeacon(0,125,Colors.BLUE,Colors.RED));
+			
 	}
 	
-	//select as red
-	public void onSetRed(View v){
+	//create new beacon
+	private Beacon addBeacon(int x, int y, Colors upper, Colors lower){
 		
-		BeaconDetectionActivity.red = mBlobColorHsv;
-		
+		return new Beacon(x,y,upper,lower);
+	
 	}
 	
-	//select as blue
-	public void onSetBlue(View v){
+	//get beacon by color
+	private Beacon getBeaconByColor(Colors upper, Colors lower){
 		
-		BeaconDetectionActivity.blue = mBlobColorHsv;
+		Beacon b = null;
+		for(int i = 0; i < beacons.size(); i++){
+			
+			b = beacons.get(i);
+			
+			if(b.getUpper().equals(upper) && b.getLower().equals(lower)){
+				break;
+			}
+			
+		}
 		
-	}
-	//select as yellow
-	public void onSetYellow(View v){
-		
-		BeaconDetectionActivity.yellow = mBlobColorHsv;
-		
-	}
-	//select as white
-	public void onSetWhite(View v){
-		
-		BeaconDetectionActivity.white = mBlobColorHsv;
+		return b;
 		
 	}
 

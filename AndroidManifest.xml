@@ -66,6 +66,12 @@
             android:label="@string/app_name"
             android:configChanges="keyboardHidden|orientation">
         </activity>
+         <activity
+            android:name=".SelfLocalizationActivity"
+            android:screenOrientation="landscape"
+            android:label="@string/app_name"
+            android:configChanges="keyboardHidden|orientation">
+        </activity>
     </application>
        
     <supports-screens android:resizeable="true"

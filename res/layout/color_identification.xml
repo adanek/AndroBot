@@ -116,22 +116,40 @@
         android:layout_marginLeft="440dp" />      
         
         <Button
-        android:id="@+id/btnColor2"
-        android:layout_width="wrap_content"
+        android:id="@+id/btnBlue"
+        android:layout_width="40dp"
         android:layout_height="wrap_content"
-        android:onClick="onSetColor2"
-        android:text="Color2"
+        android:onClick="onSetBlue"
+        android:text="B"
         android:layout_marginTop="215dp"
-        android:layout_marginLeft="440dp" />             
+        android:layout_marginLeft="390dp" />             
            
         
         <Button
-        android:id="@+id/btnColor1"
-        android:layout_width="wrap_content"
+        android:id="@+id/btnRed"
+        android:layout_width="40dp"
         android:layout_height="wrap_content"
-        android:onClick="onSetColor1"
-        android:text="Color1"
+        android:onClick="onSetRed"
+        android:text="R"
         android:layout_marginTop="215dp"
         android:layout_marginLeft="340dp" /> 
+        
+                <Button
+        android:id="@+id/btnYellow"
+        android:layout_width="40dp"
+        android:layout_height="wrap_content"
+        android:onClick="onSetYellow"
+        android:text="Y"
+        android:layout_marginTop="215dp"
+        android:layout_marginLeft="440dp" /> 
+        
+        <Button
+        android:id="@+id/btnWhite"
+        android:layout_width="40dp"
+        android:layout_height="wrap_content"
+        android:onClick="onSetWhite"
+        android:text="W"
+        android:layout_marginTop="215dp"
+        android:layout_marginLeft="490dp" /> 
         
 </RelativeLayout>
