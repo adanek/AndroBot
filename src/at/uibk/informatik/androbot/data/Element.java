@@ -4,7 +4,7 @@ import org.opencv.core.Point;
 
 import at.uibk.informatik.androbot.enums.Colors;
 
-public class Element {
+public class Element implements Comparable {
 
 	private Colors col;
 	private Point p;
@@ -31,6 +31,18 @@ public class Element {
 
 	public void setP(Point p) {
 		this.p = p;
+	}
+	
+	@Override
+	public String toString() {
+		return String.format("%s x:%f y:%f\n", col.toString(), p.x, p.y);		
+	}
+
+	@Override
+	public int compareTo(Object arg0) {
+
+		Element other = (Element) arg0;
+		return (int) Math.round( this.p.x - other.p.x);		
 	}
 	
 }

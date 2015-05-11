@@ -1,5 +1,7 @@
 package at.uibk.informatik.androbot.app;
 
+import java.util.List;
+
 import org.opencv.core.Mat;
 import org.opencv.core.Point;
 import org.opencv.core.Scalar;
@@ -15,6 +17,7 @@ import android.widget.RadioGroup;
 import at.uibk.informatik.androbot.control.Position;
 import at.uibk.informatik.androbot.programms.BeaconDetection;
 import at.uibk.informatik.androbot.programms.BlobDetection;
+import at.uibk.informatik.androbot.data.Element;
 
 public class BeaconDetectionActivity extends Activity{
 
@@ -22,10 +25,11 @@ public class BeaconDetectionActivity extends Activity{
 
 	private BeaconDetection prog;
 	private static Mat homoMat;
-	public static Scalar red;
-	public static Scalar blue;
-	public static Scalar yellow;
-	public static Scalar white;
+	public static Scalar red = new Scalar(252.0,225.0,216.0,0.0);
+	public static Scalar blue = new Scalar(149.0,188.0,100.0,0.0);
+	public static Scalar yellow = new Scalar(35.0,200.0,180.0,0.0);
+	public static Scalar white = new Scalar(134.0,209.0,215.0,0.0);
+	public static Position current;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
