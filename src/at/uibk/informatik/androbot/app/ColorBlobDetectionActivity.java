@@ -246,6 +246,6 @@ public class ColorBlobDetectionActivity extends Activity implements OnTouchListe
 
         return new Scalar(pointMatRgba.get(0, 0));
     }
-    
+
 
 }

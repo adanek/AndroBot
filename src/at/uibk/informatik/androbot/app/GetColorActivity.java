@@ -88,16 +88,28 @@ public class GetColorActivity extends Activity implements OnTouchListener,
 		SeekBar s = (SeekBar) findViewById(R.id.seekS);
 		SeekBar v = (SeekBar) findViewById(R.id.seekV);
 
+		SeekBar hp = (SeekBar) findViewById(R.id.seekHplus);
+		SeekBar sp = (SeekBar) findViewById(R.id.seekSplus);
+		SeekBar vp = (SeekBar) findViewById(R.id.seekVplus);
+		
 		// register listeners
 		h.setOnSeekBarChangeListener(this);
 		s.setOnSeekBarChangeListener(this);
 		v.setOnSeekBarChangeListener(this);
+		hp.setOnSeekBarChangeListener(this);
+		sp.setOnSeekBarChangeListener(this);
+		vp.setOnSeekBarChangeListener(this);
 
 		// set default values
 		h.setProgress((int) defaultColor.val[0]);
 		s.setProgress((int) defaultColor.val[1]);
 		v.setProgress((int) defaultColor.val[2]);
-
+		
+		// set default values
+		hp.setProgress(25);
+		sp.setProgress(50);
+		vp.setProgress(50);
+		
 		TextView lblH = (TextView) findViewById(R.id.txtH);
 		TextView lblS = (TextView) findViewById(R.id.txtS);
 		TextView lblV = (TextView) findViewById(R.id.txtV);
@@ -240,6 +252,7 @@ public class GetColorActivity extends Activity implements OnTouchListener,
 		}
 
 		return mRgba;
+
 	}
 
 	private Scalar converScalarHsv2Rgba(Scalar hsvColor) {
@@ -276,6 +289,15 @@ public class GetColorActivity extends Activity implements OnTouchListener,
 			mBlobColorHsv.val[2] = (double) progress;
 			TextView lblV = (TextView) findViewById(R.id.txtV);
 			lblV.setText(Integer.toString(progress));
+			break;
+		case (R.id.seekHplus):
+			mDetector.setColorRadius(new Scalar((double) progress, mDetector.getmColorRadius().val[1],mDetector.getmColorRadius().val[2]));
+			break;
+		case (R.id.seekSplus):
+			mDetector.setColorRadius(new Scalar(mDetector.getmColorRadius().val[0], (double) progress,mDetector.getmColorRadius().val[2]));
+			break;
+		case (R.id.seekVplus):
+			mDetector.setColorRadius(new Scalar(mDetector.getmColorRadius().val[0], mDetector.getmColorRadius().val[1], (double) progress));
 			break;
 		}
 
@@ -321,5 +343,14 @@ public class GetColorActivity extends Activity implements OnTouchListener,
 		BeaconDetectionActivity.white = mBlobColorHsv;
 		
 	}
+	
+    private Mat converScalarRgba2Hsv(Scalar rgbaColor) {
+        Mat pointMatHsv = new Mat();
+        Mat pointMatRgba = new Mat(1, 1, CvType.CV_8UC3, rgbaColor);
+        Imgproc.cvtColor(pointMatRgba, pointMatHsv, Imgproc.COLOR_RGB2HSV, 4);
+
+        //return new Scalar(pointMatHsv.get(0, 0));
+        return pointMatHsv;
+    }
 
 }

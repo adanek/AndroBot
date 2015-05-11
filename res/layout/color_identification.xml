@@ -30,6 +30,14 @@
         android:layout_marginTop="30dp"
         android:layout_marginLeft="340dp"  /> 
     
+        <SeekBar
+        android:id="@+id/seekHplus"
+        android:layout_width="90dp"
+        android:layout_height="wrap_content"
+        android:max="80"
+        android:layout_marginTop="30dp"
+        android:layout_marginLeft="520dp"  /> 
+    
            <TextView
         android:id="@+id/txtLblS"
         android:layout_width="wrap_content"
@@ -47,6 +55,14 @@
         android:layout_marginTop="80dp"
         android:layout_marginLeft="340dp"  /> 
     
+           <SeekBar
+        android:id="@+id/seekSplus"
+        android:layout_width="90dp"
+        android:layout_height="wrap_content"
+        android:max="80"
+        android:layout_marginTop="80dp"
+        android:layout_marginLeft="520dp"  /> 
+    
                <TextView
         android:id="@+id/txtLblV"
         android:layout_width="wrap_content"
@@ -63,6 +79,14 @@
         android:max="255"
         android:layout_marginTop="130dp"
         android:layout_marginLeft="340dp"  /> 
+    
+       <SeekBar
+        android:id="@+id/seekVplus"
+        android:layout_width="90dp"
+        android:layout_height="wrap_content"
+        android:max="80"
+        android:layout_marginTop="130dp"
+        android:layout_marginLeft="520dp"  /> 
     
            <TextView
         android:id="@+id/txtLblH2"

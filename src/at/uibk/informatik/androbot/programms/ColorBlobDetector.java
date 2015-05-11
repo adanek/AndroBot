@@ -44,7 +44,21 @@ public class ColorBlobDetector{
         mColorRadius = radius;
     }
 
-    public void setHsvColor(Scalar hsvColor) {
+    
+    
+    public Scalar getmColorRadius() {
+		return mColorRadius;
+	}
+
+
+
+	public void setmColorRadius(Scalar mColorRadius) {
+		this.mColorRadius = mColorRadius;
+	}
+
+
+
+	public void setHsvColor(Scalar hsvColor) {
         double minH = (hsvColor.val[0] >= mColorRadius.val[0]) ? hsvColor.val[0]-mColorRadius.val[0] : 0;
         double maxH = (hsvColor.val[0]+mColorRadius.val[0] <= 255) ? hsvColor.val[0]+mColorRadius.val[0] : 255;
 
