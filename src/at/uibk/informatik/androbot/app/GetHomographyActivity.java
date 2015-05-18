@@ -176,9 +176,9 @@ public class GetHomographyActivity extends Activity implements
 
 					//mOpenCvCameraView.disableView();
 					
-					// go back to blob activity
-					Intent blob = new Intent(this, BlobActivity.class);
-					startActivity(blob);
+					// go back to beacon activity
+					Intent beacon = new Intent(this, BeaconDetectionActivity.class);
+					startActivity(beacon);
 					finish();
 					break;
 				} else {

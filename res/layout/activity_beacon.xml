@@ -30,6 +30,55 @@
         android:onClick="onGetColor"
         android:text="Get color range" />
         
+             <TextView
+            android:id="@+id/txtLblPos"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Position:"
+            android:textAppearance="?android:attr/textAppearanceSmall" />
+        
+            <TextView
+            android:id="@+id/txtLblX"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="X"
+            android:textAppearance="?android:attr/textAppearanceSmall" />
+        
+            <TextView
+            android:id="@+id/txtX"
+            android:layout_width="70dp"
+            android:layout_height="wrap_content"
+            android:ems="5"
+            android:inputType="numberDecimal|numberSigned" />
+                    
+            <TextView
+            android:id="@+id/txtLblY"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Y"
+            android:textAppearance="?android:attr/textAppearanceSmall" /> 
+            
+            <TextView
+            android:id="@+id/txtY"
+            android:layout_width="70dp"
+            android:layout_height="wrap_content"
+            android:ems="5"
+            android:inputType="numberDecimal|numberSigned" />
+                
+            <TextView
+            android:id="@+id/txtLblTH"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="TH"
+            android:textAppearance="?android:attr/textAppearanceSmall" /> 
+            
+            <TextView
+            android:id="@+id/txtTH"
+            android:layout_width="70dp"
+            android:layout_height="wrap_content"
+            android:ems="5"
+            android:inputType="numberDecimal|numberSigned" />
+        
 </LinearLayout>
 </ScrollView>
         

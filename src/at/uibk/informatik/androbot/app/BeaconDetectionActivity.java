@@ -14,6 +14,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.TextView;
 import at.uibk.informatik.androbot.control.Position;
 import at.uibk.informatik.androbot.programms.BeaconDetection;
 import at.uibk.informatik.androbot.programms.BlobDetection;
@@ -37,6 +38,22 @@ public class BeaconDetectionActivity extends Activity{
 		setContentView(R.layout.activity_beacon);
 		
 		prog = new BeaconDetection(this);
+		
+		TextView x = (TextView) findViewById(R.id.txtX);
+		TextView y = (TextView) findViewById(R.id.txtY);
+		TextView t = (TextView) findViewById(R.id.txtTH);
+		
+		//initialization
+		if(current == null){
+			x.setText(Integer.toString(0));
+			y.setText(Integer.toString(0));
+			t.setText(Integer.toString(0));
+		//position is set
+		}else{
+			x.setText(Integer.toString(current.getX()));
+			y.setText(Integer.toString(current.getY()));
+			t.setText(Integer.toString(current.getTh()));
+		}
 	}
 	
 	@Override
