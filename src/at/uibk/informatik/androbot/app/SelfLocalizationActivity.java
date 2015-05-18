@@ -394,7 +394,9 @@ public class SelfLocalizationActivity extends Activity implements
 			break;
 		}
 		
-		return new Position((int)(beaconRight.getX() + dx), (int)(beaconRight.getY() + dy),0);
+		Position newPos = new Position((int)(beaconRight.getX() + dx), (int)(beaconRight.getY() + dy),0);
+		
+		return newPos;
 		
 	}
 
@@ -461,15 +463,27 @@ public class SelfLocalizationActivity extends Activity implements
 			beacons.clear();
 		}
 
-		// create beacon list
+		
+		//begin test list
 		beacons.add(addBeacon(125, 125, Colors.RED, Colors.YELLOW, 1));
-		beacons.add(addBeacon(125, 0, Colors.WHITE, Colors.RED, 2));
+		beacons.add(addBeacon(-125, 0, Colors.WHITE, Colors.BLUE, 2));
 		beacons.add(addBeacon(125, -125, Colors.YELLOW, Colors.RED, 3));
 		beacons.add(addBeacon(0, -125, Colors.RED, Colors.BLUE, 4));
 		beacons.add(addBeacon(-125, -125, Colors.YELLOW, Colors.BLUE, 5));
-		beacons.add(addBeacon(-125, 0, Colors.WHITE, Colors.BLUE, 6));
+		beacons.add(addBeacon(125, 0, Colors.WHITE, Colors.RED, 6));
 		beacons.add(addBeacon(-125, 125, Colors.BLUE, Colors.YELLOW,7));
 		beacons.add(addBeacon(0, 125, Colors.BLUE, Colors.RED,8));
+		//end test list
+		
+		// create beacon list
+//		beacons.add(addBeacon(125, 125, Colors.RED, Colors.YELLOW, 1));
+//		beacons.add(addBeacon(125, 0, Colors.WHITE, Colors.RED, 2));
+//		beacons.add(addBeacon(125, -125, Colors.YELLOW, Colors.RED, 3));
+//		beacons.add(addBeacon(0, -125, Colors.RED, Colors.BLUE, 4));
+//		beacons.add(addBeacon(-125, -125, Colors.YELLOW, Colors.BLUE, 5));
+//		beacons.add(addBeacon(-125, 0, Colors.WHITE, Colors.BLUE, 6));
+//		beacons.add(addBeacon(-125, 125, Colors.BLUE, Colors.YELLOW,7));
+//		beacons.add(addBeacon(0, 125, Colors.BLUE, Colors.RED,8));
 
 	}
 

@@ -69,7 +69,7 @@ public class Beacon implements Comparable {
 	@Override
 	public int compareTo(Object arg0) {
 		Beacon other = (Beacon) arg0;
-		return other.id - this.id;
+		return this.id - other.id;
 	}
 	
 }

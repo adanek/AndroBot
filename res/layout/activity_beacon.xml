@@ -45,7 +45,7 @@
             android:textAppearance="?android:attr/textAppearanceSmall" />
         
             <TextView
-            android:id="@+id/txtX"
+            android:id="@+id/txtPositionX"
             android:layout_width="70dp"
             android:layout_height="wrap_content"
             android:ems="5"
@@ -59,7 +59,7 @@
             android:textAppearance="?android:attr/textAppearanceSmall" /> 
             
             <TextView
-            android:id="@+id/txtY"
+            android:id="@+id/txtPositionY"
             android:layout_width="70dp"
             android:layout_height="wrap_content"
             android:ems="5"
@@ -73,7 +73,7 @@
             android:textAppearance="?android:attr/textAppearanceSmall" /> 
             
             <TextView
-            android:id="@+id/txtTH"
+            android:id="@+id/txtPositionTH"
             android:layout_width="70dp"
             android:layout_height="wrap_content"
             android:ems="5"

@@ -39,9 +39,9 @@ public class BeaconDetectionActivity extends Activity{
 		
 		prog = new BeaconDetection(this);
 		
-		TextView x = (TextView) findViewById(R.id.txtX);
-		TextView y = (TextView) findViewById(R.id.txtY);
-		TextView t = (TextView) findViewById(R.id.txtTH);
+		TextView x = (TextView) findViewById(R.id.txtPositionX);
+		TextView y = (TextView) findViewById(R.id.txtPositionY);
+		TextView t = (TextView) findViewById(R.id.txtPositionTH);
 		
 		//initialization
 		if(current == null){
@@ -60,6 +60,21 @@ public class BeaconDetectionActivity extends Activity{
 	protected void onResume() {
 		super.onResume();
 		
+		TextView x = (TextView) findViewById(R.id.txtPositionX);
+		TextView y = (TextView) findViewById(R.id.txtPositionY);
+		TextView t = (TextView) findViewById(R.id.txtPositionTH);
+		
+		//initialization
+		if(current == null){
+			x.setText(Integer.toString(0));
+			y.setText(Integer.toString(0));
+			t.setText(Integer.toString(0));
+		//position is set
+		}else{
+ 			x.setText(Integer.toString(current.getX()));
+			y.setText(Integer.toString(current.getY()));
+			t.setText(Integer.toString(current.getTh()));
+		}
 	}
 
 	@Override
@@ -81,6 +96,8 @@ public class BeaconDetectionActivity extends Activity{
 //			Log.d(LOG_TAG, "Homography matrix not set");
 //			return;
 //		}
+		
+		SelfLocalizationActivity.homoMat = homoMat;
 		
 		Log.d(LOG_TAG, "Beacon Detection started");
 		
