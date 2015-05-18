@@ -352,51 +352,114 @@ public class SelfLocalizationActivity extends Activity implements
 			}
 		}
 		
-		Point posB1 = mDetector.getPos(beaconLeft.getPos());
-		Point posB2 = mDetector.getPos(beaconRight.getPos());
-		
-		int b = getDistanceToTarget(new Position(), new Position((int)posB1.x, (int)posB1.y, 0));
-		int a = getDistanceToTarget(new Position(), new Position((int)posB2.x, (int)posB2.y, 0));
-		
-		int c = 125;
-		
-		double beta = (Math.pow(b,2)*-1) + Math.pow(a, 2) + Math.pow(c, 2);
-		beta = beta / (2*a*c);
-		beta = Math.toDegrees(Math.acos(beta));
+		Point Br = mDetector.getPos(beaconLeft.getPos());
+		Point Ar = mDetector.getPos(beaconRight.getPos());		
 
-		double beta1 = Math.toRadians(90 - beta);
-		double d = Math.cos(beta1) * a;
-		double e = Math.sin(beta1) * a;
-		
-		double dx = 0.0;
-		double dy = 0.0;
+        Point Aw = new Point(beaconRight.getX(), beaconRight.getY()); // given
+        int beaconId = beaconRight.getId();
 
-		switch (beaconRight.getId()){
-		case 1:
-		case 8:
-			dy = d * -1;
-			dx = e * -1;
-			break;
-		case 2:
-		case 3:
-			dy = e;
-			dx = d * -1;
-			break;
-		case 4:
-		case 5:
-			dy = d;
-			dx = e;
-			break;
-		case 6:
-		case 7:
-			dy = e *-1;
-			dx = d;
-			break;
-		}
-		
-		Position newPos = new Position((int)(beaconRight.getX() + dx), (int)(beaconRight.getY() + dy),0);
-		
-		return newPos;
+        Point Cr = new Point(0, 0);
+
+        double a = Math.sqrt(Math.pow(Br.x, 2) + Math.pow(Br.y, 2));
+        double b = Math.sqrt(Math.pow(Ar.x, 2) + Math.pow(Ar.y, 2));
+
+        //double a = 27;
+        //double b = 68.5;
+        double c = 45;
+
+        // law of cosinus c2 = a2 + b2 - 2ab cosgamma or
+        // a2 = b2 + c2 - 2bc cos(alpha)
+        // alpha = acos((-(a2) + b2 + c2) / 2bc)
+        double alphaRad = (-1 * Math.pow(a, 2)) + Math.pow(b, 2) + Math.pow(c, 2);
+        alphaRad = Math.acos(alphaRad / (2 * b * c));
+        double alpha = Math.toDegrees(alphaRad);
+
+        // Kompliment to 90  degrees
+        double alpha1 = Math.toRadians(90 - alpha);
+
+        // sin(alpha1) = v / b
+        double u = Math.cos(alpha1) * b;
+
+        // cos(alpha1) = u / b;
+        double v = Math.sin(alpha1) * b;
+
+        double dx = -1 * v;
+        double dy = -1 * u;
+
+        switch (beaconId){
+            case 1:
+            case 8:
+                dx = v * -1;
+                dy = u * -1;
+                break;
+            case 2:
+            case 3:
+                dx = u * -1;
+                dy = v;
+                break;
+            case 4:
+            case 5:
+                dx = v;
+                dy = u;
+                break;
+            case 6:
+            case 7:
+                dx = u;
+                dy = v *-1;
+                break;
+        }
+
+        // Triangle in world coordinates
+        Point Cw = new Point(Aw.x + dx, Aw.y + dy);
+
+        // Geradengleichung der 2 Beacons lösen aus ego Sicht Robot
+        // y = k * x + d
+        double k = (Ar.x - Br.x) == 0 ? 0 : (Ar.y - Br.y) / (Ar.x - Br.x);
+        double d = Ar.y - k * Ar.x;
+
+        // Calculate x for: 0 = k * x + d
+        double a1 = k == 0 ? Ar.x : -d / k;
+        Point S = new Point(a1, 0);
+
+        // law of sinus a/sin(alpha) = b/sin(beta) = c/sin(gamma)
+        double betaRad = Math.asin(Math.sin(alphaRad) * b / a1);
+        double beta1 = Math.toDegrees(betaRad);
+
+        beta1 = a < b ? 180 - beta1 : beta1;
+
+
+        double gamma1 = 180 - alpha - beta1;
+        double gamma2 = 180 - gamma1;
+
+        double offset = 0;
+
+        switch (beaconId) {
+            case 4:
+            case 5:
+                offset = 0;
+                break;
+            case 2:
+            case 3:
+                offset = 90;
+                break;
+            case 1:
+            case 8:
+                offset = 180;
+                break;
+            case 6:
+            case 7:
+                offset = 270;
+                break;
+        }
+
+        double theta = offset + alpha - gamma2;
+
+        // Second half is negative angle
+        theta = theta > 180 ? 0 - (360 - theta) : theta;
+        System.out.println(String.format("x: %f y: %f th: %f", Cw.x, Cw.y, theta));
+        
+        Position current = new Position((int)Math.round(Cw.x),(int) Math.round(Cw.y), (int)Math.round(theta));		
+		return current;
 		
 	}
 
