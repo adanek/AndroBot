@@ -121,6 +121,10 @@ public class BeaconDetectionActivity extends Activity{
 		Log.d(LOG_TAG, "Yellow: " + yellow.val[0] + " " + yellow.val[1] + " " + yellow.val[2]);
 		Log.d(LOG_TAG, "White: " + white.val[0] + " " + white.val[1] + " " + white.val[2]);
 		
+		//reset beacon numbers
+		this.leftBeaconNo = 0;
+		this.rightBeaconNo = 0;
+		
 		//call self localization activity
 		Intent sl = new Intent(this, SelfLocalizationActivity.class);
 		startActivity(sl);

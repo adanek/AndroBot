@@ -299,10 +299,6 @@ public class SelfLocalizationActivity extends Activity implements
 				}
 			}
 		}
-
-		//reset beacon numbers
-		BeaconDetectionActivity.leftBeaconNo = 0;
-		BeaconDetectionActivity.rightBeaconNo = 0;
 		
 		// sort beacons by X value
 		Collections.sort(elements);
