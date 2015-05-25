@@ -324,9 +324,11 @@ public class SelfLocalizationActivity extends Activity implements
 		//set current position in BeaconDetectionActivity
 		BeaconDetectionActivity.current = pos;
 		
+		String result = pos == null ? "Null" : pos.toString();
 		// go back to beacon activity
 		Intent beacon = new Intent(this, BeaconDetectionActivity.class);
-		startActivity(beacon);
+		beacon.putExtra("result",result);
+		setResult(RESULT_OK,beacon);
 		finish();
 
 		return mRgba;

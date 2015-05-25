@@ -178,7 +178,8 @@ public class GetHomographyActivity extends Activity implements
 					
 					// go back to beacon activity
 					Intent beacon = new Intent(this, BeaconDetectionActivity.class);
-					startActivity(beacon);
+					beacon.putExtra("result", "found");
+					setResult(RESULT_OK,beacon);
 					finish();
 					break;
 				} else {

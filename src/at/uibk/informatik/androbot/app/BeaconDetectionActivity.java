@@ -126,8 +126,9 @@ public class BeaconDetectionActivity extends Activity{
 		this.rightBeaconNo = 0;
 		
 		//call self localization activity
-		Intent sl = new Intent(this, SelfLocalizationActivity.class);
-		startActivity(sl);
+		//Intent sl = new Intent(this, SelfLocalizationActivity.class);
+		//startActivityForResult(sl, 3);
+		prog.startSelfLocalization();
 	}
 	
 	//call homography activity
@@ -141,15 +142,32 @@ public class BeaconDetectionActivity extends Activity{
 		
 		//call homography activity
 		Intent homo = new Intent(this, GetHomographyActivity.class);
-		startActivity(homo);
+		startActivityForResult(homo, 2);
 		
+	}
+	
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+		
+		if(requestCode == 2){
+			String result = data.getStringExtra("result");
+			System.out.println("Returned from homography with code " + result);
+		}else if(requestCode == 3){
+			String result = data.getStringExtra("result");
+//			System.out.println("Returned from self localization with code " + result);
+			prog.testMethod(result);
+		//ball detection
+		}else if(requestCode == 4){
+			prog.ballDetectionCallback();
+		}
 	}
 	
 	public void onGetColor(View v){
 		
 		//call color detection activity
 		Intent color = new Intent(this, GetColorActivity.class);
-		startActivity(color);
+		startActivityForResult(color, 1);
 	}
 	
 	//get homography matrix
