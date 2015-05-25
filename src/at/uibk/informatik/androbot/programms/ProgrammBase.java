@@ -152,6 +152,10 @@ public abstract class ProgrammBase {
 	
 	public void turn(int degrees){		
 		
+		if(degrees == 0){
+			return;
+		}
+		
 		int runtime = (int) (Math.abs(degrees) * robot.getAngularRuntimePerDegree());
 		
 		byte l = -9;

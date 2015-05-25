@@ -344,6 +344,11 @@ public class GetColorActivity extends Activity implements OnTouchListener,
 		
 	}
 	
+	public void onSetBall(View v){
+		Log.d("Color", mBlobColorHsv.toString());
+		BeaconDetectionActivity.ballColor = mBlobColorHsv;
+	}
+	
     private Mat converScalarRgba2Hsv(Scalar rgbaColor) {
         Mat pointMatHsv = new Mat();
         Mat pointMatRgba = new Mat(1, 1, CvType.CV_8UC3, rgbaColor);

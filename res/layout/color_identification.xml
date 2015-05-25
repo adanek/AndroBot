@@ -176,4 +176,13 @@
         android:layout_marginTop="215dp"
         android:layout_marginLeft="490dp" /> 
         
+        <Button
+        android:id="@+id/btnBall"
+        android:layout_width="40dp"
+        android:layout_height="wrap_content"
+        android:onClick="onSetBall"
+        android:text="BA"
+        android:layout_marginTop="215dp"
+        android:layout_marginLeft="540dp" /> 
+        
 </RelativeLayout>

@@ -33,6 +33,8 @@ public class BeaconDetectionActivity extends Activity{
 	public static Position current;
 	public static int leftBeaconNo = 0;
 	public static int rightBeaconNo = 0;
+
+	public static Scalar ballColor = new Scalar(93,255,107,0);
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -128,7 +130,7 @@ public class BeaconDetectionActivity extends Activity{
 		//call self localization activity
 		//Intent sl = new Intent(this, SelfLocalizationActivity.class);
 		//startActivityForResult(sl, 3);
-		prog.startSelfLocalization();
+		prog.start();
 	}
 	
 	//call homography activity
