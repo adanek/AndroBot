@@ -214,9 +214,9 @@ public class ColorBlobDetectionActivity extends Activity implements OnTouchListe
             	Point pos = mDetector.getPos(ball);            	
             	BlobActivity.ball = pos; 	
             	
-            	Intent blob = new Intent(this, BlobActivity.class);
-				startActivity(blob);
-				finish();
+//            	Intent blob = new Intent(this, BlobActivity.class);
+//				startActivity(blob);
+//				finish();
             }
             
             Log.e(TAG, "Contours count: " + contours.size());
@@ -228,12 +228,12 @@ public class ColorBlobDetectionActivity extends Activity implements OnTouchListe
             Mat spectrumLabel = mRgba.submat(4, 4 + mSpectrum.rows(), 70, 70 + mSpectrum.cols());
             mSpectrum.copyTo(spectrumLabel);
             
-            if(frames > 50){
-            	BlobActivity.ball = null;
-            	Intent blob = new Intent(this, BlobActivity.class);
-				startActivity(blob);
-				finish();
-            }
+//            if(frames > 50){
+//            	BlobActivity.ball = null;
+//            	Intent blob = new Intent(this, BlobActivity.class);
+//				startActivity(blob);
+//				finish();
+//            }
         }
 
         return mRgba;

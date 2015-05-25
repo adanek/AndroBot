@@ -487,8 +487,8 @@ public class SelfLocalizationActivity extends Activity implements
 			double val1 = elem.get(i).getP().y;
 			double val2 = elem.get(i + 1).getP().y;
 
-			Element lower = val1 > val2 ? elem.get(i) : elem.get(i + 1);
-			Element upper = val1 < val2 ? elem.get(i) : elem.get(i + 1);
+			Element lower = val1 < val2 ? elem.get(i) : elem.get(i + 1);
+			Element upper = val1 > val2 ? elem.get(i) : elem.get(i + 1);
 
 			Beacon beacon1 = getBeaconByColor(upper.getCol(), lower.getCol());
 
@@ -529,11 +529,11 @@ public class SelfLocalizationActivity extends Activity implements
 		
 		//begin test list
 		beacons.add(addBeacon(125, 125, Colors.RED, Colors.YELLOW, 1));
-		beacons.add(addBeacon(-125, 0, Colors.WHITE, Colors.BLUE, 2));
+		beacons.add(addBeacon(125, 0, Colors.WHITE, Colors.BLUE, 2));
 		beacons.add(addBeacon(125, -125, Colors.YELLOW, Colors.RED, 3));
 		beacons.add(addBeacon(0, -125, Colors.RED, Colors.BLUE, 4));
 		beacons.add(addBeacon(-125, -125, Colors.YELLOW, Colors.BLUE, 5));
-		beacons.add(addBeacon(125, 0, Colors.WHITE, Colors.RED, 6));
+		beacons.add(addBeacon(-125, 0, Colors.WHITE, Colors.RED, 6));
 		beacons.add(addBeacon(-125, 125, Colors.BLUE, Colors.YELLOW,7));
 		beacons.add(addBeacon(0, 125, Colors.BLUE, Colors.RED,8));
 		//end test list
