@@ -459,6 +459,10 @@ public class SelfLocalizationActivity extends Activity implements
         theta = theta > 180 ? 0 - (360 - theta) : theta;
         System.out.println(String.format("x: %f y: %f th: %f", Cw.x, Cw.y, theta));
         
+        //set beacon numbers
+        BeaconDetectionActivity.leftBeaconNo = beaconLeft.getId();
+        BeaconDetectionActivity.rightBeaconNo = beaconRight.getId();
+        
         Position current = new Position((int)Math.round(Cw.x),(int) Math.round(Cw.y), (int)Math.round(theta));		
 		return current;
 		

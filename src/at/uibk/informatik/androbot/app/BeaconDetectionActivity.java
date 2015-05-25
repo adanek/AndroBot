@@ -31,6 +31,8 @@ public class BeaconDetectionActivity extends Activity{
 	public static Scalar yellow = new Scalar(35.0,200.0,180.0,0.0);
 	public static Scalar white = new Scalar(134.0,209.0,215.0,0.0);
 	public static Position current;
+	public static int leftBeaconNo = 0;
+	public static int rightBeaconNo = 0;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +56,12 @@ public class BeaconDetectionActivity extends Activity{
 			y.setText(Integer.toString(current.getY()));
 			t.setText(Integer.toString(current.getTh()));
 		}
+		
+		TextView lB = (TextView) findViewById(R.id.txtBeacon1);
+		TextView rB = (TextView) findViewById(R.id.txtBeacon2);
+		
+		lB.setText(Integer.toString(leftBeaconNo));
+		rB.setText(Integer.toString(rightBeaconNo));
 	}
 	
 	@Override
@@ -75,6 +83,12 @@ public class BeaconDetectionActivity extends Activity{
 			y.setText(Integer.toString(current.getY()));
 			t.setText(Integer.toString(current.getTh()));
 		}
+		
+		TextView lB = (TextView) findViewById(R.id.txtBeacon1);
+		TextView rB = (TextView) findViewById(R.id.txtBeacon2);
+		
+		lB.setText(Integer.toString(leftBeaconNo));
+		rB.setText(Integer.toString(rightBeaconNo));
 	}
 
 	@Override

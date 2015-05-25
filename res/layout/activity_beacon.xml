@@ -79,6 +79,34 @@
             android:ems="5"
             android:inputType="numberDecimal|numberSigned" />
         
+            <TextView
+            android:id="@+id/txtLblBeacon1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Left Beacon No.:"
+            android:textAppearance="?android:attr/textAppearanceSmall" /> 
+            
+             <TextView
+            android:id="@+id/txtBeacon1"
+            android:layout_width="70dp"
+            android:layout_height="wrap_content"
+            android:ems="5"
+            android:inputType="numberDecimal|numberSigned" />
+            
+            <TextView
+            android:id="@+id/txtLblBeacon2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Right Beacon No.:"
+            android:textAppearance="?android:attr/textAppearanceSmall" /> 
+            
+            <TextView
+            android:id="@+id/txtBeacon2"
+            android:layout_width="70dp"
+            android:layout_height="wrap_content"
+            android:ems="5"
+            android:inputType="numberDecimal|numberSigned" />
+            
 </LinearLayout>
 </ScrollView>
         
