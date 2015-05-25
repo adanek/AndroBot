@@ -300,6 +300,10 @@ public class SelfLocalizationActivity extends Activity implements
 			}
 		}
 
+		//reset beacon numbers
+		BeaconDetectionActivity.leftBeaconNo = 0;
+		BeaconDetectionActivity.rightBeaconNo = 0;
+		
 		// sort beacons by X value
 		Collections.sort(elements);
 
@@ -311,6 +315,14 @@ public class SelfLocalizationActivity extends Activity implements
 			pos = calculatePosition(foundBeacons);	
 		}else{
 			pos = null;
+		}
+		
+		//set beacon numbers
+		if(foundBeacons.size() > 0){
+	        BeaconDetectionActivity.leftBeaconNo = foundBeacons.get(0).getId();
+		}
+		if(foundBeacons.size() > 1){
+			BeaconDetectionActivity.rightBeaconNo = foundBeacons.get(1).getId();
 		}
 		
 		//set current position in BeaconDetectionActivity
@@ -458,10 +470,6 @@ public class SelfLocalizationActivity extends Activity implements
         // Second half is negative angle
         theta = theta > 180 ? 0 - (360 - theta) : theta;
         System.out.println(String.format("x: %f y: %f th: %f", Cw.x, Cw.y, theta));
-        
-        //set beacon numbers
-        BeaconDetectionActivity.leftBeaconNo = beaconLeft.getId();
-        BeaconDetectionActivity.rightBeaconNo = beaconRight.getId();
         
         Position current = new Position((int)Math.round(Cw.x),(int) Math.round(Cw.y), (int)Math.round(theta));		
 		return current;
