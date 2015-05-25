@@ -365,7 +365,8 @@ public class SelfLocalizationActivity extends Activity implements
 
         //double a = 27;
         //double b = 68.5;
-        double c = 45;
+        // space between the beacons
+        double c = 125;
 
         // law of cosinus c2 = a2 + b2 - 2ab cosgamma or
         // a2 = b2 + c2 - 2bc cos(alpha)
