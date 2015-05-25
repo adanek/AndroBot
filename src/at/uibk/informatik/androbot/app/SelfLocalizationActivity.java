@@ -138,7 +138,7 @@ public class SelfLocalizationActivity extends Activity implements
 		mBlobColorRgba = new Scalar(255);
 		mBlobColorHsv = new Scalar(255);
 		SPECTRUM_SIZE = new Size(200, 64);
-		CONTOUR_COLOR = new Scalar(255, 0, 0, 255);
+		CONTOUR_COLOR = new Scalar(255, 255, 255, 255);
 
 		// begin with red
 		mBlobColorHsv = red;
@@ -281,7 +281,7 @@ public class SelfLocalizationActivity extends Activity implements
 
 						// maximum X
 						if (p.x > maxX) {
-							minX = p.x;
+							maxX = p.x;
 						}
 
 					}
@@ -340,14 +340,14 @@ public class SelfLocalizationActivity extends Activity implements
 			if(beaconLeft.getId() == 1){
 				beaconRight = foundBeacons.get(foundBeacons.size()-1);
 				if(beaconRight.getId() != 8){
-					Log.d("Beacon ordering", "Beacon order is wrong");
+					Log.d("Beacon found", "Beacon order is wrong");
 					return null;
 				}else{
 					beaconLeft = beaconRight;
 					beaconRight = foundBeacons.get(0);
 				}
 			} else {
-				Log.d("Beacon ordering", "Beacon order is wrong");
+				Log.d("Beacon found", "Beacon order is wrong");
 				return null;
 			}
 		}

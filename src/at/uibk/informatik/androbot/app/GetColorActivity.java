@@ -152,7 +152,7 @@ public class GetColorActivity extends Activity implements OnTouchListener,
 		mBlobColorRgba = new Scalar(255);
 		mBlobColorHsv = new Scalar(255);
 		SPECTRUM_SIZE = new Size(200, 64);
-		CONTOUR_COLOR = new Scalar(255, 0, 0, 255);
+		CONTOUR_COLOR = new Scalar(255, 255, 255, 255);
 
 		// default color
 		mBlobColorHsv = defaultColor;
