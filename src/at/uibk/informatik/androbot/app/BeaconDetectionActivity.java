@@ -18,6 +18,7 @@ import android.widget.TextView;
 import at.uibk.informatik.androbot.control.Position;
 import at.uibk.informatik.androbot.programms.BeaconDetection;
 import at.uibk.informatik.androbot.programms.BlobDetection;
+import at.uibk.informatik.androbot.data.ColorRange;
 import at.uibk.informatik.androbot.data.Element;
 
 public class BeaconDetectionActivity extends Activity{
@@ -26,10 +27,16 @@ public class BeaconDetectionActivity extends Activity{
 
 	private BeaconDetection prog;
 	private static Mat homoMat;
-	public static Scalar red = new Scalar(252.0,225.0,216.0,0.0);
-	public static Scalar blue = new Scalar(149.0,188.0,100.0,0.0);
-	public static Scalar yellow = new Scalar(35.0,200.0,180.0,0.0);
-	public static Scalar white = new Scalar(134.0,209.0,215.0,0.0);
+	//public static Scalar red = new Scalar(252.0,225.0,216.0,0.0);
+	//public static Scalar blue = new Scalar(149.0,188.0,100.0,0.0);
+	//public static Scalar yellow = new Scalar(35.0,200.0,180.0,0.0);
+	//public static Scalar white = new Scalar(134.0,209.0,215.0,0.0);
+	
+	public static ColorRange red = new ColorRange();
+	public static ColorRange blue = new ColorRange();;
+	public static ColorRange yellow = new ColorRange();;
+	public static ColorRange white = new ColorRange();;
+	
 	public static Position current;
 	public static int leftBeaconNo = 0;
 	public static int rightBeaconNo = 0;
@@ -118,14 +125,14 @@ public class BeaconDetectionActivity extends Activity{
 		Log.d(LOG_TAG, "Beacon Detection started");
 		
 		//log color values
-		Log.d(LOG_TAG, "Red: " + red.val[0] + " " + red.val[1] + " " + red.val[2]);
-		Log.d(LOG_TAG, "Blue: " + blue.val[0] + " " + blue.val[1] + " " + blue.val[2]);
-		Log.d(LOG_TAG, "Yellow: " + yellow.val[0] + " " + yellow.val[1] + " " + yellow.val[2]);
-		Log.d(LOG_TAG, "White: " + white.val[0] + " " + white.val[1] + " " + white.val[2]);
+		//Log.d(LOG_TAG, "Red: " + red.val[0] + " " + red.val[1] + " " + red.val[2]);
+		//Log.d(LOG_TAG, "Blue: " + blue.val[0] + " " + blue.val[1] + " " + blue.val[2]);
+		//Log.d(LOG_TAG, "Yellow: " + yellow.val[0] + " " + yellow.val[1] + " " + yellow.val[2]);
+		//Log.d(LOG_TAG, "White: " + white.val[0] + " " + white.val[1] + " " + white.val[2]);
 		
 		//reset beacon numbers
-		this.leftBeaconNo = 0;
-		this.rightBeaconNo = 0;
+		leftBeaconNo = 0;
+		rightBeaconNo = 0;
 		
 		//call self localization activity
 		//Intent sl = new Intent(this, SelfLocalizationActivity.class);

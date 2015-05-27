@@ -35,11 +35,12 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import at.uibk.informatik.androbot.control.Position;
 import at.uibk.informatik.androbot.data.Beacon;
+import at.uibk.informatik.androbot.data.ColorRange;
 import at.uibk.informatik.androbot.data.Element;
 import at.uibk.informatik.androbot.enums.Colors;
 import at.uibk.informatik.androbot.programms.ColorBlobDetector;
 
-public class SelfLocalizationActivity extends Activity implements OnTouchListener, CvCameraViewListener2 {
+public class SelfLocalizationActivity extends Activity implements CvCameraViewListener2 {
 	private static final String TAG = "SelfLocalization";
 
 	private boolean mIsColorSelected = false;
@@ -52,10 +53,10 @@ public class SelfLocalizationActivity extends Activity implements OnTouchListene
 	private Scalar CONTOUR_COLOR;
 
 	public static Mat homoMat;
-	private Scalar red;
-	private Scalar blue;
-	private Scalar yellow;
-	private Scalar white;
+	//private Scalar red;
+	//private Scalar blue;
+	//private Scalar yellow;
+	//private Scalar white;
 	private Colors current;
 	private int frame = 0;
 	private List<Beacon> beacons;
@@ -70,7 +71,6 @@ public class SelfLocalizationActivity extends Activity implements OnTouchListene
 			case LoaderCallbackInterface.SUCCESS: {
 				Log.i(TAG, "OpenCV loaded successfully");
 				mOpenCvCameraView.enableView();
-				mOpenCvCameraView.setOnTouchListener(SelfLocalizationActivity.this);
 			}
 				break;
 			default: {
@@ -99,10 +99,10 @@ public class SelfLocalizationActivity extends Activity implements OnTouchListene
 		mOpenCvCameraView.setCvCameraViewListener(this);
 
 		// set colors
-		red = BeaconDetectionActivity.red;
-		blue = BeaconDetectionActivity.blue;
-		yellow = BeaconDetectionActivity.yellow;
-		white = BeaconDetectionActivity.white;
+		//red = BeaconDetectionActivity.red;
+		//blue = BeaconDetectionActivity.blue;
+		//yellow = BeaconDetectionActivity.yellow;
+		//white = BeaconDetectionActivity.white;
 
 	}
 
@@ -138,8 +138,13 @@ public class SelfLocalizationActivity extends Activity implements OnTouchListene
 		CONTOUR_COLOR = new Scalar(255, 255, 255, 255);
 
 		// begin with red
-		mBlobColorHsv = red;
-		mDetector.setHsvColor(mBlobColorHsv);
+		mDetector.Hmin = BeaconDetectionActivity.red.getHmin();
+		mDetector.Hmax = BeaconDetectionActivity.red.getHmax();
+		mDetector.Smin = BeaconDetectionActivity.red.getSmin();
+		mDetector.Smax = BeaconDetectionActivity.red.getSmax();
+		mDetector.Vmin = BeaconDetectionActivity.red.getVmin();
+		mDetector.Vmax = BeaconDetectionActivity.red.getVmax();
+		
 		mIsColorSelected = true;
 
 		frame = 0;
@@ -148,57 +153,6 @@ public class SelfLocalizationActivity extends Activity implements OnTouchListene
 
 	public void onCameraViewStopped() {
 		mRgba.release();
-	}
-
-	public boolean onTouch(View v, MotionEvent event) {
-		int cols = mRgba.cols();
-		int rows = mRgba.rows();
-
-		int xOffset = (mOpenCvCameraView.getWidth() - cols) / 2;
-		int yOffset = (mOpenCvCameraView.getHeight() - rows) / 2;
-
-		int x = (int) event.getX() - xOffset;
-		int y = (int) event.getY() - yOffset;
-
-		if ((x < 0) || (y < 0) || (x > cols) || (y > rows))
-			return false;
-
-		Rect touchedRect = new Rect();
-
-		touchedRect.x = (x > 4) ? x - 4 : 0;
-		touchedRect.y = (y > 4) ? y - 4 : 0;
-
-		touchedRect.width = (x + 4 < cols) ? x + 4 - touchedRect.x : cols - touchedRect.x;
-		touchedRect.height = (y + 4 < rows) ? y + 4 - touchedRect.y : rows - touchedRect.y;
-
-		Mat touchedRegionRgba = mRgba.submat(touchedRect);
-
-		Mat touchedRegionHsv = new Mat();
-		Imgproc.cvtColor(touchedRegionRgba, touchedRegionHsv, Imgproc.COLOR_RGB2HSV_FULL);
-
-		// Calculate average color of touched region
-		mBlobColorHsv = Core.sumElems(touchedRegionHsv);
-		int pointCount = touchedRect.width * touchedRect.height;
-		for (int i = 0; i < mBlobColorHsv.val.length; i++)
-			mBlobColorHsv.val[i] /= pointCount;
-
-		Log.d(TAG, String.format("Touched values: %f %f %f %f", mBlobColorHsv.val[0], mBlobColorHsv.val[1],
-				mBlobColorHsv.val[2], mBlobColorHsv.val[3]));
-		mBlobColorRgba = converScalarHsv2Rgba(mBlobColorHsv);
-
-		Log.i(TAG, "Touched rgba color: (" + mBlobColorRgba.val[0] + ", " + mBlobColorRgba.val[1] + ", "
-				+ mBlobColorRgba.val[2] + ", " + mBlobColorRgba.val[3] + ")");
-
-		mDetector.setHsvColor(mBlobColorHsv);
-
-		Imgproc.resize(mDetector.getSpectrum(), mSpectrum, SPECTRUM_SIZE);
-
-		mIsColorSelected = true;
-
-		touchedRegionRgba.release();
-		touchedRegionHsv.release();
-
-		return false; // don't need subsequent touch events
 	}
 
 	public Mat onCameraFrame(CvCameraViewFrame inputFrame) {
@@ -572,22 +526,29 @@ public class SelfLocalizationActivity extends Activity implements OnTouchListene
 
 	public void setColor(Colors col) {
 
+		ColorRange color = null;
+		
 		switch (col) {
 		case RED:
-			mBlobColorHsv = red;
+			color = BeaconDetectionActivity.red;
 			break;
 		case BLUE:
-			mBlobColorHsv = blue;
+			color = BeaconDetectionActivity.blue;
 			break;
 		case YELLOW:
-			mBlobColorHsv = yellow;
+			color = BeaconDetectionActivity.yellow;
 			break;
 		case WHITE:
-			mBlobColorHsv = white;
+			color = BeaconDetectionActivity.white;
 			break;
 		}
 
-		mDetector.setHsvColor(mBlobColorHsv);
+		mDetector.Hmin = color.getHmin();
+		mDetector.Hmax = color.getHmax();
+		mDetector.Smin = color.getSmin();
+		mDetector.Smax = color.getSmax();
+		mDetector.Vmin = color.getVmin();
+		mDetector.Vmax = color.getVmax();
 		current = col;
 
 	}

@@ -56,7 +56,7 @@
         android:layout_marginLeft="340dp"  /> 
     
            <SeekBar
-        android:id="@+id/seekSplusmax"
+        android:id="@+id/seekSmax"
         android:layout_width="202dp"
         android:layout_height="wrap_content"
         android:max="255"
