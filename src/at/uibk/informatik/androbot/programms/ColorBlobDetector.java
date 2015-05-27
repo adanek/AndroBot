@@ -170,7 +170,9 @@ public class ColorBlobDetector {
 		return mContours;
 	}
 
-	public Point getPos(Point ps) {
+	
+	// Converts a point in screen coordinates in a point in world coordinates
+	public Point getWorldCoordinates(Point ps) {
 		Mat src = new Mat(1, 1, CvType.CV_32FC2);
 		Mat dest = new Mat(1, 1, CvType.CV_32FC2);
 		src.put(0, 0, new double[] { ps.x, ps.y }); // ps is a point in image coordinates

@@ -211,7 +211,7 @@ public class ColorBlobDetectionActivity extends Activity implements OnTouchListe
             	Log.d(TAG, String.format("Ball @ x:%f y:%f\n", ball.x, ball.y));   
             	
             	
-            	Point pos = mDetector.getPos(ball);            	
+            	Point pos = mDetector.getWorldCoordinates(ball);            	
             	BlobActivity.ball = pos; 	
             	
 //            	Intent blob = new Intent(this, BlobActivity.class);
