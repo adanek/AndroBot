@@ -39,8 +39,7 @@ import at.uibk.informatik.androbot.data.Element;
 import at.uibk.informatik.androbot.enums.Colors;
 import at.uibk.informatik.androbot.programms.ColorBlobDetector;
 
-public class SelfLocalizationActivity extends Activity implements
-		OnTouchListener, CvCameraViewListener2 {
+public class SelfLocalizationActivity extends Activity implements OnTouchListener, CvCameraViewListener2 {
 	private static final String TAG = "SelfLocalization";
 
 	private boolean mIsColorSelected = false;
@@ -71,8 +70,7 @@ public class SelfLocalizationActivity extends Activity implements
 			case LoaderCallbackInterface.SUCCESS: {
 				Log.i(TAG, "OpenCV loaded successfully");
 				mOpenCvCameraView.enableView();
-				mOpenCvCameraView
-						.setOnTouchListener(SelfLocalizationActivity.this);
+				mOpenCvCameraView.setOnTouchListener(SelfLocalizationActivity.this);
 			}
 				break;
 			default: {
@@ -118,8 +116,7 @@ public class SelfLocalizationActivity extends Activity implements
 	@Override
 	public void onResume() {
 		super.onResume();
-		OpenCVLoader.initAsync(OpenCVLoader.OPENCV_VERSION_2_4_3, this,
-				mLoaderCallback);
+		OpenCVLoader.initAsync(OpenCVLoader.OPENCV_VERSION_2_4_3, this, mLoaderCallback);
 
 		initializeBeacons();
 	}
@@ -171,16 +168,13 @@ public class SelfLocalizationActivity extends Activity implements
 		touchedRect.x = (x > 4) ? x - 4 : 0;
 		touchedRect.y = (y > 4) ? y - 4 : 0;
 
-		touchedRect.width = (x + 4 < cols) ? x + 4 - touchedRect.x : cols
-				- touchedRect.x;
-		touchedRect.height = (y + 4 < rows) ? y + 4 - touchedRect.y : rows
-				- touchedRect.y;
+		touchedRect.width = (x + 4 < cols) ? x + 4 - touchedRect.x : cols - touchedRect.x;
+		touchedRect.height = (y + 4 < rows) ? y + 4 - touchedRect.y : rows - touchedRect.y;
 
 		Mat touchedRegionRgba = mRgba.submat(touchedRect);
 
 		Mat touchedRegionHsv = new Mat();
-		Imgproc.cvtColor(touchedRegionRgba, touchedRegionHsv,
-				Imgproc.COLOR_RGB2HSV_FULL);
+		Imgproc.cvtColor(touchedRegionRgba, touchedRegionHsv, Imgproc.COLOR_RGB2HSV_FULL);
 
 		// Calculate average color of touched region
 		mBlobColorHsv = Core.sumElems(touchedRegionHsv);
@@ -188,14 +182,12 @@ public class SelfLocalizationActivity extends Activity implements
 		for (int i = 0; i < mBlobColorHsv.val.length; i++)
 			mBlobColorHsv.val[i] /= pointCount;
 
-		Log.d(TAG, String.format("Touched values: %f %f %f %f",
-				mBlobColorHsv.val[0], mBlobColorHsv.val[1],
+		Log.d(TAG, String.format("Touched values: %f %f %f %f", mBlobColorHsv.val[0], mBlobColorHsv.val[1],
 				mBlobColorHsv.val[2], mBlobColorHsv.val[3]));
 		mBlobColorRgba = converScalarHsv2Rgba(mBlobColorHsv);
 
-		Log.i(TAG, "Touched rgba color: (" + mBlobColorRgba.val[0] + ", "
-				+ mBlobColorRgba.val[1] + ", " + mBlobColorRgba.val[2] + ", "
-				+ mBlobColorRgba.val[3] + ")");
+		Log.i(TAG, "Touched rgba color: (" + mBlobColorRgba.val[0] + ", " + mBlobColorRgba.val[1] + ", "
+				+ mBlobColorRgba.val[2] + ", " + mBlobColorRgba.val[3] + ")");
 
 		mDetector.setHsvColor(mBlobColorHsv);
 
@@ -250,8 +242,7 @@ public class SelfLocalizationActivity extends Activity implements
 				Mat colorLabel = mRgba.submat(4, 68, 4, 68);
 				colorLabel.setTo(mBlobColorRgba);
 
-				Mat spectrumLabel = mRgba.submat(4, 4 + mSpectrum.rows(), 70,
-						70 + mSpectrum.cols());
+				Mat spectrumLabel = mRgba.submat(4, 4 + mSpectrum.rows(), 70, 70 + mSpectrum.cols());
 				mSpectrum.copyTo(spectrumLabel);
 
 				// check all contours
@@ -299,60 +290,60 @@ public class SelfLocalizationActivity extends Activity implements
 				}
 			}
 		}
-		
+
 		// sort beacons by X value
 		Collections.sort(elements);
 
 		List<Beacon> foundBeacons = getBeaconsFromElements(elements);
 
 		Position pos;
-		//more than one beacon found?
-		if(foundBeacons.size() > 1){
-			pos = calculatePosition(foundBeacons);	
-		}else{
+		// more than one beacon found?
+		if (foundBeacons.size() > 1) {
+			pos = calculatePosition(foundBeacons);
+		} else {
 			pos = null;
 		}
-		
-		//set beacon numbers
-		if(foundBeacons.size() > 0){
-	        BeaconDetectionActivity.leftBeaconNo = foundBeacons.get(0).getId();
+
+		// set beacon numbers
+		if (foundBeacons.size() > 0) {
+			BeaconDetectionActivity.leftBeaconNo = foundBeacons.get(0).getId();
 		}
-		if(foundBeacons.size() > 1){
+		if (foundBeacons.size() > 1) {
 			BeaconDetectionActivity.rightBeaconNo = foundBeacons.get(1).getId();
 		}
-		
-		//set current position in BeaconDetectionActivity
+
+		// set current position in BeaconDetectionActivity
 		BeaconDetectionActivity.current = pos;
-		
+
 		String result = pos == null ? "Null" : pos.toString();
 		// go back to beacon activity
 		Intent beacon = new Intent(this, BeaconDetectionActivity.class);
-		beacon.putExtra("result",result);
-		setResult(RESULT_OK,beacon);
+		beacon.putExtra("result", result);
+		setResult(RESULT_OK, beacon);
 		finish();
 
 		return mRgba;
 	}
 
-	//calculate robots position from found beacons
+	// calculate robots position from found beacons
 	private Position calculatePosition(List<Beacon> foundBeacons) {
-		
-		//set homography matrix in detector
+
+		// set homography matrix in detector
 		mDetector.setHomoMat(homoMat);
-		
-		//sort beacons by id
+
+		// sort beacons by id
 		Collections.sort(foundBeacons);
-		
+
 		Beacon beaconLeft = foundBeacons.get(0);
 		Beacon beaconRight = foundBeacons.get(1);
-		
-		if((beaconLeft.getId() + 1) != beaconRight.getId()){
-			if(beaconLeft.getId() == 1){
-				beaconRight = foundBeacons.get(foundBeacons.size()-1);
-				if(beaconRight.getId() != 8){
+
+		if ((beaconLeft.getId() + 1) != beaconRight.getId()) {
+			if (beaconLeft.getId() == 1) {
+				beaconRight = foundBeacons.get(foundBeacons.size() - 1);
+				if (beaconRight.getId() != 8) {
 					Log.d("Beacon found", "Beacon order is wrong");
 					return null;
-				}else{
+				} else {
 					beaconLeft = beaconRight;
 					beaconRight = foundBeacons.get(0);
 				}
@@ -361,123 +352,120 @@ public class SelfLocalizationActivity extends Activity implements
 				return null;
 			}
 		}
-		
+
 		Point Br = mDetector.getPos(beaconLeft.getPos());
-		Point Ar = mDetector.getPos(beaconRight.getPos());		
+		Point Ar = mDetector.getPos(beaconRight.getPos());
 
-        Point Aw = new Point(beaconRight.getX(), beaconRight.getY()); // given
-        int beaconId = beaconRight.getId();
+		Point Aw = new Point(beaconRight.getX(), beaconRight.getY()); // given
+		int beaconId = beaconRight.getId();
 
-        Point Cr = new Point(0, 0);
+		Point Cr = new Point(0, 0);
 
-        double a = Math.sqrt(Math.pow(Br.x, 2) + Math.pow(Br.y, 2));
-        double b = Math.sqrt(Math.pow(Ar.x, 2) + Math.pow(Ar.y, 2));
+		double a = Math.sqrt(Math.pow(Br.x, 2) + Math.pow(Br.y, 2));
+		double b = Math.sqrt(Math.pow(Ar.x, 2) + Math.pow(Ar.y, 2));
 
-        //double a = 27;
-        //double b = 68.5;
-        // space between the beacons
-        double c = 125;
+		// space between the beacons
+		double c = 125;
 
-        // law of cosinus c2 = a2 + b2 - 2ab cosgamma or
-        // a2 = b2 + c2 - 2bc cos(alpha)
-        // alpha = acos((-(a2) + b2 + c2) / 2bc)
-        double alphaRad = (-1 * Math.pow(a, 2)) + Math.pow(b, 2) + Math.pow(c, 2);
-        alphaRad = Math.acos(alphaRad / (2 * b * c));
-        double alpha = Math.toDegrees(alphaRad);
+		// law of cosinus c2 = a2 + b2 - 2ab cosgamma or
+		// a2 = b2 + c2 - 2bc cos(alpha)
+		// alpha = acos((-(a2) + b2 + c2) / 2bc)
+		double alphaRad = (-1 * Math.pow(a, 2)) + Math.pow(b, 2) + Math.pow(c, 2);
+		alphaRad = Math.acos(alphaRad / (2 * b * c));
+		double alpha = Math.toDegrees(alphaRad);
 
-        // Kompliment to 90  degrees
-        double alpha1 = Math.toRadians(90 - alpha);
+		// Kompliment to 90 degrees
+		double alpha1 = Math.toRadians(90 - alpha);
 
-        // sin(alpha1) = v / b
-        double u = Math.cos(alpha1) * b;
+		// sin(alpha1) = v / b
+		double u = Math.cos(alpha1) * b;
 
-        // cos(alpha1) = u / b;
-        double v = Math.sin(alpha1) * b;
+		// cos(alpha1) = u / b;
+		double v = Math.sin(alpha1) * b;
 
-        double dx = -1 * v;
-        double dy = -1 * u;
+		double dx = -1 * v;
+		double dy = -1 * u;
 
-        switch (beaconId){
-            case 1:
-            case 8:
-                dx = v * -1;
-                dy = u * -1;
-                break;
-            case 2:
-            case 3:
-                dx = u * -1;
-                dy = v;
-                break;
-            case 4:
-            case 5:
-                dx = v;
-                dy = u;
-                break;
-            case 6:
-            case 7:
-                dx = u;
-                dy = v *-1;
-                break;
-        }
+		switch (beaconId) {
+		case 1:
+		case 8:
+			dx = v * -1;
+			dy = u * -1;
+			break;
+		case 2:
+		case 3:
+			dx = u * -1;
+			dy = v;
+			break;
+		case 4:
+		case 5:
+			dx = v;
+			dy = u;
+			break;
+		case 6:
+		case 7:
+			dx = u;
+			dy = v * -1;
+			break;
+		}
 
-        // Triangle in world coordinates
-        Point Cw = new Point(Aw.x + dx, Aw.y + dy);
+		// Triangle in world coordinates
+		Point Cw = new Point(Aw.x + dx, Aw.y + dy);
 
-        // Geradengleichung der 2 Beacons lösen aus ego Sicht Robot
-        // y = k * x + d
-        double k = (Ar.x - Br.x) == 0 ? 0 : (Ar.y - Br.y) / (Ar.x - Br.x);
-        double d = Ar.y - k * Ar.x;
+		// Geradengleichung der 2 Beacons lösen aus ego Sicht Robot
+		// y = k * x + d
+		double k = (Ar.x - Br.x) == 0 ? 0 : (Ar.y - Br.y) / (Ar.x - Br.x);
+		double d = Ar.y - k * Ar.x;
 
-        // Calculate x for: 0 = k * x + d
-        double a1 = k == 0 ? Ar.x : -d / k;
-        Point S = new Point(a1, 0);
+		// Calculate x for: 0 = k * x + d
+		double a1 = k == 0 ? Ar.x : -d / k;
+		Point S = new Point(a1, 0);
 
-        // law of sinus a/sin(alpha) = b/sin(beta) = c/sin(gamma)
-        double betaRad = Math.asin(Math.sin(alphaRad) * b / a1);
-        double beta1 = Math.toDegrees(betaRad);
+		// Calculate distance between S an Ar
+		double dx1 = S.x - Ar.x;
+		double dy1 = S.y - Ar.y;
+		double c2 = Math.sqrt(Math.pow(dx1, 2) + Math.pow(dy1, 2));
 
-        beta1 = a < b ? 180 - beta1 : beta1;
+		// Use the law of the cosinus to get gamma1
+		double gamma2 = Math.toDegrees(Math.acos((Math.pow(a1, 2) + Math.pow(b, 2) - Math.pow(c2, 2)) / (2 * a1 * b)));
 
+		double offset = 0;
 
-        double gamma1 = 180 - alpha - beta1;
-        double gamma2 = 180 - gamma1;
+		switch (beaconId) {
+		case 4:
+		case 5:
+			offset = 0;
+			break;
+		case 2:
+		case 3:
+			offset = 90;
+			break;
+		case 1:
+		case 8:
+			offset = 180;
+			break;
+		case 6:
+		case 7:
+			offset = 270;
+			break;
+		}
 
-        double offset = 0;
+		double theta = offset + alpha - gamma2;
 
-        switch (beaconId) {
-            case 4:
-            case 5:
-                offset = 0;
-                break;
-            case 2:
-            case 3:
-                offset = 90;
-                break;
-            case 1:
-            case 8:
-                offset = 180;
-                break;
-            case 6:
-            case 7:
-                offset = 270;
-                break;
-        }
+		// Second half is negative angle
+		theta = theta > 180 ? 0 - (360 - theta) : theta;
+		System.out.println(String.format("x: %f y: %f th: %f", Cw.x, Cw.y, theta));
 
-        double theta = offset + alpha - gamma2;
-
-        // Second half is negative angle
-        theta = theta > 180 ? 0 - (360 - theta) : theta;
-        System.out.println(String.format("x: %f y: %f th: %f", Cw.x, Cw.y, theta));
-        
-        Position current = new Position((int)Math.round(Cw.x),(int) Math.round(Cw.y), (int)Math.round(theta));		
+		Position current = new Position((int) Math.round(Cw.x), (int) Math.round(Cw.y), (int) Math.round(theta));
 		return current;
-		
+
 	}
 
-	public int getDistanceToTarget(Position current, Position target){		
-		return (int) Math.sqrt(Math.pow(target.getX()-current.getX(), 2) + Math.pow(target.getY()-current.getY(),2));	
+	public int getDistanceToTarget(Position current, Position target) {
+		return (int) Math.sqrt(Math.pow(target.getX() - current.getX(), 2)
+				+ Math.pow(target.getY() - current.getY(), 2));
 	}
-	
+
 	private List<Beacon> getBeaconsFromElements(List<Element> elem) {
 
 		List<Beacon> beacon = new ArrayList<Beacon>();
@@ -487,8 +475,7 @@ public class SelfLocalizationActivity extends Activity implements
 		for (int i = 0; i < (elem.size() - 1); i++) {
 
 			// get difference
-			int diff = (int) Math.round(Math.abs(elem.get(i).getP().x
-					- elem.get(i + 1).getP().x));
+			int diff = (int) Math.round(Math.abs(elem.get(i).getP().x - elem.get(i + 1).getP().x));
 
 			// in threshold??
 			if (diff > threshold) {
@@ -504,14 +491,13 @@ public class SelfLocalizationActivity extends Activity implements
 			Beacon beacon1 = getBeaconByColor(upper.getCol(), lower.getCol());
 
 			beacon1.setPos(lower.getP());
-			
-			Log.d("Beacon found", "Lower color: " + beacon1.getLower()
-					+ " , upper color: " + beacon1.getUpper() + " ; X: "
-					+ beacon1.getX() + " , Y: " + beacon1.getY() + " , Position: " + beacon1.getPos());
 
-			//add to beacon list
+			Log.d("Beacon found", "Lower color: " + beacon1.getLower() + " , upper color: " + beacon1.getUpper()
+					+ " ; X: " + beacon1.getX() + " , Y: " + beacon1.getY() + " , Position: " + beacon1.getPos());
+
+			// add to beacon list
 			beacon.add(beacon1);
-			
+
 			i++;
 		}
 
@@ -521,8 +507,7 @@ public class SelfLocalizationActivity extends Activity implements
 	private Scalar converScalarHsv2Rgba(Scalar hsvColor) {
 		Mat pointMatRgba = new Mat();
 		Mat pointMatHsv = new Mat(1, 1, CvType.CV_8UC3, hsvColor);
-		Imgproc.cvtColor(pointMatHsv, pointMatRgba, Imgproc.COLOR_HSV2RGB_FULL,
-				4);
+		Imgproc.cvtColor(pointMatHsv, pointMatRgba, Imgproc.COLOR_HSV2RGB_FULL, 4);
 
 		return new Scalar(pointMatRgba.get(0, 0));
 	}
@@ -537,27 +522,26 @@ public class SelfLocalizationActivity extends Activity implements
 			beacons.clear();
 		}
 
-		
-		//begin test list
+		// begin test list
 		beacons.add(addBeacon(125, 125, Colors.RED, Colors.YELLOW, 1));
 		beacons.add(addBeacon(125, 0, Colors.WHITE, Colors.BLUE, 2));
 		beacons.add(addBeacon(125, -125, Colors.YELLOW, Colors.RED, 3));
 		beacons.add(addBeacon(0, -125, Colors.RED, Colors.BLUE, 4));
 		beacons.add(addBeacon(-125, -125, Colors.YELLOW, Colors.BLUE, 5));
 		beacons.add(addBeacon(-125, 0, Colors.WHITE, Colors.RED, 6));
-		beacons.add(addBeacon(-125, 125, Colors.BLUE, Colors.YELLOW,7));
-		beacons.add(addBeacon(0, 125, Colors.BLUE, Colors.RED,8));
-		//end test list
-		
+		beacons.add(addBeacon(-125, 125, Colors.BLUE, Colors.YELLOW, 7));
+		beacons.add(addBeacon(0, 125, Colors.BLUE, Colors.RED, 8));
+		// end test list
+
 		// create beacon list
-//		beacons.add(addBeacon(125, 125, Colors.RED, Colors.YELLOW, 1));
-//		beacons.add(addBeacon(125, 0, Colors.WHITE, Colors.RED, 2));
-//		beacons.add(addBeacon(125, -125, Colors.YELLOW, Colors.RED, 3));
-//		beacons.add(addBeacon(0, -125, Colors.RED, Colors.BLUE, 4));
-//		beacons.add(addBeacon(-125, -125, Colors.YELLOW, Colors.BLUE, 5));
-//		beacons.add(addBeacon(-125, 0, Colors.WHITE, Colors.BLUE, 6));
-//		beacons.add(addBeacon(-125, 125, Colors.BLUE, Colors.YELLOW,7));
-//		beacons.add(addBeacon(0, 125, Colors.BLUE, Colors.RED,8));
+		// beacons.add(addBeacon(125, 125, Colors.RED, Colors.YELLOW, 1));
+		// beacons.add(addBeacon(125, 0, Colors.WHITE, Colors.RED, 2));
+		// beacons.add(addBeacon(125, -125, Colors.YELLOW, Colors.RED, 3));
+		// beacons.add(addBeacon(0, -125, Colors.RED, Colors.BLUE, 4));
+		// beacons.add(addBeacon(-125, -125, Colors.YELLOW, Colors.BLUE, 5));
+		// beacons.add(addBeacon(-125, 0, Colors.WHITE, Colors.BLUE, 6));
+		// beacons.add(addBeacon(-125, 125, Colors.BLUE, Colors.YELLOW,7));
+		// beacons.add(addBeacon(0, 125, Colors.BLUE, Colors.RED,8));
 
 	}
 
