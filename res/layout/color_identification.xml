@@ -169,8 +169,8 @@
         android:layout_height="wrap_content"
         android:onClick="onSetBlue"
         android:text="B"
-        android:layout_marginTop="300dp"
-        android:layout_marginLeft="390dp" />             
+        android:layout_marginTop="30dp"
+        android:layout_marginLeft="560dp" />             
            
         
         <Button
@@ -179,8 +179,8 @@
         android:layout_height="wrap_content"
         android:onClick="onSetRed"
         android:text="R"
-        android:layout_marginTop="300dp"
-        android:layout_marginLeft="340dp" /> 
+        android:layout_marginTop="80dp"
+        android:layout_marginLeft="560dp" /> 
         
                 <Button
         android:id="@+id/btnYellow"
@@ -188,8 +188,8 @@
         android:layout_height="wrap_content"
         android:onClick="onSetYellow"
         android:text="Y"
-        android:layout_marginTop="300dp"
-        android:layout_marginLeft="440dp" /> 
+        android:layout_marginTop="130dp"
+        android:layout_marginLeft="560dp" /> 
         
         <Button
         android:id="@+id/btnWhite"
@@ -197,8 +197,8 @@
         android:layout_height="wrap_content"
         android:onClick="onSetWhite"
         android:text="W"
-        android:layout_marginTop="300dp"
-        android:layout_marginLeft="490dp" /> 
+        android:layout_marginTop="180dp"
+        android:layout_marginLeft="560dp" /> 
         
         <Button
         android:id="@+id/btnBall"
@@ -206,7 +206,7 @@
         android:layout_height="wrap_content"
         android:onClick="onSetBall"
         android:text="BA"
-        android:layout_marginTop="300dp"
-        android:layout_marginLeft="540dp" /> 
+        android:layout_marginTop="230dp"
+        android:layout_marginLeft="560dp" /> 
         
 </RelativeLayout>

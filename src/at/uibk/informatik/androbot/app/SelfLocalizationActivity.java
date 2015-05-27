@@ -145,6 +145,8 @@ public class SelfLocalizationActivity extends Activity implements CvCameraViewLi
 		mDetector.Vmin = BeaconDetectionActivity.red.getVmin();
 		mDetector.Vmax = BeaconDetectionActivity.red.getVmax();
 		
+		mDetector.setHsvColor(mBlobColorHsv);
+		
 		mIsColorSelected = true;
 
 		frame = 0;

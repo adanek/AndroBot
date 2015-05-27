@@ -41,7 +41,7 @@ public class BeaconDetectionActivity extends Activity{
 	public static int leftBeaconNo = 0;
 	public static int rightBeaconNo = 0;
 
-	public static Scalar ballColor = new Scalar(93,255,107,0);
+	public static ColorRange ballColor = new ColorRange();
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -115,28 +115,20 @@ public class BeaconDetectionActivity extends Activity{
 	public void onStart(View v){
 		
 		//check if homography matrix is set
-//		if(homoMat == null || homoMat.empty() == true){
-//			Log.d(LOG_TAG, "Homography matrix not set");
-//			return;
-//		}
+		if(homoMat == null || homoMat.empty() == true){
+			Log.d(LOG_TAG, "Homography matrix not set");
+			return;
+		}
 		
 		SelfLocalizationActivity.homoMat = homoMat;
 		
 		Log.d(LOG_TAG, "Beacon Detection started");
-		
-		//log color values
-		//Log.d(LOG_TAG, "Red: " + red.val[0] + " " + red.val[1] + " " + red.val[2]);
-		//Log.d(LOG_TAG, "Blue: " + blue.val[0] + " " + blue.val[1] + " " + blue.val[2]);
-		//Log.d(LOG_TAG, "Yellow: " + yellow.val[0] + " " + yellow.val[1] + " " + yellow.val[2]);
-		//Log.d(LOG_TAG, "White: " + white.val[0] + " " + white.val[1] + " " + white.val[2]);
 		
 		//reset beacon numbers
 		leftBeaconNo = 0;
 		rightBeaconNo = 0;
 		
 		//call self localization activity
-		//Intent sl = new Intent(this, SelfLocalizationActivity.class);
-		//startActivityForResult(sl, 3);
 		prog.start();
 	}
 	
@@ -164,7 +156,6 @@ public class BeaconDetectionActivity extends Activity{
 			System.out.println("Returned from homography with code " + result);
 		}else if(requestCode == 3){
 			String result = data.getStringExtra("result");
-//			System.out.println("Returned from self localization with code " + result);
 			prog.testMethod(result);
 		//ball detection
 		}else if(requestCode == 4){
