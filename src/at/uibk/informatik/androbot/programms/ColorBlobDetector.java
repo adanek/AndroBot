@@ -30,6 +30,14 @@ public class ColorBlobDetector{
     private Mat mSpectrum = new Mat();
     private List<MatOfPoint> mContours = new ArrayList<MatOfPoint>();
 
+    //color range
+    public static int Hmin = 0;
+    public static int Hmax = 255;
+    public static int Smin = 0;
+    public static int Smax = 255;
+    public static int Vmin = 0;
+    public static int Vmax = 255;
+    
     private Mat homoMat;
     
     // Cache

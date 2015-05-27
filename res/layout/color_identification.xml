@@ -23,7 +23,7 @@
         android:layout_marginLeft="340dp" />
 
     <SeekBar
-        android:id="@+id/seekH"
+        android:id="@+id/seekHmin"
         android:layout_width="202dp"
         android:layout_height="wrap_content"
         android:max="255"
@@ -31,12 +31,12 @@
         android:layout_marginLeft="340dp"  /> 
     
         <SeekBar
-        android:id="@+id/seekHplus"
-        android:layout_width="90dp"
+        android:id="@+id/seekHmax"
+        android:layout_width="202dp"
         android:layout_height="wrap_content"
-        android:max="80"
-        android:layout_marginTop="30dp"
-        android:layout_marginLeft="520dp"  /> 
+        android:max="255"
+        android:layout_marginTop="60dp"
+        android:layout_marginLeft="340dp"  /> 
     
            <TextView
         android:id="@+id/txtLblS"
@@ -44,24 +44,24 @@
         android:layout_height="wrap_content"
         android:text="S"
         android:textAppearance="?android:attr/textAppearanceSmall"
-        android:layout_marginTop="60dp"
+        android:layout_marginTop="85dp"
         android:layout_marginLeft="340dp" />
 
     <SeekBar
-        android:id="@+id/seekS"
+        android:id="@+id/seekSmin"
         android:layout_width="202dp"
         android:layout_height="wrap_content"
         android:max="255"
-        android:layout_marginTop="80dp"
+        android:layout_marginTop="100dp"
         android:layout_marginLeft="340dp"  /> 
     
            <SeekBar
-        android:id="@+id/seekSplus"
-        android:layout_width="90dp"
+        android:id="@+id/seekSplusmax"
+        android:layout_width="202dp"
         android:layout_height="wrap_content"
-        android:max="80"
-        android:layout_marginTop="80dp"
-        android:layout_marginLeft="520dp"  /> 
+        android:max="255"
+        android:layout_marginTop="130dp"
+        android:layout_marginLeft="340dp"  /> 
     
                <TextView
         android:id="@+id/txtLblV"
@@ -69,24 +69,24 @@
         android:layout_height="wrap_content"
         android:text="V"
         android:textAppearance="?android:attr/textAppearanceSmall"
-        android:layout_marginTop="110dp"
+        android:layout_marginTop="155dp"
         android:layout_marginLeft="340dp" />
 
     <SeekBar
-        android:id="@+id/seekV"
+        android:id="@+id/seekVmin"
         android:layout_width="202dp"
         android:layout_height="wrap_content"
         android:max="255"
-        android:layout_marginTop="130dp"
+        android:layout_marginTop="170dp"
         android:layout_marginLeft="340dp"  /> 
     
        <SeekBar
-        android:id="@+id/seekVplus"
-        android:layout_width="90dp"
+        android:id="@+id/seekVmax"
+        android:layout_width="202dp"
         android:layout_height="wrap_content"
-        android:max="80"
-        android:layout_marginTop="130dp"
-        android:layout_marginLeft="520dp"  /> 
+        android:max="255"
+        android:layout_marginTop="200dp"
+        android:layout_marginLeft="340dp"  /> 
     
            <TextView
         android:id="@+id/txtLblH2"
@@ -94,15 +94,15 @@
         android:layout_height="wrap_content"
         android:text="H"
         android:textAppearance="?android:attr/textAppearanceSmall"
-        android:layout_marginTop="170dp"
+        android:layout_marginTop="240dp"
         android:layout_marginLeft="340dp" />
            
                     <TextView
-        android:id="@+id/txtH"
+        android:id="@+id/txtHmin"
         android:layout_width="40dp"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceSmall"
-        android:layout_marginTop="190dp"
+        android:layout_marginTop="260dp"
         android:layout_marginLeft="340dp" />  
            
         <TextView
@@ -111,15 +111,15 @@
         android:layout_height="wrap_content"
         android:text="S"
         android:textAppearance="?android:attr/textAppearanceSmall"
-        android:layout_marginTop="170dp"
+        android:layout_marginTop="240dp"
         android:layout_marginLeft="390dp" />
     
                             <TextView
-        android:id="@+id/txtS"
+        android:id="@+id/txtSmin"
         android:layout_width="40dp"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceSmall"
-        android:layout_marginTop="190dp"
+        android:layout_marginTop="260dp"
         android:layout_marginLeft="390dp" /> 
         
                <TextView
@@ -128,24 +128,48 @@
         android:layout_height="wrap_content"
         android:text="V"
         android:textAppearance="?android:attr/textAppearanceSmall"
-        android:layout_marginTop="170dp"
+        android:layout_marginTop="240dp"
         android:layout_marginLeft="440dp" />
     
-                    <TextView
-        android:id="@+id/txtV"
+        <TextView
+        android:id="@+id/txtHmax"
         android:layout_width="40dp"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceSmall"
-        android:layout_marginTop="190dp"
+        android:layout_marginTop="280dp"
+        android:layout_marginLeft="340dp" />        
+               
+                    <TextView
+        android:id="@+id/txtVmin"
+        android:layout_width="40dp"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:layout_marginTop="260dp"
         android:layout_marginLeft="440dp" />      
         
+                                    <TextView
+        android:id="@+id/txtSmax"
+        android:layout_width="40dp"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:layout_marginTop="280dp"
+        android:layout_marginLeft="390dp" />             
+                    
+                            <TextView
+        android:id="@+id/txtVmax"
+        android:layout_width="40dp"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:layout_marginTop="280dp"
+        android:layout_marginLeft="440dp" />             
+                    
         <Button
         android:id="@+id/btnBlue"
         android:layout_width="40dp"
         android:layout_height="wrap_content"
         android:onClick="onSetBlue"
         android:text="B"
-        android:layout_marginTop="215dp"
+        android:layout_marginTop="300dp"
         android:layout_marginLeft="390dp" />             
            
         
@@ -155,7 +179,7 @@
         android:layout_height="wrap_content"
         android:onClick="onSetRed"
         android:text="R"
-        android:layout_marginTop="215dp"
+        android:layout_marginTop="300dp"
         android:layout_marginLeft="340dp" /> 
         
                 <Button
@@ -164,7 +188,7 @@
         android:layout_height="wrap_content"
         android:onClick="onSetYellow"
         android:text="Y"
-        android:layout_marginTop="215dp"
+        android:layout_marginTop="300dp"
         android:layout_marginLeft="440dp" /> 
         
         <Button
@@ -173,7 +197,7 @@
         android:layout_height="wrap_content"
         android:onClick="onSetWhite"
         android:text="W"
-        android:layout_marginTop="215dp"
+        android:layout_marginTop="300dp"
         android:layout_marginLeft="490dp" /> 
         
         <Button
@@ -182,7 +206,7 @@
         android:layout_height="wrap_content"
         android:onClick="onSetBall"
         android:text="BA"
-        android:layout_marginTop="215dp"
+        android:layout_marginTop="300dp"
         android:layout_marginLeft="540dp" /> 
         
 </RelativeLayout>
