@@ -77,6 +77,14 @@ public class ColorRange {
 	
 	public Scalar getUpper(){
 		return new Scalar(hmax, smax, vmax);
-	}	
+	}
+	
+	public Scalar getColor(){
+		
+		int h = (hmax-hmin) / 2;
+		int s = (smax-smin)/2;
+		int v = (vmax-vmin)/2;
+		return new Scalar(h,s,v);
+	}
 
 }
