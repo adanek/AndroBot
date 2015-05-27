@@ -30,6 +30,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.view.View.OnTouchListener;
 import at.uibk.informatik.androbot.control.Position;
+import at.uibk.informatik.androbot.data.ColorRange;
 import at.uibk.informatik.androbot.programms.BeaconDetection;
 import at.uibk.informatik.androbot.programms.ColorBlobDetector;
 
@@ -47,7 +48,7 @@ public class BallDetectionActivity extends Activity implements OnTouchListener,
 	private Scalar CONTOUR_COLOR;
 
 	public static Mat homoMat;
-	public static Scalar color;
+	public static ColorRange color;
 	private int frames;
 
 	private CameraBridgeViewBase mOpenCvCameraView;
@@ -120,7 +121,7 @@ public class BallDetectionActivity extends Activity implements OnTouchListener,
 		SPECTRUM_SIZE = new Size(200, 64);
 		CONTOUR_COLOR = new Scalar(255, 100, 100, 255);
 
-		mBlobColorHsv = color;
+		mBlobColorHsv = color.getColor();
 		mDetector.setHsvColor(mBlobColorHsv);
 		mIsColorSelected = true;
 	}
