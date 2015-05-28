@@ -29,6 +29,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.View.OnTouchListener;
+import android.widget.CheckBox;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import at.uibk.informatik.androbot.data.ColorRange;
@@ -46,6 +47,7 @@ public class GetColorActivity extends Activity implements
 	private Mat mSpectrum;
 	private Size SPECTRUM_SIZE;
 	private Scalar CONTOUR_COLOR;
+	private boolean rgb = true;
 
 	public static Mat homoMat;
 	private Scalar defaultColorFrom = new Scalar(120.0, 255.0, 110.0, 0.0);
@@ -200,8 +202,13 @@ public class GetColorActivity extends Activity implements
 
 		}
 
-		return mRgba;
-
+		//return mRgba;
+		if(rgb){
+			return mDetector.getRgbImage();
+		}else{
+			return mDetector.getBinImage();
+		}
+		
 	}
 
 	private Scalar converScalarHsv2Rgba(Scalar hsvColor) {
@@ -308,6 +315,18 @@ public class GetColorActivity extends Activity implements
 
         //return new Scalar(pointMatHsv.get(0, 0));
         return pointMatHsv;
+    }
+    
+    public void onRGB(View v){
+    	
+    	CheckBox rgb = (CheckBox) findViewById(R.id.chkRGB);
+    	
+    	if(rgb.isChecked()){
+    		this.rgb = true;
+    	}else{
+    		this.rgb = false;
+    	}
+    	
     }
 
 }
