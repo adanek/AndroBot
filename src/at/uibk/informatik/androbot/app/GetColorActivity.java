@@ -34,8 +34,7 @@ import android.widget.TextView;
 import at.uibk.informatik.androbot.data.ColorRange;
 import at.uibk.informatik.androbot.programms.ColorBlobDetector;
 
-public class GetColorActivity extends Activity implements 
-		CvCameraViewListener2, SeekBar.OnSeekBarChangeListener {
+public class GetColorActivity extends Activity implements CvCameraViewListener2, SeekBar.OnSeekBarChangeListener {
 	private static final String TAG = "ColorDetection";
 
 	private boolean mIsColorSelected = false;
@@ -49,7 +48,7 @@ public class GetColorActivity extends Activity implements
 
 	public static Mat homoMat;
 	private Scalar defaultColorFrom = new Scalar(120.0, 255.0, 110.0, 0.0);
-	private Scalar defaultColorTo   = new Scalar(130.0, 255.0, 130.0, 0.0);
+	private Scalar defaultColorTo = new Scalar(130.0, 255.0, 130.0, 0.0);
 
 	private CameraBridgeViewBase mOpenCvCameraView;
 
@@ -92,7 +91,7 @@ public class GetColorActivity extends Activity implements
 		SeekBar hmax = (SeekBar) findViewById(R.id.seekHmax);
 		SeekBar smax = (SeekBar) findViewById(R.id.seekSmax);
 		SeekBar vmax = (SeekBar) findViewById(R.id.seekVmax);
-		
+
 		// register listeners
 		hmin.setOnSeekBarChangeListener(this);
 		smin.setOnSeekBarChangeListener(this);
@@ -105,16 +104,15 @@ public class GetColorActivity extends Activity implements
 		hmin.setProgress((int) defaultColorFrom.val[0]);
 		smin.setProgress((int) defaultColorFrom.val[1]);
 		vmin.setProgress((int) defaultColorFrom.val[2]);
-		
+
 		hmax.setProgress((int) defaultColorTo.val[0]);
 		smax.setProgress((int) defaultColorTo.val[1]);
 		vmax.setProgress((int) defaultColorTo.val[2]);
 
-		
 		TextView lblHmin = (TextView) findViewById(R.id.txtHmin);
 		TextView lblSmin = (TextView) findViewById(R.id.txtSmin);
 		TextView lblVmin = (TextView) findViewById(R.id.txtVmin);
-		
+
 		TextView lblHmax = (TextView) findViewById(R.id.txtHmax);
 		TextView lblSmax = (TextView) findViewById(R.id.txtSmax);
 		TextView lblVmax = (TextView) findViewById(R.id.txtVmax);
@@ -123,7 +121,7 @@ public class GetColorActivity extends Activity implements
 		lblHmin.setText(Integer.toString(hmin.getProgress()));
 		lblSmin.setText(Integer.toString(smin.getProgress()));
 		lblVmin.setText(Integer.toString(vmin.getProgress()));
-		
+
 		lblHmax.setText(Integer.toString(hmax.getProgress()));
 		lblSmax.setText(Integer.toString(smax.getProgress()));
 		lblVmax.setText(Integer.toString(vmax.getProgress()));
@@ -143,8 +141,7 @@ public class GetColorActivity extends Activity implements
 	@Override
 	public void onResume() {
 		super.onResume();
-		OpenCVLoader.initAsync(OpenCVLoader.OPENCV_VERSION_2_4_3, this,
-				mLoaderCallback);
+		OpenCVLoader.initAsync(OpenCVLoader.OPENCV_VERSION_2_4_3, this, mLoaderCallback);
 	}
 
 	public void onDestroy() {
@@ -166,13 +163,13 @@ public class GetColorActivity extends Activity implements
 		// default color
 		mBlobColorHsv = defaultColorFrom;
 		mDetector.setHsvColor(mBlobColorHsv);
-		
-		mDetector.Hmin = (int)defaultColorFrom.val[0];
-		mDetector.Hmax = (int)defaultColorTo.val[0];
-		mDetector.Smin = (int)defaultColorFrom.val[1];
-		mDetector.Smax = (int)defaultColorTo.val[1];
-		mDetector.Vmin = (int)defaultColorFrom.val[2];
-		mDetector.Vmax = (int)defaultColorTo.val[2];
+
+		mDetector.Hmin = (int) defaultColorFrom.val[0];
+		mDetector.Hmax = (int) defaultColorTo.val[0];
+		mDetector.Smin = (int) defaultColorFrom.val[1];
+		mDetector.Smax = (int) defaultColorTo.val[1];
+		mDetector.Vmin = (int) defaultColorFrom.val[2];
+		mDetector.Vmax = (int) defaultColorTo.val[2];
 		mIsColorSelected = true;
 	}
 
@@ -184,38 +181,33 @@ public class GetColorActivity extends Activity implements
 
 		mRgba = inputFrame.rgba();
 
-		if (mIsColorSelected) {
-			mDetector.process(mRgba);
-			List<MatOfPoint> contours = mDetector.getContours();
+		mDetector.process(mRgba);
+		List<MatOfPoint> contours = mDetector.getContours();
 
-			Log.e(TAG, "Contours count: " + contours.size());
-			Imgproc.drawContours(mRgba, contours, -1, CONTOUR_COLOR);
+		Log.e(TAG, "Contours count: " + contours.size());
+		Imgproc.drawContours(mRgba, contours, -1, CONTOUR_COLOR, 2);
 
-			Mat colorLabel = mRgba.submat(4, 68, 4, 68);
-			colorLabel.setTo(mBlobColorRgba);
+		// Mat colorLabel = mRgba.submat(4, 68, 4, 68);
+		// colorLabel.setTo(mBlobColorRgba);
+		//
+		// Mat spectrumLabel = mRgba.submat(4, 4 + mSpectrum.rows(), 70,
+		// 70 + mSpectrum.cols());
+		// mSpectrum.copyTo(spectrumLabel);
 
-			Mat spectrumLabel = mRgba.submat(4, 4 + mSpectrum.rows(), 70,
-					70 + mSpectrum.cols());
-			mSpectrum.copyTo(spectrumLabel);
-
-		}
-
-		return mRgba;
+		return mDetector.getBinImage();
 
 	}
 
 	private Scalar converScalarHsv2Rgba(Scalar hsvColor) {
 		Mat pointMatRgba = new Mat();
 		Mat pointMatHsv = new Mat(1, 1, CvType.CV_8UC3, hsvColor);
-		Imgproc.cvtColor(pointMatHsv, pointMatRgba, Imgproc.COLOR_HSV2RGB_FULL,
-				4);
+		Imgproc.cvtColor(pointMatHsv, pointMatRgba, Imgproc.COLOR_HSV2RGB_FULL, 4);
 
 		return new Scalar(pointMatRgba.get(0, 0));
 	}
 
 	@Override
-	public void onProgressChanged(SeekBar seekBar, int progress,
-			boolean fromUser) {
+	public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
 
 		if (mDetector == null) {
 			return;
@@ -269,45 +261,52 @@ public class GetColorActivity extends Activity implements
 		// TODO Auto-generated method stub
 
 	}
-	
-	//select as red
-	public void onSetRed(View v){
-		
-		BeaconDetectionActivity.red = new ColorRange(mDetector.Hmin, mDetector.Hmax, mDetector.Smin, mDetector.Smax, mDetector.Vmin, mDetector.Vmax);
-		
-	}
-	
-	//select as blue
-	public void onSetBlue(View v){
-		
-		BeaconDetectionActivity.blue = new ColorRange(mDetector.Hmin, mDetector.Hmax, mDetector.Smin, mDetector.Smax, mDetector.Vmin, mDetector.Vmax);
-		
-	}
-	//select as yellow
-	public void onSetYellow(View v){
-		
-		BeaconDetectionActivity.yellow = new ColorRange(mDetector.Hmin, mDetector.Hmax, mDetector.Smin, mDetector.Smax, mDetector.Vmin, mDetector.Vmax);
-		
-	}
-	//select as white
-	public void onSetWhite(View v){
-		
-		BeaconDetectionActivity.white = new ColorRange(mDetector.Hmin, mDetector.Hmax, mDetector.Smin, mDetector.Smax, mDetector.Vmin, mDetector.Vmax);
-		
-	}
-	
-	public void onSetBall(View v){
-		//Log.d("Color", mBlobColorHsv.toString());
-		BeaconDetectionActivity.ballColor = new ColorRange(mDetector.Hmin, mDetector.Hmax, mDetector.Smin, mDetector.Smax, mDetector.Vmin, mDetector.Vmax);
-	}
-	
-    private Mat converScalarRgba2Hsv(Scalar rgbaColor) {
-        Mat pointMatHsv = new Mat();
-        Mat pointMatRgba = new Mat(1, 1, CvType.CV_8UC3, rgbaColor);
-        Imgproc.cvtColor(pointMatRgba, pointMatHsv, Imgproc.COLOR_RGB2HSV, 4);
 
-        //return new Scalar(pointMatHsv.get(0, 0));
-        return pointMatHsv;
-    }
+	// select as red
+	public void onSetRed(View v) {
+
+		BeaconDetectionActivity.red = new ColorRange(mDetector.Hmin, mDetector.Hmax, mDetector.Smin, mDetector.Smax,
+				mDetector.Vmin, mDetector.Vmax);
+
+	}
+
+	// select as blue
+	public void onSetBlue(View v) {
+
+		BeaconDetectionActivity.blue = new ColorRange(mDetector.Hmin, mDetector.Hmax, mDetector.Smin, mDetector.Smax,
+				mDetector.Vmin, mDetector.Vmax);
+
+	}
+
+	// select as yellow
+	public void onSetYellow(View v) {
+
+		BeaconDetectionActivity.yellow = new ColorRange(mDetector.Hmin, mDetector.Hmax, mDetector.Smin, mDetector.Smax,
+				mDetector.Vmin, mDetector.Vmax);
+
+	}
+
+	// select as white
+	public void onSetWhite(View v) {
+
+		BeaconDetectionActivity.white = new ColorRange(mDetector.Hmin, mDetector.Hmax, mDetector.Smin, mDetector.Smax,
+				mDetector.Vmin, mDetector.Vmax);
+
+	}
+
+	public void onSetBall(View v) {
+		// Log.d("Color", mBlobColorHsv.toString());
+		BeaconDetectionActivity.ballColor = new ColorRange(mDetector.Hmin, mDetector.Hmax, mDetector.Smin,
+				mDetector.Smax, mDetector.Vmin, mDetector.Vmax);
+	}
+
+	private Mat converScalarRgba2Hsv(Scalar rgbaColor) {
+		Mat pointMatHsv = new Mat();
+		Mat pointMatRgba = new Mat(1, 1, CvType.CV_8UC3, rgbaColor);
+		Imgproc.cvtColor(pointMatRgba, pointMatHsv, Imgproc.COLOR_RGB2HSV, 4);
+
+		// return new Scalar(pointMatHsv.get(0, 0));
+		return pointMatHsv;
+	}
 
 }
