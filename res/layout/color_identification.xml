@@ -132,6 +132,24 @@
         android:layout_marginLeft="440dp" />
     
         <TextView
+        android:id="@+id/txtLblRGB"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="RGB"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:layout_marginTop="240dp"
+        android:layout_marginLeft="470dp" />               
+               
+        <CheckBox
+        android:id="@+id/chkRGB"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:checked="true"
+        android:layout_marginTop="260dp"
+        android:layout_marginLeft="470dp" 
+        android:onClick="onRGB"/>
+               
+        <TextView
         android:id="@+id/txtHmax"
         android:layout_width="40dp"
         android:layout_height="wrap_content"

@@ -3,32 +3,25 @@ package at.uibk.informatik.androbot.app;
 import java.util.List;
 
 import org.opencv.android.BaseLoaderCallback;
+import org.opencv.android.CameraBridgeViewBase;
 import org.opencv.android.CameraBridgeViewBase.CvCameraViewFrame;
-import org.opencv.android.CameraBridgeViewBase.CvCameraViewListener;
-import org.opencv.android.JavaCameraView;
+import org.opencv.android.CameraBridgeViewBase.CvCameraViewListener2;
 import org.opencv.android.LoaderCallbackInterface;
 import org.opencv.android.OpenCVLoader;
-import org.opencv.core.Core;
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfPoint;
-import org.opencv.core.Point;
-import org.opencv.core.Rect;
 import org.opencv.core.Scalar;
 import org.opencv.core.Size;
-import org.opencv.android.CameraBridgeViewBase;
-import org.opencv.android.CameraBridgeViewBase.CvCameraViewListener2;
 import org.opencv.imgproc.Imgproc;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.view.View.OnTouchListener;
+import android.widget.CheckBox;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import at.uibk.informatik.androbot.data.ColorRange;
@@ -45,6 +38,7 @@ public class GetColorActivity extends Activity implements CvCameraViewListener2,
 	private Mat mSpectrum;
 	private Size SPECTRUM_SIZE;
 	private Scalar CONTOUR_COLOR;
+	private boolean rgb = true;
 
 	public static Mat homoMat;
 	private Scalar defaultColorFrom = new Scalar(120.0, 255.0, 110.0, 0.0);
@@ -194,8 +188,11 @@ public class GetColorActivity extends Activity implements CvCameraViewListener2,
 		// 70 + mSpectrum.cols());
 		// mSpectrum.copyTo(spectrumLabel);
 
-		return mDetector.getBinImage();
-
+		if(rgb){
+			return mDetector.getRgbImage();
+		}else{
+			return mDetector.getBinImage();
+		}
 	}
 
 	private Scalar converScalarHsv2Rgba(Scalar hsvColor) {
@@ -309,4 +306,16 @@ public class GetColorActivity extends Activity implements CvCameraViewListener2,
 		return pointMatHsv;
 	}
 
+    
+    public void onRGB(View v){
+    	
+    	CheckBox rgb = (CheckBox) findViewById(R.id.chkRGB);
+    	
+    	if(rgb.isChecked()){
+    		this.rgb = true;
+    	}else{
+    		this.rgb = false;
+    	}
+    	
+    }
 }
