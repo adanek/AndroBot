@@ -34,13 +34,13 @@ public class BeaconDetectionActivity extends Activity{
 	//public static ColorRange blue = new ColorRange(10,28,255,255,119,255);
 	//public static ColorRange white = new ColorRange(154,192,116,170,78,231);
 	
-	public static ColorRange red = new ColorRange(116,133,193,252,115,255);
-	public static ColorRange yellow = new ColorRange(78,107,79,158,185,255);
-	public static ColorRange blue = new ColorRange(10,28,255,255,119,255);
-	public static ColorRange white = new ColorRange(154,192,116,170,78,231);
+	public static ColorRange red = new ColorRange(104,131,111,187,86,168);
+	public static ColorRange yellow = new ColorRange(84,96,111,187,86,168);
+	public static ColorRange blue = new ColorRange(0,35,255,255,78,171);
+	public static ColorRange white = new ColorRange(166, 194, 90, 177, 37, 134);
 	
 	//ball default color
-	public static ColorRange ballColor = new ColorRange(35,58,207,255,103,197);
+	public static ColorRange ballColor = new ColorRange(32, 72, 178, 225, 26, 229);
 	
 	public static Position current;
 	public static int leftBeaconNo = 0;
