@@ -78,12 +78,12 @@ public class BeaconDetection extends ProgrammBase {
 		int angle = getAngle(new Position(), ball);
 		int distance = getDistanceToTarget(new Position(), ball);
 		Log.d(LOG_TAG, String.format("ang: %d dis: %d", angle, distance));
-		turn(angle);		
-		moveDistance(distance-10);
-		
-		this.getRobot().lowerBar();
-		
-		this.getRobot().raiseBar();
+//		turn(angle);		
+//		moveDistance(distance-10);
+//		
+//		this.getRobot().lowerBar();
+//		
+//		this.getRobot().raiseBar();
 		
 		
 	}
