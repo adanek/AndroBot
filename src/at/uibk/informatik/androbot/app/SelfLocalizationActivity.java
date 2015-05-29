@@ -242,6 +242,11 @@ public class SelfLocalizationActivity extends Activity implements CvCameraViewLi
 
 		List<Beacon> foundBeacons = getBeaconsFromElements(elements);
 
+		for(int i = 0; i < foundBeacons.size(); i++){
+			Beacon beacon = foundBeacons.get(i);
+			Core.circle(mRgba, beacon.getPos(), 10, new Scalar(25,25,25), -1);
+		}
+		
 		Position pos;
 		// more than one beacon found?
 		if (foundBeacons.size() > 1) {
