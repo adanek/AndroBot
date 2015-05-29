@@ -307,6 +307,8 @@ public class SelfLocalizationActivity extends Activity implements CvCameraViewLi
 		Point Br = mDetector.getWorldCoordinates(beaconLeft.getPos());
 		Point Ar = mDetector.getWorldCoordinates(beaconRight.getPos());
 
+		Log.d("Positions", "Ar: x: " + Ar.x + ", y: " + Ar.y + "; Br: x: " + Br.x + ", y: " + Br.y);
+		
 		Point Aw = new Point(beaconRight.getX(), beaconRight.getY()); // given
 		int beaconId = beaconRight.getId();
 
