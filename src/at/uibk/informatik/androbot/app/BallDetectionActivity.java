@@ -234,12 +234,4 @@ public class BallDetectionActivity extends Activity implements CvCameraViewListe
 		return mRgba;
 	}
 
-//	private Scalar converScalarHsv2Rgba(Scalar hsvColor) {
-//		Mat pointMatRgba = new Mat();
-//		Mat pointMatHsv = new Mat(1, 1, CvType.CV_8UC3, hsvColor);
-//		Imgproc.cvtColor(pointMatHsv, pointMatRgba, Imgproc.COLOR_HSV2RGB_FULL, 4);
-//
-//		return new Scalar(pointMatRgba.get(0, 0));
-//	}
-
 }

@@ -8,12 +8,22 @@ import at.uibk.informatik.androbot.app.BallDetectionActivity;
 import at.uibk.informatik.androbot.app.BeaconDetectionActivity;
 import at.uibk.informatik.androbot.app.SelfLocalizationActivity;
 import at.uibk.informatik.androbot.control.Position;
+import at.uibk.informatik.androbot.enums.States;
 
 public class BeaconDetection extends ProgrammBase {
 
 	private static final String LOG_TAG = "Beacon detection";	
 	private Context context;
 	public static Position ball;
+	private States currentState = States.INIT;
+
+	public States getCurrentState() {
+		return currentState;
+	}
+
+	public void setCurrentState(States currentState) {
+		this.currentState = currentState;
+	}
 
 	public BeaconDetection(Context context) {
 		super(context);

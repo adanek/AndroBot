@@ -127,7 +127,8 @@ public class BeaconDetectionActivity extends Activity{
 		rightBeaconNo = 0;
 		
 		//call self localization activity
-		prog.start();
+		//prog.start();
+		prog.startSelfLocalization();
 	}
 	
 	//call homography activity
