@@ -27,21 +27,19 @@ public class BeaconDetectionActivity extends Activity{
 
 	private BeaconDetection prog;
 	private static Mat homoMat;
-	//public static Scalar red = new Scalar(252.0,225.0,216.0,0.0);
-	//public static Scalar blue = new Scalar(149.0,188.0,100.0,0.0);
-	//public static Scalar yellow = new Scalar(35.0,200.0,180.0,0.0);
-	//public static Scalar white = new Scalar(134.0,209.0,215.0,0.0);
 	
-	public static ColorRange red = new ColorRange();
-	public static ColorRange blue = new ColorRange();;
-	public static ColorRange yellow = new ColorRange();;
-	public static ColorRange white = new ColorRange();;
+	//beacon default colors
+	public static ColorRange red = new ColorRange(116,133,218,255,111,186);
+	public static ColorRange yellow = new ColorRange(78,107,79,158,185,255);
+	public static ColorRange blue = new ColorRange(10,28,255,255,119,255);
+	public static ColorRange white = new ColorRange(154,192,116,170,78,231);
+	
+	//ball default color
+	public static ColorRange ballColor = new ColorRange(35,58,207,255,103,197);
 	
 	public static Position current;
 	public static int leftBeaconNo = 0;
 	public static int rightBeaconNo = 0;
-
-	public static ColorRange ballColor = new ColorRange();
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {

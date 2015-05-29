@@ -53,10 +53,6 @@ public class SelfLocalizationActivity extends Activity implements CvCameraViewLi
 	private Scalar CONTOUR_COLOR;
 
 	public static Mat homoMat;
-	//private Scalar red;
-	//private Scalar blue;
-	//private Scalar yellow;
-	//private Scalar white;
 	private Colors current;
 	private int frame = 0;
 	private List<Beacon> beacons;
@@ -97,12 +93,6 @@ public class SelfLocalizationActivity extends Activity implements CvCameraViewLi
 
 		mOpenCvCameraView = (CameraBridgeViewBase) findViewById(R.id.color_blob_detection_activity_surface_view);
 		mOpenCvCameraView.setCvCameraViewListener(this);
-
-		// set colors
-		//red = BeaconDetectionActivity.red;
-		//blue = BeaconDetectionActivity.blue;
-		//yellow = BeaconDetectionActivity.yellow;
-		//white = BeaconDetectionActivity.white;
 
 	}
 
@@ -145,7 +135,7 @@ public class SelfLocalizationActivity extends Activity implements CvCameraViewLi
 		mDetector.Vmin = BeaconDetectionActivity.red.getVmin();
 		mDetector.Vmax = BeaconDetectionActivity.red.getVmax();
 		
-		mDetector.setHsvColor(mBlobColorHsv);
+		//mDetector.setHsvColor(mBlobColorHsv);
 		
 		mIsColorSelected = true;
 
@@ -545,12 +535,7 @@ public class SelfLocalizationActivity extends Activity implements CvCameraViewLi
 			break;
 		}
 
-		mDetector.Hmin = color.getHmin();
-		mDetector.Hmax = color.getHmax();
-		mDetector.Smin = color.getSmin();
-		mDetector.Smax = color.getSmax();
-		mDetector.Vmin = color.getVmin();
-		mDetector.Vmax = color.getVmax();
+		mDetector.setColor(color);
 		current = col;
 
 	}

@@ -41,8 +41,6 @@ public class GetColorActivity extends Activity implements CvCameraViewListener2,
 	private boolean rgb = true;
 
 	public static Mat homoMat;
-	private Scalar defaultColorFrom = new Scalar(120.0, 255.0, 110.0, 0.0);
-	private Scalar defaultColorTo = new Scalar(130.0, 255.0, 130.0, 0.0);
 
 	private CameraBridgeViewBase mOpenCvCameraView;
 
@@ -94,14 +92,14 @@ public class GetColorActivity extends Activity implements CvCameraViewListener2,
 		smax.setOnSeekBarChangeListener(this);
 		vmax.setOnSeekBarChangeListener(this);
 
-		// set default values
-		hmin.setProgress((int) defaultColorFrom.val[0]);
-		smin.setProgress((int) defaultColorFrom.val[1]);
-		vmin.setProgress((int) defaultColorFrom.val[2]);
+		// set default values - begin with red
+		hmin.setProgress(BeaconDetectionActivity.red.getHmin());
+		smin.setProgress(BeaconDetectionActivity.red.getSmin());
+		vmin.setProgress(BeaconDetectionActivity.red.getVmin());
 
-		hmax.setProgress((int) defaultColorTo.val[0]);
-		smax.setProgress((int) defaultColorTo.val[1]);
-		vmax.setProgress((int) defaultColorTo.val[2]);
+		hmax.setProgress(BeaconDetectionActivity.red.getHmax());
+		smax.setProgress(BeaconDetectionActivity.red.getSmax());
+		vmax.setProgress(BeaconDetectionActivity.red.getVmax());
 
 		TextView lblHmin = (TextView) findViewById(R.id.txtHmin);
 		TextView lblSmin = (TextView) findViewById(R.id.txtSmin);
@@ -154,16 +152,13 @@ public class GetColorActivity extends Activity implements CvCameraViewListener2,
 		SPECTRUM_SIZE = new Size(200, 64);
 		CONTOUR_COLOR = new Scalar(255, 255, 255, 255);
 
-		// default color
-		mBlobColorHsv = defaultColorFrom;
-		mDetector.setHsvColor(mBlobColorHsv);
-
-		mDetector.Hmin = (int) defaultColorFrom.val[0];
-		mDetector.Hmax = (int) defaultColorTo.val[0];
-		mDetector.Smin = (int) defaultColorFrom.val[1];
-		mDetector.Smax = (int) defaultColorTo.val[1];
-		mDetector.Vmin = (int) defaultColorFrom.val[2];
-		mDetector.Vmax = (int) defaultColorTo.val[2];
+		// default color - red
+		mDetector.Hmin = BeaconDetectionActivity.red.getHmin();
+		mDetector.Hmax = BeaconDetectionActivity.red.getHmax();
+		mDetector.Smin = BeaconDetectionActivity.red.getSmin();
+		mDetector.Smax = BeaconDetectionActivity.red.getSmax();
+		mDetector.Vmin = BeaconDetectionActivity.red.getVmin();
+		mDetector.Vmax = BeaconDetectionActivity.red.getVmax();
 		mIsColorSelected = true;
 	}
 
@@ -311,8 +306,10 @@ public class GetColorActivity extends Activity implements CvCameraViewListener2,
     	
     	CheckBox rgb = (CheckBox) findViewById(R.id.chkRGB);
     	
+    	//show rgb frame
     	if(rgb.isChecked()){
     		this.rgb = true;
+    	//show binary frame
     	}else{
     		this.rgb = false;
     	}
