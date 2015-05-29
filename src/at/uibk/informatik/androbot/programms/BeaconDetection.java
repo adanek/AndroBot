@@ -73,6 +73,11 @@ public class BeaconDetection extends ProgrammBase {
 	public void ballDetectionCallback(){
 		
 		//Log
+		
+		if(ball == null)
+			return;
+		
+		
 		Log.d(LOG_TAG, "Ball is at position: " + ball.toString());
 		
 		int angle = getAngle(new Position(), ball);
