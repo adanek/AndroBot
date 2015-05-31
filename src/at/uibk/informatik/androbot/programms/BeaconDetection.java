@@ -33,16 +33,48 @@ public class BeaconDetection extends ProgrammBase {
 	@Override
 	protected void onExecute() {
 
-		localizeSelf();
+		switch (currentState) {
+		case INIT:
+			Log.d("Test", "init");
+			this.currentState = States.LOCALIZE;
+			break;
+		case LOCALIZE:
+			Log.d("Test", "Localize start");
+			this.localizeSelf();
+			Log.d("Test", "Localize end");
+			break;
+		case FIND_BALL:
+		case CATCH_BALL:
+		case DELIVER:
+			break;
+
+		default:
+			break;
+		}
 		
-		//Log
-		Log.d(LOG_TAG, "Beacon detection started");
+		
+		this.onExecute();
 	}
 
 	private void localizeSelf() {
+		
+		
 		//call self localization activity
 		Intent sl = new Intent(context, SelfLocalizationActivity.class);
 		((Activity) context).startActivityForResult(sl, 3);
+	}
+	
+	public void selflocationCallback(){
+		
+		Log.d("Test", "Callback");
+		
+		if(BeaconDetectionActivity.current == null){
+			turn(45);
+		}
+		else {
+			currentState = States.FIND_BALL;
+		}	
+		
 	}
 	
 	public void searchBall(){
@@ -63,6 +95,8 @@ public class BeaconDetection extends ProgrammBase {
 	public void startSelfLocalization(){
 		this.onExecute();
 	}
+	
+
 	
 	public void testMethod(String result){
 		//Log

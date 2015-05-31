@@ -403,11 +403,11 @@ public class SelfLocalizationActivity extends Activity implements CvCameraViewLi
 			break;
 		}
 
-		double theta = offset + alpha - gamma2;
+		double theta = offset + alpha - (180 - gamma2);
 
 		// Second half is negative angle
 		theta = theta > 180 ? 0 - (360 - theta) : theta;
-		System.out.println(String.format("x: %f y: %f th: %f", Cw.x, Cw.y, theta));
+		Log.d("Positions",String.format("x: %f y: %f th: %f", Cw.x, Cw.y, theta));
 
 		Position current = new Position((int) Math.round(Cw.x), (int) Math.round(Cw.y), (int) Math.round(theta));
 		return current;
