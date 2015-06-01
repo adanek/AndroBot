@@ -8,6 +8,7 @@ import org.opencv.android.CameraBridgeViewBase.CvCameraViewFrame;
 import org.opencv.android.CameraBridgeViewBase.CvCameraViewListener2;
 import org.opencv.android.LoaderCallbackInterface;
 import org.opencv.android.OpenCVLoader;
+import org.opencv.core.Core;
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfPoint;
@@ -205,7 +206,13 @@ public class BallDetectionActivity extends Activity implements CvCameraViewListe
 			Log.d(TAG, String.format("Ball @Screen x:%f y:%f\n", ball.x, ball.y));
 
 			Point pos = mDetector.getWorldCoordinates(ball);
+			
+			if(pos.x < 0){
+				return mRgba;
+			}
+				
 			BeaconDetection.ball = new Position((int) pos.x, (int) pos.y, 0);
+			Core.circle(mRgba, ball, 10, new Scalar(25,25,25), -1);
 
 			// go back to beacon activity
 			Intent beacon = new Intent(this, BeaconDetectionActivity.class);
@@ -223,7 +230,7 @@ public class BallDetectionActivity extends Activity implements CvCameraViewListe
 		Mat spectrumLabel = mRgba.submat(4, 4 + mSpectrum.rows(), 70, 70 + mSpectrum.cols());
 		mSpectrum.copyTo(spectrumLabel);
 
-		if (frames > 50) {
+		if (frames > 25) {
 			BeaconDetection.ball = null;
 			// go back to beacon activity
 			Intent beacon = new Intent(this, BeaconDetectionActivity.class);

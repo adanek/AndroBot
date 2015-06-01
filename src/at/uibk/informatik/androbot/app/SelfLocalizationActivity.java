@@ -476,25 +476,25 @@ public class SelfLocalizationActivity extends Activity implements CvCameraViewLi
 		}
 
 		// begin test list
-		beacons.add(addBeacon(125, 125, Colors.RED, Colors.YELLOW, 1));
-		beacons.add(addBeacon(125, 0, Colors.WHITE, Colors.BLUE, 2));
-		beacons.add(addBeacon(125, -125, Colors.YELLOW, Colors.RED, 3));
-		beacons.add(addBeacon(0, -125, Colors.RED, Colors.BLUE, 4));
-		beacons.add(addBeacon(-125, -125, Colors.YELLOW, Colors.BLUE, 5));
-		beacons.add(addBeacon(-125, 0, Colors.WHITE, Colors.RED, 6));
-		beacons.add(addBeacon(-125, 125, Colors.BLUE, Colors.YELLOW, 7));
-		beacons.add(addBeacon(0, 125, Colors.BLUE, Colors.RED, 8));
+//		beacons.add(addBeacon(125, 125, Colors.RED, Colors.YELLOW, 1));
+//		beacons.add(addBeacon(125, 0, Colors.WHITE, Colors.BLUE, 2));
+//		beacons.add(addBeacon(125, -125, Colors.YELLOW, Colors.RED, 3));
+//		beacons.add(addBeacon(0, -125, Colors.RED, Colors.BLUE, 4));
+//		beacons.add(addBeacon(-125, -125, Colors.YELLOW, Colors.BLUE, 5));
+//		beacons.add(addBeacon(-125, 0, Colors.WHITE, Colors.RED, 6));
+//		beacons.add(addBeacon(-125, 125, Colors.BLUE, Colors.YELLOW, 7));
+//		beacons.add(addBeacon(0, 125, Colors.BLUE, Colors.RED, 8));
 		// end test list
 
 		// create beacon list
-		// beacons.add(addBeacon(125, 125, Colors.RED, Colors.YELLOW, 1));
-		// beacons.add(addBeacon(125, 0, Colors.WHITE, Colors.RED, 2));
-		// beacons.add(addBeacon(125, -125, Colors.YELLOW, Colors.RED, 3));
-		// beacons.add(addBeacon(0, -125, Colors.RED, Colors.BLUE, 4));
-		// beacons.add(addBeacon(-125, -125, Colors.YELLOW, Colors.BLUE, 5));
-		// beacons.add(addBeacon(-125, 0, Colors.WHITE, Colors.BLUE, 6));
-		// beacons.add(addBeacon(-125, 125, Colors.BLUE, Colors.YELLOW,7));
-		// beacons.add(addBeacon(0, 125, Colors.BLUE, Colors.RED,8));
+		 beacons.add(addBeacon(125, 125, Colors.RED, Colors.YELLOW, 1));
+		 beacons.add(addBeacon(125, 0, Colors.BLUE, Colors.WHITE, 2));
+		 beacons.add(addBeacon(125, -125, Colors.RED, Colors.BLUE, 3));
+		 beacons.add(addBeacon(0, -125, Colors.BLUE, Colors.YELLOW, 4));
+		 beacons.add(addBeacon(-125, -125, Colors.YELLOW, Colors.RED, 5));
+		 beacons.add(addBeacon(-125, 0, Colors.WHITE, Colors.BLUE, 6));
+		 beacons.add(addBeacon(-125, 125, Colors.BLUE, Colors.RED,7));
+		 beacons.add(addBeacon(0, 125, Colors.YELLOW, Colors.WHITE,8));
 
 	}
 
