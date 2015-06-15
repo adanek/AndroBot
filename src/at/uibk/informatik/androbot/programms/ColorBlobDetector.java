@@ -56,19 +56,6 @@ public class ColorBlobDetector {
 	Mat mDilatedMask = new Mat();
 	Mat mHierarchy = new Mat();
 	public Point d;
-
-//	public void setColorRadius(Scalar radius) {
-//		mColorRadius = radius;
-//	}
-//
-//	public Scalar getmColorRadius() {
-//		return mColorRadius;
-//	}
-//
-//	public void setmColorRadius(Scalar mColorRadius) {
-//		this.mColorRadius = mColorRadius;
-//	}
-//
 	
 	public void setColor(ColorRange color){
 		
@@ -105,14 +92,10 @@ public class ColorBlobDetector {
 
 		Imgproc.cvtColor(spectrumHsv, mSpectrum, Imgproc.COLOR_HSV2RGB_FULL, 4);
 	}
-//
+
 	public Mat getSpectrum() {
 		return mSpectrum;
 	}
-//
-//	public void setMinContourArea(double area) {
-//		mMinContourArea = area;
-//	}
 
 	public void process(Mat rgbaImage) {
 
@@ -144,14 +127,7 @@ public class ColorBlobDetector {
 		Imgproc.findContours(tmp, contours, mHierarchy, Imgproc.RETR_EXTERNAL, Imgproc.CHAIN_APPROX_SIMPLE);
 		Log.d(LOG_TAG, String.format("Found %d contours in frame", contours.size()));
 //		// Find max contour area
-//		double maxArea = 0;
 		Iterator<MatOfPoint> each = contours.iterator();
-//		while (each.hasNext()) {
-//			MatOfPoint wrapper = each.next();
-//			double area = Imgproc.contourArea(wrapper);
-//			if (area > maxArea)
-//				maxArea = area;
-//		}
 
 		// Filter contours by area and resize to fit the original image size
 		mContours.clear();
@@ -159,10 +135,6 @@ public class ColorBlobDetector {
 		while (each.hasNext()) {
 			MatOfPoint contour = each.next();
 			mContours.add(contour);
-//			if (Imgproc.contourArea(contour) > mMinContourArea * maxArea) {
-//				//Core.multiply(contour, new Scalar(4, 4), contour); //?
-//				mContours.add(contour);
-//			}
 		}
 	}
 

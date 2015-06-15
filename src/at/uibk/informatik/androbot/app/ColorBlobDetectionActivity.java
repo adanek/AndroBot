@@ -32,7 +32,7 @@ import android.view.View.OnTouchListener;
 import at.uibk.informatik.androbot.programms.ColorBlobDetector;
 
 public class ColorBlobDetectionActivity extends Activity implements OnTouchListener, CvCameraViewListener2 {
-    private static final String  TAG              = "OCVSample::Activity";
+    private static final String  TAG              = "ColorBlobActivity";
 
     private boolean              mIsColorSelected = false;
     private Mat                  mRgba;
@@ -115,7 +115,6 @@ public class ColorBlobDetectionActivity extends Activity implements OnTouchListe
         mDetector.setHomoMat(homoMat);
         mSpectrum = new Mat();
         mBlobColorRgba = new Scalar(255);
-        //mBlobColorHsv = new Scalar(255);
         SPECTRUM_SIZE = new Size(200, 64);
         CONTOUR_COLOR = new Scalar(255,100, 100,255);
     
@@ -214,9 +213,6 @@ public class ColorBlobDetectionActivity extends Activity implements OnTouchListe
             	Point pos = mDetector.getWorldCoordinates(ball);            	
             	BlobActivity.ball = pos; 	
             	
-//            	Intent blob = new Intent(this, BlobActivity.class);
-//				startActivity(blob);
-//				finish();
             }
             
             Log.e(TAG, "Contours count: " + contours.size());
@@ -228,12 +224,6 @@ public class ColorBlobDetectionActivity extends Activity implements OnTouchListe
             Mat spectrumLabel = mRgba.submat(4, 4 + mSpectrum.rows(), 70, 70 + mSpectrum.cols());
             mSpectrum.copyTo(spectrumLabel);
             
-//            if(frames > 50){
-//            	BlobActivity.ball = null;
-//            	Intent blob = new Intent(this, BlobActivity.class);
-//				startActivity(blob);
-//				finish();
-//            }
         }
 
         return mRgba;

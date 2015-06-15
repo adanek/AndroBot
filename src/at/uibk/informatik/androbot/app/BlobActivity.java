@@ -172,8 +172,6 @@ public class BlobActivity extends Activity{
 	//on color toggle
 	public void onRadioButtonToggle(View v){
 		
-		//mBlobColorHsv = new Scalar(105.0, 255.0, 130.0, 0.0); //now green red: 255 255 220 0
-		
 		Log.d(LOG_TAG, "changed");
 		
 		RadioButton red = (RadioButton) findViewById(R.id.radioRed);

@@ -365,11 +365,6 @@ public class BluetoothConnection implements IConnection {
 						// Send the obtained bytes to the caller
 						String msg = new String(buffer, 0, pos);						
 						Log.d(LOG_TAG, "Message received: " + msg);
-//						Message msg = handler.obtainMessage(MessageTypes.CONNECTION_MESSAGE_EVENT);
-//						msg.arg1 = MessageTypes.CONNECTION_MESSAGE_RECEIVED;
-//						msg.obj = s;
-//						msg.sendToTarget();
-						
 
 						pos = 0;
 						lineComplete = false;

@@ -29,11 +29,6 @@ public class BeaconDetectionActivity extends Activity{
 	private static Mat homoMat;
 	
 	//beacon default colors
-	//public static ColorRange red = new ColorRange(116,133,218,255,111,186);
-	//public static ColorRange yellow = new ColorRange(78,107,79,158,185,255);
-	//public static ColorRange blue = new ColorRange(10,28,255,255,119,255);
-	//public static ColorRange white = new ColorRange(154,192,116,170,78,231);
-	
 	public static ColorRange red = new ColorRange(121, 158, 218, 255, 118, 183);
 	public static ColorRange yellow = new ColorRange(86, 99, 210, 255, 81, 253);
 	public static ColorRange blue = new ColorRange(1, 16, 149, 255, 29, 125);
@@ -133,7 +128,6 @@ public class BeaconDetectionActivity extends Activity{
 		rightBeaconNo = 0;
 		
 		//call self localization activity
-		//prog.start();
 		prog.start();
 	}
 	

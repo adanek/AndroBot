@@ -134,9 +134,7 @@ public class SelfLocalizationActivity extends Activity implements CvCameraViewLi
 		mDetector.Smax = BeaconDetectionActivity.red.getSmax();
 		mDetector.Vmin = BeaconDetectionActivity.red.getVmin();
 		mDetector.Vmax = BeaconDetectionActivity.red.getVmax();
-		
-		//mDetector.setHsvColor(mBlobColorHsv);
-		
+	
 		mIsColorSelected = true;
 
 		frame = 0;
@@ -321,8 +319,6 @@ public class SelfLocalizationActivity extends Activity implements CvCameraViewLi
 		double c = 125;
 
 		// law of cosinus c2 = a2 + b2 - 2ab cosgamma or
-		// a2 = b2 + c2 - 2bc cos(alpha)
-		// alpha = acos((-(a2) + b2 + c2) / 2bc)
 		double alphaRad = (-1 * Math.pow(a, 2)) + Math.pow(b, 2) + Math.pow(c, 2);
 		alphaRad = Math.acos(alphaRad / (2 * b * c));
 		double alpha = Math.toDegrees(alphaRad);
@@ -474,17 +470,6 @@ public class SelfLocalizationActivity extends Activity implements CvCameraViewLi
 		if (beacons != null && beacons.isEmpty() == false) {
 			beacons.clear();
 		}
-
-		// begin test list
-//		beacons.add(addBeacon(125, 125, Colors.RED, Colors.YELLOW, 1));
-//		beacons.add(addBeacon(125, 0, Colors.WHITE, Colors.BLUE, 2));
-//		beacons.add(addBeacon(125, -125, Colors.YELLOW, Colors.RED, 3));
-//		beacons.add(addBeacon(0, -125, Colors.RED, Colors.BLUE, 4));
-//		beacons.add(addBeacon(-125, -125, Colors.YELLOW, Colors.BLUE, 5));
-//		beacons.add(addBeacon(-125, 0, Colors.WHITE, Colors.RED, 6));
-//		beacons.add(addBeacon(-125, 125, Colors.BLUE, Colors.YELLOW, 7));
-//		beacons.add(addBeacon(0, 125, Colors.BLUE, Colors.RED, 8));
-		// end test list
 
 		// create beacon list
 		 beacons.add(addBeacon(125, 125, Colors.RED, Colors.YELLOW, 1));

@@ -176,13 +176,6 @@ public class GetColorActivity extends Activity implements CvCameraViewListener2,
 		Log.e(TAG, "Contours count: " + contours.size());
 		Imgproc.drawContours(mRgba, contours, -1, CONTOUR_COLOR, 2);
 
-		// Mat colorLabel = mRgba.submat(4, 68, 4, 68);
-		// colorLabel.setTo(mBlobColorRgba);
-		//
-		// Mat spectrumLabel = mRgba.submat(4, 4 + mSpectrum.rows(), 70,
-		// 70 + mSpectrum.cols());
-		// mSpectrum.copyTo(spectrumLabel);
-
 		if(rgb){
 			return mDetector.getRgbImage();
 		}else{

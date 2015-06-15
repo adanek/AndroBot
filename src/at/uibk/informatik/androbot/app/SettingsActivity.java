@@ -18,13 +18,10 @@ public class SettingsActivity extends ProgramActivityBase{
 	public static final String ANGULAR_RUNTIME = "AngularRuntime";
 
 	public static boolean useFakeConnection = true;
-	// public static String MacAddress = "00:26:83:30:F7:E8";
-	//public static String MacAddress = "20:13:08:16:10:50"; // 0C:8B:FD:CC:54:51
-	//public static String MacAddress = "0C:8B:FD:CC:54:51"; //Laptop Andi
-	public static String MacAddress = "20:13:08:16:10:50"; //Laptop Andi
+	public static String MacAddress = "20:13:08:16:10:50"; 
 
 	public static double LinearRuntimePerCentimeter = 100;
-	public static double AngularCorrecion = 1.0; // Last Value 1.55
+	public static double AngularCorrecion = 1.0; 
 	public static double AngularRuntimePerDegree = 25;
 
 
@@ -186,9 +183,5 @@ public class SettingsActivity extends ProgramActivityBase{
 		
 		configuration.setAngularRuntime(current);		
 	}
-	
-	
+
 }
-
-
-

@@ -37,7 +37,5 @@ public abstract class ProgramActivityBase extends Activity {
 	public void setProgramm(ProgrammBase program) {
 		this.program = program;
 	}
-	
-	
 
 }

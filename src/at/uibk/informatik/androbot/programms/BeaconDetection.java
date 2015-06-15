@@ -46,15 +46,8 @@ public class BeaconDetection extends ProgrammBase {
 		case INIT:
 			Log.d(LOG_TAG, "init");
 			
-			//BEGIN TO BE IMPLEMENTED
-			//this.currentState = States.LOCALIZE;
-			//END TO BE IMPLEMENTED
-			
-			//BEGIN TO BE DELETED
-			this.currentState = States.FIND_BALL;
-			currentPos = new Position();
-			//END TO BE DELETED
-			
+			this.currentState = States.LOCALIZE;
+		
 			onExecute();
 			break;
 		case LOCALIZE:
@@ -170,9 +163,6 @@ public class BeaconDetection extends ProgrammBase {
 			int distance = getDistanceToTarget(new Position(), ball);
 			Log.d(LOG_TAG, String.format("ang: %d dis: %d", angle, distance));
 
-			// turn(angle);
-			// this.currentPos.setTh(currentPos.getTh() + angle);
-
 			// set ball position
 			this.ballWorld = calcPosition(distance, angle);
 		}
@@ -201,16 +191,6 @@ public class BeaconDetection extends ProgrammBase {
 
 	private void deliverBall() {
 
-		// int angle = getAngle(currentPos, home);
-		// int distance = getDistanceToTarget(currentPos, home);
-		// Log.d(LOG_TAG, String.format("Movement to home: ang: %d dis: %d",
-		// angle, distance));
-
-		// turn(angle);
-		// this.currentPos.setTh(currentPos.getTh() + angle);
-
-		// moveDistance(distance - 10);
-
 		// bring the ball home
 		moveTowardsTarget(home);
 
@@ -224,8 +204,7 @@ public class BeaconDetection extends ProgrammBase {
 			return;
 		}
 
-		// setPosition(distance);
-
+		// setPosition(distance)
 		this.getRobot().raiseBar();
 
 		turn(179);
@@ -350,9 +329,6 @@ public class BeaconDetection extends ProgrammBase {
 		// Dreh dich in den gewünschten Winkel
 		if (!obstacleDeteced) {
 			setPosition(dis);
-			// ang = target.getTh() - currentPos.getTh();
-			// turn(ang);
-			// currentPos.setTh(currentPos.getTh() + ang);
 		}
 
 	}
