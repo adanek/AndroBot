@@ -94,12 +94,13 @@ public class BeaconDetection extends ProgrammBase {
 		int angle = -90 * direction;
 
 		turn(angle);
-		currentPos.setTh(currentPos.getTh() + (angle));
+		setOrientation(angle);		
 		Log.d(LOG_TAG,
 				String.format("Pos: %d %d %d %b", currentPos.getX(),
 						currentPos.getY(), currentPos.getTh(), obstacleDeteced));
 
 		moveDistance(25);
+		setPosition(25);
 
 		if (obstacleDeteced == false) {
 			currentState = prevState;
@@ -227,8 +228,8 @@ public class BeaconDetection extends ProgrammBase {
 
 		this.getRobot().raiseBar();
 
-		turn(180);
-		setOrientation(180);
+		turn(179);
+		setOrientation(179);
 		this.currentState = States.INIT;
 		onExecute();
 	}
@@ -248,7 +249,15 @@ public class BeaconDetection extends ProgrammBase {
 	}
 
 	private void setOrientation(int angle) {
-		this.currentPos.setTh((currentPos.getTh() + 30) % 360);
+		int ori = this.currentPos.getTh() + angle;
+		
+		if(ori < 0 ){
+			ori = 360 + ori;
+		} else if (ori >= 360){
+			ori = ori - 360;
+		}
+		
+		this.currentPos.setTh(ori);
 	}
 
 	private Position calcPosition(int distance, int angle) {
@@ -328,14 +337,14 @@ public class BeaconDetection extends ProgrammBase {
 		Log.d(LOG_TAG, String.format("Angle to tdistancearget %d", ang));
 		if (ang != 0) {
 			turn(ang);
-			currentPos.setTh(currentPos.getTh() + ang);
+			setOrientation(ang);
 		}
 
 		// Fahre auf das Ziel
 		int dis = getDistanceToTarget(currentPos, target);
 		Log.d(LOG_TAG, String.format("Distance to target %d", dis));
 		if (dis != 0) {
-			moveDistance(dis);
+			moveDistance(dis);			
 		}
 
 		// Dreh dich in den gewünschten Winkel
